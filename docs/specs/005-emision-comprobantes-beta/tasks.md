@@ -8,8 +8,8 @@
 
 ## Fase 1 · Preparación y *spike*
 
-- [ ] **T001** Crear la rama `005-emision-comprobantes` desde `main` en la API y en el frontend. — Verificación: rama en ambos.
-- [ ] **T002** *Spike* contra SUNAT beta real (R-1, R-3). Un script en `tests/Beta/` (no es código de producción) arma con Greenter los casos de CE-001 con la regla de cálculo del plan y los envía a beta:
+- [x] **T001** Crear la rama `005-emision-comprobantes` desde `main` en la API y en el frontend. — Verificación: rama en ambos.
+- [x] **T002** *Spike* contra SUNAT beta real (R-1, R-3). Un script en `tests/Beta/` (no es código de producción) arma con Greenter los casos de CE-001 con la regla de cálculo del plan y los envía a beta:
   - Gravado, exonerado, inafecto y mixto.
   - Descuento por línea y redondeos límite (p. ej. 3 × 0.33, importes que no se dividen exacto entre 1.18).
   - Boleta a «Cliente varios» (tipo `0`, número `-`), boleta con DNI y factura con RUC.

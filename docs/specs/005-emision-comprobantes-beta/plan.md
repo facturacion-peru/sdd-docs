@@ -69,6 +69,8 @@ El precio del catálogo incluye IGV (A-16) y el importe de cada línea se calcul
 - **Leyenda `1000`** («SON … CON xx/100 SOLES»): se reincorpora el número en letras de `legacy/PdfService` con su propia tabla de pruebas.
 - **Riesgo principal (II):** que SUNAT beta rechace alguna combinación. Por eso la **primera tarea técnica es un *spike*** que envía a beta los casos de CE-001 (gravado, exonerado, inafecto, mixto, descuentos y redondeos límite) con este cálculo, antes de construir el resto. Si algún caso falla, se ajusta la regla y se registra aquí.
 
+**Resultado del *spike* (T002, 2026-09-29, `tests/Beta/spike_005.php`):** SUNAT beta aceptó los 9 casos con CDR 0 y **sin observaciones**: gravado, exonerado, inafecto, mixto, descuento de línea (código `00`, por su valor sin IGV), redondeos límite (3 × 0.33, 2.5 kg × 4.20, 25 líneas de céntimos), boleta a «Cliente varios» (tipo `0`, número `-`), boleta con DNI de S/ 777 y factura con RUC y forma de pago contado. El precio unitario de referencia (tipo `01`) es el del catálogo con IGV, sin restar el descuento. La regla no cambia.
+
 ## Servicios
 
 | Pieza | Responsabilidad | Spec |
@@ -89,12 +91,13 @@ El precio del catálogo incluye IGV (A-16) y el importe de cada línea se calcul
 | CDR con código 0 sin observaciones | `accepted` | — |
 | CDR con observaciones (códigos 4000 o más) | `observed`, con las notas | — |
 | Error de 2000 a 3999, o excepción de 1000 a 1999 | `rejected`, con código y motivo | No |
-| Tiempo agotado, error de red o de HTTP, o servicio de SUNAT no disponible (códigos 0100–0199) | `pending` | Sí: 1, 2, 5, 10 y 30 min, luego cada hora durante 24 h. Después sigue pendiente para el reintento manual y se avisa en la lista |
+| Tiempo agotado, error de red o de HTTP (incluido el **401 transitorio** de beta, ver abajo), o servicio de SUNAT no disponible (códigos 0100–0199) | `pending` | Sí: 1, 2, 5, 10 y 30 min, luego cada hora durante 24 h. Después sigue pendiente para el reintento manual y se avisa en la lista |
 | «Registrado previamente» (1033) | Ver riesgo R-3 | — |
 
 - **«Cliente varios»:** boleta de S/ 700 o menos sin cliente → tipo de documento `0` y número `-`, «CLIENTES VARIOS» (se confirma en el *spike*).
 - **Boletas:** se envían una por una con `sendBill`, igual que las facturas; el resumen diario queda fuera (A-22).
 - **Primer intento:** dentro de la petición de emisión, después del *commit* y con un tiempo límite de 15 s, para que el vendedor vea el resultado al momento. Si falla, la respuesta ya informa «pendiente de envío» (HU-4.1).
+- **Límite de frecuencia de beta (hallado en el *spike*):** si se envía un documento a los pocos segundos del anterior, beta responde `HTTP Unauthorized` en unos 15 ms; a los 5 s lo acepta. En beta ese 401 se trata como transitorio: el primer intento hace **un reintento a los 5 s** dentro de la misma petición y, si vuelve a fallar, el comprobante queda pendiente para el comando programado.
 
 ## Contrato de API (`/api/v1`, grupo de empresa)
 
@@ -154,7 +157,7 @@ El precio del catálogo incluye IGV (A-16) y el importe de cada línea se calcul
 |---|---|---|
 | R-1 | SUNAT beta rechaza alguna combinación del cálculo o de «Cliente varios» | *Spike* contra beta como primera tarea técnica, antes de construir el resto |
 | R-2 | SUNAT beta es inestable o lenta | Primer intento con tiempo límite y cola de pendientes; la venta nunca se pierde |
-| R-3 | **HU-4.5 («duplicado»)**: el servicio que consulta el CDR de un comprobante ya enviado solo existe en producción, no en beta (se confirma en el *spike*) | Si SUNAT responde 1033, el comprobante se marca `accepted` con la nota «SUNAT ya lo tenía registrado; CDR no disponible en beta», y el detalle lo muestra. En producción (spec futura) se consultará el CDR. **Es una desviación de HU-4.5 que requiere tu aprobación** |
+| R-3 | **HU-4.5 («duplicado»)**. Confirmado en el *spike*: la consulta de CDR (`billConsultService`) solo existe en producción, y beta **no detecta reenvíos**: aceptó de nuevo el mismo comprobante y devolvió un CDR nuevo | En beta, reenviar ya devuelve el estado real (el CDR), así que HU-4.5 se cumple sin consulta. Por robustez, si SUNAT llegara a responder 1033, el comprobante se marca `accepted` con la nota «SUNAT ya lo tenía registrado; CDR no disponible en beta» (aprobado). En producción (spec futura) se consultará el CDR |
 | R-4 | Se pierde el *cron* del *scheduler* y los pendientes no se reenvían | El reintento manual siempre está disponible; README y verificación incluyen `schedule:run`; la lista resalta los pendientes con más de 1 h |
 | R-5 | Plantillas heredadas acopladas a los modelos viejos | Se reescriben sobre un DTO del comprobante, cubiertas por `SalesDocumentPdfTest` |
 | R-6 | Volumen de XML y CDR en la base de datos | Unos 15 KB por comprobante; con el volumen de A-06 es despreciable. La retención se decide en A-24 |
