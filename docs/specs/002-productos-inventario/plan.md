@@ -1,6 +1,6 @@
 # Plan 002: Productos, lotes y movimientos de inventario
 
-**Estado:** Borrador (pendiente de aprobación) · **Fecha:** 2026-09-28 · **Spec:** [spec.md](./spec.md) (versión aprobada: 1.0)
+**Estado:** Aprobado (2026-09-28) · **Fecha:** 2026-09-28 · **Spec:** [spec.md](./spec.md) (versión aprobada: 1.0)
 
 ## Resumen técnico
 
@@ -132,3 +132,7 @@ Sobre la base de la 001 (aislamiento con `BelongsToCompany`, auditoría y contra
 | La 003 o la 005 descuentan stock fuera de una transacción | `consume()` lo rechaza con una excepción |
 | Crecimiento de `inventory_movements` | Índices por producto y fecha; paginación del historial |
 | `ext-bcmath` ausente en el servidor | Declarada en `composer.json`: `composer install` falla si falta |
+
+## Aprobación
+
+Aprobado por el usuario el 2026-09-28, incluidos el requisito de plataforma `ext-bcmath` y el campo `expiry_warning_days` editable desde «Mi empresa».
