@@ -69,6 +69,7 @@ Primer arranque local: `php artisan migrate:fresh --seed` (crea las cuentas de p
 
 Entradas breves y fechadas de decisiones o cambios relevantes (la más reciente arriba).
 
+- **2026-09-29** — Spec 004 integrada en `main` de la API y del frontend (merge local, T074); suites en verde sobre `main`. Siguiente: aclaraciones de la spec 005 (A-22 ⚖️, A-23).
 - **2026-09-29** — Spec 004 implementada (T001–T073) en la rama `004-configuracion-sunat` de API y frontend: 380 pruebas de API (SQLite y PostgreSQL, con correlativo concurrente y prueba de no filtración de secretos) y 114 de frontend; recorrido de extremo a extremo 21/21 con validación real contra SUNAT beta y pantallas a 360 px revisadas. Secretos cifrados con `APP_KEY` (requisito `ext-openssl`). La verificación encontró que «/» mostraba un AuthLayout vacío al recargar (desde la 001) y se corrigió. Pendiente: probar con un certificado real y el merge (T074).
 - **2026-09-29** — Spec 003 integrada en `main` de la API y del frontend (merge local, T084); suites en verde sobre `main`. Siguiente: aclaraciones de la spec 004 (A-20, A-21).
 - **2026-09-28** — Spec 003 implementada (T001–T083) en la rama `003-tickets-venta`: 317 pruebas de API (SQLite y PostgreSQL, con numeración concurrente real) y 87 de frontend; recorrido de extremo a extremo 13/13 y pantallas a 360 px revisadas. Aclaraciones A-17 a A-19, A-29 y A-30. Navegación con menú «Más». Pendiente: cronometrar una venta (CE-001), probar la impresión en una térmica real y el merge (T084).

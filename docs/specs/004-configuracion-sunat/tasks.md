@@ -83,7 +83,7 @@
   - Capturas a 360 px. Resultado en `verificacion.md`.
   - Verificación: `verificacion.md` con resultado por paso.
 - [x] **T073** Documentación: README de la API y del frontend, `AGENTS.md` y estado de la spec en `specs/README.md`. — Verificación: enlaces válidos.
-- [ ] **T074** 🔒 Merge local de `004-configuracion-sunat` a `main` en ambos repositorios y commit de la raíz. — Verificación: suites en verde sobre `main`.
+- [x] **T074** 🔒 Merge local de `004-configuracion-sunat` a `main` en ambos repositorios y commit de la raíz. — Verificación: suites en verde sobre `main`.
 
 ## Trazabilidad
 
