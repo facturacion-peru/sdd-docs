@@ -57,12 +57,16 @@ Primer arranque local: `php artisan migrate:fresh --seed` (crea las cuentas de p
 - El generador de OpenAPI solo documenta parámetros de consulta y cuerpos que vienen de un **FormRequest**. Si la validación está en línea (`$request->validate`), el frontend queda sin tipos. Los numéricos se documentan como cadenas decimales.
 - Antes de un commit, verificar con el **código de salida** de las suites (`php artisan test; echo $?`), nunca con `| grep … &&`: `grep` tiene éxito aunque la suite falle.
 - La factory de establecimientos no genera el código `0000` (es el del principal): colisionaba con el índice único y daba pruebas intermitentes.
+- El `TenantContext` persiste entre peticiones de una misma prueba: si la prueba crea datos de **otra** empresa después de una petición, limpiarlo antes con `app(TenantContext::class)->clear()`.
+- Las ventas de un ticket solo se revierten anulando el ticket (`InventoryService::reverse(..., fromSource: true)` desde `TicketService`).
+- Chrome headless (`--print-to-pdf`) ignora `@page size`: para comprobar los 80 mm hace falta el diálogo de impresión real.
 - El código heredado de `legacy/` no se ejecuta: antes de reincorporar algo, leer `docs/investigacion/001-evaluacion-api-existente.md`.
 
 ## Bitácora
 
 Entradas breves y fechadas de decisiones o cambios relevantes (la más reciente arriba).
 
+- **2026-09-28** — Spec 003 implementada (T001–T083) en la rama `003-tickets-venta`: 317 pruebas de API (SQLite y PostgreSQL, con numeración concurrente real) y 87 de frontend; recorrido de extremo a extremo 13/13 y pantallas a 360 px revisadas. Aclaraciones A-17 a A-19, A-29 y A-30. Navegación con menú «Más». Pendiente: cronometrar una venta (CE-001), probar la impresión en una térmica real y el merge (T084).
 - **2026-09-28** — Spec 002 integrada en `main` de la API y del frontend (merge local, T094); suites en verde sobre `main`. Siguiente: aclaraciones de la spec 003 (A-15, A-17 ⚖️, A-18, A-19).
 - **2026-09-28** — Spec 002 implementada (T001–T093) en la rama `002-productos-inventario` de API y frontend: 276 pruebas de API (SQLite y PostgreSQL, con concurrencia real y consistencia aleatoria) y 70 de frontend en verde; recorrido de extremo a extremo 16/16 y pantallas a 360 px revisadas. Aclaraciones A-12 a A-16 y A-26 a A-28. Requisito de plataforma `ext-bcmath`. Pendiente: cronometrar la entrada rápida (CE-003) y el merge (T094).
 - **2026-09-28** — Spec 001 integrada en `main` de la API y del frontend (merge local, T124). Queda pendiente la revisión visual de las pantallas con sesión (T122). `pint.json` excluye `legacy/` y `lang/`.
