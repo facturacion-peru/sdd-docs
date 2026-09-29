@@ -1,10 +1,10 @@
 # Spec 003: Tickets de venta internos
 
-**Estado:** En aclaración · **Versión:** 0.2 · **Fecha:** 2026-09-26
-**Depende de:** 001, 002 · **Aclaraciones:** A-09, A-15, A-17, A-18, A-19
+**Estado:** Aprobada · **Versión:** 1.0 · **Fecha:** 2026-09-28
+**Depende de:** 001, 002 · **Aclaraciones:** A-09, A-15, A-17 a A-19, A-29, A-30
 
-> Los requisitos marcados con `[A-xx]` siguen la recomendación de esa aclaración y se ajustarán si la decisión es otra.
-> ⚖️ Esta spec **no puede aprobarse** sin resolver [A-17](../../aclaraciones.md#a-17): define para qué sirve legalmente el ticket.
+> Las marcas `[A-xx]` indican la aclaración de la que sale cada requisito; todas están resueltas.
+> ⚖️ El uso del ticket ([A-17](../../aclaraciones.md#a-17)) debe confirmarse con un contador antes de producción.
 
 ## Objetivo
 
@@ -74,6 +74,9 @@ Como administrador de empresa, quiero listar los tickets por fecha, vendedor, es
 - **RF-008:** Confirmar la misma venta dos veces (reintento) NO DEBE crear dos tickets.
 - **RF-009:** El ticket guarda los precios y datos de los productos vigentes al momento de la venta.
 - **RF-010:** Si se registra un cliente, el ticket guarda su nombre y, opcionalmente, su documento.
+- **RF-011:** El precio unitario de cada línea DEBE ser el del catálogo al momento de la venta; el vendedor no puede cambiarlo, solo aplicar un descuento por línea no mayor que su importe `[A-29]`.
+- **RF-012:** Pueden registrar ventas el administrador de empresa y el vendedor; el vendedor solo consulta sus propios tickets `[A-30]`.
+- **RF-013:** Los medios de pago del MVP DEBEN ser: efectivo, tarjeta, Yape/Plin y transferencia `[A-19]`.
 
 ## Entidades clave
 
@@ -99,4 +102,8 @@ Como administrador de empresa, quiero listar los tickets por fecha, vendedor, es
 
 | Fecha | Aclaración | Decisión |
 |---|---|---|
+| 2026-09-28 | A-17, A-18, A-19 | Control interno + nota convertible (conversión en spec posterior); paquete del ticket tal cual; sin caja, con medio de pago |
+| 2026-09-28 | A-29 · Precio | Solo el del catálogo, con descuento por línea (RF-011) |
+| 2026-09-28 | A-30 · Quién vende | Administrador y vendedor; el vendedor ve solo sus tickets (RF-012) |
+| 2026-09-28 | **Aprobación** | Spec aprobada por el usuario (v1.0) |
 | 2026-09-26 | La tarea del borrador "definir si el ticket es fiscal o no" | Ya decidido en la visión: es **no tributario** |

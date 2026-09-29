@@ -31,9 +31,9 @@ Registro único de preguntas abiertas y decisiones. Las specs las citan por su i
 | [A-14](#a-14) | Política de salida de stock | 002 | Resuelta |
 | [A-15](#a-15) | Stock negativo | 002 | Resuelta |
 | [A-16](#a-16) | Servicios, unidades, costo e impuestos del producto | 002 | Resuelta |
-| [A-17](#a-17) ⚖️ | Propósito legal del ticket interno | 003 | Abierta |
-| [A-18](#a-18) | Contenido, impresión y anulación del ticket | 003 | Abierta |
-| [A-19](#a-19) | Caja y medios de pago | 003 | Abierta |
+| [A-17](#a-17) ⚖️ | Propósito legal del ticket interno | 003 | Resuelta |
+| [A-18](#a-18) | Contenido, impresión y anulación del ticket | 003 | Resuelta |
+| [A-19](#a-19) | Caja y medios de pago | 003 | Resuelta |
 | [A-20](#a-20) | Ambientes SUNAT del MVP | 004, 005 | Abierta |
 | [A-21](#a-21) | Series y certificados | 004 | Abierta |
 | [A-22](#a-22) ⚖️ | Comprobantes y casos tributarios del MVP | 005 | Abierta |
@@ -43,6 +43,8 @@ Registro único de preguntas abiertas y decisiones. Las specs las citan por su i
 | [A-26](#a-26) | Importación masiva de productos | 002 | Resuelta |
 | [A-27](#a-27) | Visibilidad del costo | 002 | Resuelta |
 | [A-28](#a-28) | Quién registra entradas de mercadería | 002 | Resuelta |
+| [A-29](#a-29) | Cambiar el precio al vender | 003 | Resuelta |
+| [A-30](#a-30) | Quién registra ventas con ticket | 003 | Resuelta |
 
 ---
 
@@ -247,7 +249,7 @@ La visión dice que cada entrada registra un lote, pero muchos productos (ferret
 
 ### A-17 ⚖️
 
-**¿Para qué sirve legalmente el ticket interno?** · Bloquea: 003 · Abierta
+**¿Para qué sirve legalmente el ticket interno?** · Bloquea: 003 · **Resuelta**
 
 En el Perú toda venta debe sustentarse con un comprobante de pago y casi todos los contribuyentes están obligados a emitirlo electrónicamente. Un documento interno puede usarse como nota de venta, pedido o control, pero **no sustituye** al comprobante. El producto no debe facilitar ventas sin comprobante.
 
@@ -259,9 +261,11 @@ En el Perú toda venta debe sustentarse con un comprobante de pago y casi todos 
 
 **Recomendación:** A y B. La conversión a comprobante en una spec posterior. El ticket incluye siempre la leyenda "Documento interno — no es comprobante de pago". Confirmar con un contador antes de producción.
 
+> **Decisión (2026-09-28):** Aceptada la recomendación: control interno para negocios que emiten sus comprobantes en otro sistema y nota de venta que se convertirá en boleta o factura en una spec posterior. Siempre con la leyenda «Documento interno — no es comprobante de pago». ⚖️ Confirmar con un contador antes de producción.
+
 ### A-18
 
-**Contenido, impresión y anulación del ticket.** · Bloquea: 003 · Abierta
+**Contenido, impresión y anulación del ticket.** · Bloquea: 003 · **Resuelta**
 
 **Recomendación:**
 
@@ -270,11 +274,15 @@ En el Perú toda venta debe sustentarse con un comprobante de pago y casi todos 
 - **Anulación:** solo el administrador de empresa. El ticket conserva su número con estado "anulado" y el stock se repone con un movimiento de reversión.
 - **Numeración:** una secuencia por empresa con prefijo propio (p. ej. `T-000001`) que no pueda confundirse con una serie SUNAT.
 
+> **Decisión (2026-09-28):** Aceptada la recomendación tal cual: cliente opcional («Cliente varios»), vista de 80 mm imprimible y PDF desde el navegador (sin Bluetooth), anulación solo por el administrador conservando el número y devolviendo el stock, y numeración propia por empresa `T-000001`.
+
 ### A-19
 
-**¿Hace falta caja (apertura y cierre) o medios de pago?** · Bloquea: 003 · Abierta
+**¿Hace falta caja (apertura y cierre) o medios de pago?** · Bloquea: 003 · **Resuelta**
 
 **Recomendación:** sin caja en el MVP. Solo se registra el medio de pago de cada venta (efectivo, tarjeta, Yape/Plin, transferencia) para poder sacar totales simples.
+
+> **Decisión (2026-09-28):** Aceptada la recomendación: sin caja en el MVP; cada venta registra su medio de pago (efectivo, tarjeta, Yape/Plin, transferencia) para totales por día y por medio.
 
 ---
 
@@ -362,3 +370,17 @@ Surgió al releer la spec 002 con las decisiones anteriores: el costo revela el 
 En tiendas pequeñas a menudo recibe la mercadería el vendedor.
 
 > **Decisión (2026-09-28):** Solo el administrador de empresa, como ya decía RF-020. Ajustes y reversiones también.
+
+### A-29
+
+**¿El vendedor puede cambiar el precio al vender?** · Bloquea: 003 · **Resuelta**
+
+Surgió al releer la spec 003: solo hablaba de descuento por línea.
+
+> **Decisión (2026-09-28):** No. El precio es el del catálogo; se admite un descuento por línea (nunca mayor que el importe), registrado en el ticket y auditado.
+
+### A-30
+
+**¿Quién registra ventas con ticket?** · Bloquea: 003 · **Resuelta**
+
+> **Decisión (2026-09-28):** El administrador de empresa y el vendedor. El vendedor ve solo sus tickets; el administrador, todos.
