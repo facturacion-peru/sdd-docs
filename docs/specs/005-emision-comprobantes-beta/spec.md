@@ -1,6 +1,6 @@
 # Spec 005: Emisión y consulta de comprobantes en beta
 
-**Estado:** Borrador para aprobación · **Versión:** 0.3 · **Fecha:** 2026-09-29
+**Estado:** Aprobada (2026-09-29) · **Versión:** 1.0 · **Fecha:** 2026-09-29
 **Depende de:** 001, 002, 003, 004 · **Aclaraciones:** A-20, A-22 ⚖️, A-23, A-31, A-32, A-33, A-34
 
 > ⚖️ Los casos tributarios de esta spec (tipos de operación, tope de S/ 700 para identificar al comprador de una boleta) son una decisión de trabajo y deben revisarse con un contador antes de producción ([A-22](../../aclaraciones.md#a-22)).
@@ -153,3 +153,4 @@ Como usuario de empresa, quiero listar los comprobantes por fecha, tipo, estado 
 | 2026-09-29 | A-32 | El vendedor ve todos los comprobantes de su empresa |
 | 2026-09-29 | A-33 | Se emite desde «Vender» eligiendo Ticket, Boleta o Factura |
 | 2026-09-29 | A-34 | El vendedor busca y registra clientes; editarlos es del administrador; no se borran |
+| 2026-09-29 | Aprobación | Spec aprobada por el usuario (v1.0) |
