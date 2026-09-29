@@ -49,6 +49,10 @@ Registro único de preguntas abiertas y decisiones. Las specs las citan por su i
 | [A-32](#a-32) | Qué comprobantes ve el vendedor | 005 | Resuelta |
 | [A-33](#a-33) | Dónde se emite el comprobante | 005 | Resuelta |
 | [A-34](#a-34) | Quién registra clientes | 005 | Resuelta |
+| [A-35](#a-35) | Tecnología del panel de la plataforma | 006 | Abierta |
+| [A-36](#a-36) | Alcance del panel | 006 | Abierta |
+| [A-37](#a-37) | Qué ve la plataforma de cada empresa | 006 | Abierta |
+| [A-38](#a-38) | Protección del acceso de la plataforma | 006 | Abierta |
 
 ---
 
@@ -372,6 +376,47 @@ RF-030 pide registrar clientes pero no decía quién.
 **Retención de documentos, protección de datos y seguridad legal.** · Bloquea: paso a producción · Abierta
 
 Revisar con un especialista, antes de producción, la Ley 29733 de protección de datos personales, los plazos de conservación de comprobantes y las obligaciones del proveedor del SaaS. No bloquea el MVP en beta.
+
+## 006 · Panel de la plataforma
+
+### A-35
+
+**¿Con qué tecnología se construye el panel de la plataforma?** · Bloquea: 006 · Abierta
+
+A-08 dejó el panel de la plataforma en «Blade o Livewire», dentro del proyecto Laravel, cuando aún no existía nada. Hoy hay dos datos nuevos: la API de plataforma de la 001 (alta, edición, activar y desactivar empresas) ya existe y está probada, y el frontend Vue tiene su sistema de componentes, autenticación y pruebas. Livewire no está instalado.
+
+- **A. Vue, en el mismo frontend:** un área `/plataforma` con su propio layout, que consume la API existente. Sin tecnología nueva; un solo sistema de diseño. El código del panel viaja en el mismo proyecto (se puede excluir del APK).
+- **B. Blade + Livewire en Laravel:** separado de la app de las empresas, como decía A-08. Obliga a añadir Livewire, otra forma de probar y otro sistema de estilos, y duplica lógica que ya expone la API.
+
+**Recomendación:** A. Reutiliza la API y las pruebas existentes y no suma tecnología (principio V). Requiere actualizar A-08.
+
+### A-36
+
+**¿Qué entra en el panel del MVP?** · Bloquea: 006 · Abierta
+
+**Recomendación:**
+
+- **Sí:** lista y búsqueda de empresas con su estado; ficha; alta; corrección de datos legales; desactivar (con motivo) y reactivar; reenviar la invitación al administrador de la empresa; vista de soporte de la emisión; auditoría de la plataforma.
+- **No:** crear administradores de la plataforma desde el panel (sigue por consola, son pocos y muy sensibles), suplantar usuarios, planes y cobros, métricas de negocio.
+
+### A-37
+
+**¿Qué ve el administrador de la plataforma de cada empresa?** · Bloquea: 006 · Abierta
+
+Da soporte, pero los datos de negocio son de cada empresa (y personales en el caso de los clientes; ver A-24 ⚖️).
+
+**Recomendación:** solo metadatos y contadores (usuarios, estado SUNAT, número de comprobantes pendientes o rechazados, fecha de la última actividad) y, para soporte, los datos de envío de los comprobantes pendientes o rechazados (número, estado, código y mensaje de SUNAT, intentos) con la opción de reintentar. Nunca secretos, productos, ventas, clientes ni líneas de comprobantes, y sin «entrar como» un usuario.
+
+### A-38
+
+**¿Cómo se protege el acceso del administrador de la plataforma?** · Bloquea: 006 · Abierta
+
+Es la cuenta con más poder del sistema. Hoy entra con correo y contraseña, igual que cualquier usuario.
+
+- **A. Segundo factor (TOTP, app de autenticación) obligatorio ya en la 006.**
+- **B. En la 006, sesión más corta (p. ej. 8 h) y auditoría de cada acceso; el segundo factor queda como requisito previo a producción**, junto con A-24.
+
+**Recomendación:** B. En beta, con pocas empresas y sin valor legal, el riesgo es acotado y el segundo factor merece su propia spec; queda registrado como bloqueante de producción.
 
 ---
 
