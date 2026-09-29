@@ -1,6 +1,6 @@
 # Tareas 002: Productos, lotes y movimientos de inventario
 
-**Estado:** Borrador (pendiente de aprobación) · **Fecha:** 2026-09-28 · **Plan:** [plan.md](./plan.md) (aprobado)
+**Estado:** Aprobado (2026-09-28) · **Fecha:** 2026-09-28 · **Plan:** [plan.md](./plan.md) (aprobado)
 
 > Mismas convenciones que la 001: tareas pequeñas con su verificación; `[P]` = en paralelo con la anterior; 🔒 = confirmación del usuario al ejecutarla.
 > **Pruebas primero:** las tareas «Escribir pruebas» terminan en rojo y la siguiente las pone en verde.
