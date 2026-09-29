@@ -1,6 +1,6 @@
 # Plan 003: Tickets de venta internos
 
-**Estado:** Borrador (pendiente de aprobación) · **Fecha:** 2026-09-28 · **Spec:** [spec.md](./spec.md) (versión aprobada: 1.0)
+**Estado:** Aprobado (2026-09-28) · **Fecha:** 2026-09-28 · **Spec:** [spec.md](./spec.md) (versión aprobada: 1.0)
 
 ## Resumen técnico
 
@@ -110,3 +110,7 @@ Sobre la 001 (aislamiento y auditoría) y la 002 (`InventoryService`):
 | Ticket y stock desalineados | Una sola transacción; anular revierte; se bloquea la reversión manual de ventas de tickets |
 | Confundir el ticket con un comprobante | Leyenda en el recurso y en la vista, número `T-` sin formato de serie, pruebas que buscan «boleta» y «factura» |
 | Diferencias de redondeo entre vista previa y servidor | La misma regla en ambos lados; el ticket siempre muestra el total del servidor |
+
+## Aprobación
+
+Aprobado por el usuario el 2026-09-28, incluidos el bloqueo de la reversión manual de ventas de tickets (cambio en la 002) y la navegación con menú «Más».
