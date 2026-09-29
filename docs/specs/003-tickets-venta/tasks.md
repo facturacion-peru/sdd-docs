@@ -1,6 +1,6 @@
 # Tareas 003: Tickets de venta internos
 
-**Estado:** Borrador (pendiente de aprobación) · **Fecha:** 2026-09-28 · **Plan:** [plan.md](./plan.md) (aprobado)
+**Estado:** Aprobado (2026-09-28) · **Fecha:** 2026-09-28 · **Plan:** [plan.md](./plan.md) (aprobado)
 
 > Mismas convenciones que las specs anteriores: tareas pequeñas con su verificación; `[P]` = en paralelo con la anterior; 🔒 = confirmación del usuario al ejecutarla.
 > **Pruebas primero:** las tareas «Escribir pruebas» terminan en rojo y la siguiente las pone en verde.

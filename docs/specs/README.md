@@ -8,7 +8,7 @@ Una carpeta por capacidad, numerada. Cada una avanza por el ciclo SDD de la [con
 |---|---|---|---|---|
 | 001 | [Empresa, usuarios, roles y aislamiento](001-empresa-usuarios-aislamiento/spec.md) | **Integrada en `main`** (falta la revisión visual de T122) · [plan](001-empresa-usuarios-aislamiento/plan.md) · [tareas](001-empresa-usuarios-aislamiento/tasks.md) · [verificación](001-empresa-usuarios-aislamiento/verificacion.md) | — | — (A-11 ⚖️ a confirmar antes de producción) |
 | 002 | [Productos, lotes e inventario](002-productos-inventario/spec.md) | **Integrada en `main`** · [plan](002-productos-inventario/plan.md) · [tareas](002-productos-inventario/tasks.md) · [verificación](002-productos-inventario/verificacion.md) | 001 | — |
-| 003 | [Tickets de venta internos](003-tickets-venta/spec.md) | **Planificada** · [plan](003-tickets-venta/plan.md) · [tareas](003-tickets-venta/tasks.md) en revisión | 001, 002 | — (A-17 ⚖️ a confirmar antes de producción) |
+| 003 | [Tickets de venta internos](003-tickets-venta/spec.md) | **Lista** · [plan](003-tickets-venta/plan.md) · [tareas](003-tickets-venta/tasks.md) | 001, 002 | — (A-17 ⚖️ a confirmar antes de producción) |
 | 004 | [Configuración segura de SUNAT y series](004-configuracion-sunat/spec.md) | En aclaración | 001 | A-20, A-21 |
 | 005 | [Emisión y consulta de comprobantes en beta](005-emision-comprobantes-beta/spec.md) | En aclaración | 001, 002, 004 | A-20, A-22 ⚖️, A-23 |
 | 006 | Panel de administración de la plataforma | Por especificar | 001 | — |
