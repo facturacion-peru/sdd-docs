@@ -51,12 +51,19 @@ Primer arranque local: `php artisan migrate:fresh --seed` (crea las cuentas de p
 - Pint: `vendor/bin/pint --test` revisa el código mantenido. Para formatear, pasar solo los archivos de la tarea.
 - `migrate:fresh --seed` en local regenera ubigeos y las cuentas de prueba de `DevelopmentSeeder` (solo `APP_ENV=local`, contraseña `Clave-demo-123`). El usuario autorizó refrescar la base local (2026-09-28); los datos que no vengan del seeder se pierden. Nunca ejecutarlo fuera de local.
 - Las pruebas de PHP salen marcadas como *deprecated* por `PDO::MYSQL_ATTR_SSL_CA` dentro de `vendor/` (Laravel 12.28 + PHP 8.5). Se resuelve actualizando Laravel dentro de la 12.x.
+- `tests/Integration` corre sin la transacción envolvente de `RefreshDatabase`: úsalo para límites de transacción y concurrencia. Dentro de `tests/Feature`, `DB::transactionLevel()` ya vale 1.
+- Las pruebas que llaman a modelos de empresa fuera de una petición (servicios, recursos, relaciones) necesitan `app(TenantContext::class)->set($empresa)`. Si falla con `TenantContextMissing` o `TenantMismatch`, casi siempre es la prueba y no el código.
+- En SQLite, `SUM()` sobre columnas decimales devuelve coma flotante y `bcadd` trunca (12.3449999 → 12.344). Sumar en PHP con `App\Support\Decimal::sum()`, no con `->sum()`.
+- El generador de OpenAPI solo documenta parámetros de consulta y cuerpos que vienen de un **FormRequest**. Si la validación está en línea (`$request->validate`), el frontend queda sin tipos. Los numéricos se documentan como cadenas decimales.
+- Antes de un commit, verificar con el **código de salida** de las suites (`php artisan test; echo $?`), nunca con `| grep … &&`: `grep` tiene éxito aunque la suite falle.
+- La factory de establecimientos no genera el código `0000` (es el del principal): colisionaba con el índice único y daba pruebas intermitentes.
 - El código heredado de `legacy/` no se ejecuta: antes de reincorporar algo, leer `docs/investigacion/001-evaluacion-api-existente.md`.
 
 ## Bitácora
 
 Entradas breves y fechadas de decisiones o cambios relevantes (la más reciente arriba).
 
+- **2026-09-28** — Spec 002 implementada (T001–T093) en la rama `002-productos-inventario` de API y frontend: 276 pruebas de API (SQLite y PostgreSQL, con concurrencia real y consistencia aleatoria) y 70 de frontend en verde; recorrido de extremo a extremo 16/16 y pantallas a 360 px revisadas. Aclaraciones A-12 a A-16 y A-26 a A-28. Requisito de plataforma `ext-bcmath`. Pendiente: cronometrar la entrada rápida (CE-003) y el merge (T094).
 - **2026-09-28** — Spec 001 integrada en `main` de la API y del frontend (merge local, T124). Queda pendiente la revisión visual de las pantallas con sesión (T122). `pint.json` excluye `legacy/` y `lang/`.
 - **2026-09-28** — Cuentas de prueba en `DevelopmentSeeder` (solo `APP_ENV=local`); el usuario aprobó los cambios de la 001.
 - **2026-09-28** — Spec 001 implementada (T001–T123) en la rama `001-empresa-usuarios-aislamiento` de API y frontend: 182 pruebas de API (SQLite y PostgreSQL) y 46 de frontend en verde; recorrido de extremo a extremo 17/17 (`verificacion.md`). La verificación encontró y corrigió un 500 exclusivo de PostgreSQL y un límite de rutas públicas demasiado estricto (ahora 30/min e IP). Pendiente: revisión visual de las pantallas con sesión (T122) y merge (T124). Constitución 1.1.2.

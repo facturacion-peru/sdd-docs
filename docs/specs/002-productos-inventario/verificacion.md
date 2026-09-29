@@ -1,6 +1,6 @@
 # Verificación 002: Productos, lotes e inventario
 
-**Fecha:** 2026-09-28 · **Tarea:** T092 (parcial) · **Rama:** `002-productos-inventario`
+**Fecha:** 2026-09-28 · **Tarea:** T092 · **Rama:** `002-productos-inventario`
 
 ## Recorrido de extremo a extremo (por el proxy de Vite, datos demo)
 
@@ -15,7 +15,20 @@
 - 404 desde otra empresa, idéntico a un recurso inexistente.
 - Aviso al desactivar un producto con stock.
 
-## Pendiente
+## Pantallas a 360 px
 
-- Capturas a 360 px ya tomadas (catálogo del vendedor, ficha, entrada, alertas, nuevo producto); **aún sin revisar a la vista**.
-- CE-003 (entrada en menos de 30 s): el formulario exige un solo campo, pero falta que una persona lo cronometre.
+Capturas con Chrome headless contra el servidor de Vite, con sesión real de las cuentas demo (2026-09-28):
+
+| Pantalla | Resultado |
+|---|---|
+| Catálogo (vendedor) | ✅ Precio, disponible, «Stock bajo» y «Servicio»; sin «Nuevo producto», sin filtro de desactivados, sin costo |
+| Ficha (administrador) | ✅ Precio, disponible, stock físico y último costo; lotes con vencimiento y costo; historial con «Revertir» |
+| Entrada rápida | ✅ Foco en la cantidad; vencimiento visible porque el producto lo controla; datos opcionales plegados |
+| Alertas | ✅ Stock bajo y próximos a vencer con días restantes |
+| Nuevo producto | ✅ Campos legibles; ayuda del stock mínimo visible |
+
+**Observación:** con seis entradas, la navegación del administrador no cabe a 360 px: «Usuarios» y «Auditoría» quedan detrás de un desplazamiento horizontal. Se puede usar, pero conviene agrupar entradas cuando lleguen las ventas (spec 003).
+
+## Pendiente de confirmación del usuario
+
+- CE-003 (entrada en menos de 30 s): el formulario exige un solo campo y la API responde en unos 50 ms, pero falta que una persona lo cronometre en el celular.
