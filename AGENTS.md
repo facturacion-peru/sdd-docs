@@ -66,6 +66,7 @@ Primer arranque local: `php artisan migrate:fresh --seed` (crea las cuentas de p
 
 Entradas breves y fechadas de decisiones o cambios relevantes (la más reciente arriba).
 
+- **2026-09-29** — Spec 003 integrada en `main` de la API y del frontend (merge local, T084); suites en verde sobre `main`. Siguiente: aclaraciones de la spec 004 (A-20, A-21).
 - **2026-09-28** — Spec 003 implementada (T001–T083) en la rama `003-tickets-venta`: 317 pruebas de API (SQLite y PostgreSQL, con numeración concurrente real) y 87 de frontend; recorrido de extremo a extremo 13/13 y pantallas a 360 px revisadas. Aclaraciones A-17 a A-19, A-29 y A-30. Navegación con menú «Más». Pendiente: cronometrar una venta (CE-001), probar la impresión en una térmica real y el merge (T084).
 - **2026-09-28** — Spec 002 integrada en `main` de la API y del frontend (merge local, T094); suites en verde sobre `main`. Siguiente: aclaraciones de la spec 003 (A-15, A-17 ⚖️, A-18, A-19).
 - **2026-09-28** — Spec 002 implementada (T001–T093) en la rama `002-productos-inventario` de API y frontend: 276 pruebas de API (SQLite y PostgreSQL, con concurrencia real y consistencia aleatoria) y 70 de frontend en verde; recorrido de extremo a extremo 16/16 y pantallas a 360 px revisadas. Aclaraciones A-12 a A-16 y A-26 a A-28. Requisito de plataforma `ext-bcmath`. Pendiente: cronometrar la entrada rápida (CE-003) y el merge (T094).

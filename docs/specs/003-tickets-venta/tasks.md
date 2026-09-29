@@ -82,7 +82,7 @@
 - [x] **T081** Frontend: `pnpm type-check`, `pnpm lint`, `pnpm test:unit --run` y `pnpm build-only` en verde. — Verificación: salidas adjuntas.
 - [x] **T082** Verificación de extremo a extremo por el proxy de Vite (vender, idempotencia, stock insuficiente, anular, listado, vendedor solo lo suyo, otra empresa) y capturas a 360 px, incluida la vista de impresión. Se cronometra una venta de 3 productos (CE-001). Resultado en `verificacion.md`. — Verificación: `verificacion.md` con resultado por paso.
 - [x] **T083** Documentación: README de la API y del frontend, `AGENTS.md` y estado de la spec en `specs/README.md`. — Verificación: enlaces válidos.
-- [ ] **T084** 🔒 Merge local de `003-tickets-venta` a `main` en ambos repositorios y commit de la raíz. — Verificación: suites en verde sobre `main`.
+- [x] **T084** 🔒 Merge local de `003-tickets-venta` a `main` en ambos repositorios y commit de la raíz. — Verificación: suites en verde sobre `main`.
 
 ## Trazabilidad
 
