@@ -1,9 +1,9 @@
 # Spec 002: Productos, lotes y movimientos de inventario
 
-**Estado:** En aclaración · **Versión:** 0.2 · **Fecha:** 2026-09-26
+**Estado:** En aclaración (aclaraciones resueltas, pendiente de aprobación) · **Versión:** 0.3 · **Fecha:** 2026-09-28
 **Depende de:** 001 · **Aclaraciones:** A-12 a A-16, A-26
 
-> Los requisitos marcados con `[A-xx]` siguen la recomendación de esa aclaración y se ajustarán si la decisión es otra.
+> Las marcas `[A-xx]` indican la aclaración de la que sale cada requisito; todas están resueltas (ver *Clarificaciones*).
 
 ## Objetivo
 
@@ -131,4 +131,5 @@ Como administrador de empresa, quiero ver el historial de cada producto y entera
 
 | Fecha | Aclaración | Decisión |
 |---|---|---|
+| 2026-09-28 | A-12 a A-16 y A-26 | Recomendaciones aceptadas: stock único; lote siempre y vencimiento por producto; salida automática FEFO/FIFO; sin stock negativo; modelo de producto tal cual (precio con IGV, afectación obligatoria); sin importación masiva en el MVP |
 | 2026-09-26 | Se elimina la alerta "una operación inmoviliza más stock del normal" del borrador | No era verificable; se reintroducirá con una definición medible si hace falta |

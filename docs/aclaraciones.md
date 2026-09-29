@@ -26,11 +26,11 @@ Registro único de preguntas abiertas y decisiones. Las specs las citan por su i
 | [A-09](#a-09) | Convivencia de tickets y comprobantes | 001, 003 | Resuelta |
 | [A-10](#a-10) | Enmienda de la constitución 1.1.0 | 001 | Resuelta |
 | [A-11](#a-11) ⚖️ | Tipos de contribuyente y régimen | 001, 004 | Resuelta |
-| [A-12](#a-12) | Almacenes | 002 | Abierta |
-| [A-13](#a-13) | Lotes y vencimientos | 002 | Abierta |
-| [A-14](#a-14) | Política de salida de stock | 002 | Abierta |
-| [A-15](#a-15) | Stock negativo | 002 | Abierta |
-| [A-16](#a-16) | Servicios, unidades, costo e impuestos del producto | 002 | Abierta |
+| [A-12](#a-12) | Almacenes | 002 | Resuelta |
+| [A-13](#a-13) | Lotes y vencimientos | 002 | Resuelta |
+| [A-14](#a-14) | Política de salida de stock | 002 | Resuelta |
+| [A-15](#a-15) | Stock negativo | 002 | Resuelta |
+| [A-16](#a-16) | Servicios, unidades, costo e impuestos del producto | 002 | Resuelta |
 | [A-17](#a-17) ⚖️ | Propósito legal del ticket interno | 003 | Abierta |
 | [A-18](#a-18) | Contenido, impresión y anulación del ticket | 003 | Abierta |
 | [A-19](#a-19) | Caja y medios de pago | 003 | Abierta |
@@ -40,7 +40,7 @@ Registro único de preguntas abiertas y decisiones. Las specs las citan por su i
 | [A-23](#a-23) | Envío a SUNAT y fallos | 005 | Abierta |
 | [A-24](#a-24) ⚖️ | Retención de documentos y protección de datos | Producción | Abierta |
 | [A-25](#a-25) | Recuperación de contraseña | 001 | Resuelta |
-| [A-26](#a-26) | Importación masiva de productos | 002 | Abierta |
+| [A-26](#a-26) | Importación masiva de productos | 002 | Resuelta |
 
 ---
 
@@ -190,13 +190,15 @@ Lo que se sabe, **a confirmar con un contador**:
 
 ### A-12
 
-**¿Varios almacenes o un stock único por producto?** · Bloquea: 002 · Abierta
+**¿Varios almacenes o un stock único por producto?** · Bloquea: 002 · **Resuelta**
 
 **Recomendación:** stock único por empresa en el MVP (la visión ya excluye varios almacenes).
 
+> **Decisión (2026-09-28):** Aceptada la recomendación: un stock único por empresa. El modelo no impide añadir almacenes después.
+
 ### A-13
 
-**¿Todos los productos llevan lote y vencimiento?** · Bloquea: 002 · Abierta
+**¿Todos los productos llevan lote y vencimiento?** · Bloquea: 002 · **Resuelta**
 
 La visión dice que cada entrada registra un lote, pero muchos productos (ferretería, ropa) no tienen número de lote.
 
@@ -205,21 +207,27 @@ La visión dice que cada entrada registra un lote, pero muchos productos (ferret
 - Toda entrada crea un lote. Si el usuario no indica número, el sistema genera uno (p. ej. `L-20260926-001`).
 - El vencimiento es opcional y se activa **por producto** con la opción "controla vencimiento". Si está activa, la fecha es obligatoria.
 
+> **Decisión (2026-09-28):** Aceptada la recomendación: toda entrada crea un lote (número propio o generado, p. ej. `L-20260928-001`). El vencimiento se activa por producto («controla vencimiento») y entonces es obligatorio.
+
 ### A-14
 
-**¿Qué lote se descuenta al vender?** · Bloquea: 002 · Abierta
+**¿Qué lote se descuenta al vender?** · Bloquea: 002 · **Resuelta**
 
 **Recomendación:** automático. **FEFO** (vence primero, sale primero) si el producto controla vencimiento; **FIFO** (entra primero, sale primero) si no. Una venta puede consumir varios lotes. No se venden lotes vencidos. La elección manual de lote queda fuera del MVP.
 
+> **Decisión (2026-09-28):** Aceptada la recomendación: asignación automática, FEFO si el producto controla vencimiento y FIFO si no. Una venta puede consumir varios lotes y nunca se venden lotes vencidos.
+
 ### A-15
 
-**¿Se permite vender sin stock (stock negativo)?** · Bloquea: 002, 003 · Abierta
+**¿Se permite vender sin stock (stock negativo)?** · Bloquea: 002, 003 · **Resuelta**
 
 **Recomendación:** no. La venta se bloquea si no hay stock disponible. Los servicios no controlan stock (ver A-16).
 
+> **Decisión (2026-09-28):** Aceptada la recomendación: no se permite stock negativo; la venta se bloquea e indica el disponible. Los servicios no controlan stock.
+
 ### A-16
 
-**Servicios, unidades de medida, costo e impuestos del producto.** · Bloquea: 002 · Abierta
+**Servicios, unidades de medida, costo e impuestos del producto.** · Bloquea: 002 · **Resuelta**
 
 **Recomendación:**
 
@@ -228,6 +236,8 @@ La visión dice que cada entrada registra un lote, pero muchos productos (ferret
 - **Costo:** opcional en la entrada de stock.
 - **Precio de venta:** con IGV incluido, como lo ve el cliente.
 - **Afectación al IGV:** obligatoria por producto (gravado, exonerado o inafecto), porque la emisión de comprobantes (005) la necesita.
+
+> **Decisión (2026-09-28):** Aceptada la recomendación tal cual: bien o servicio; una unidad del catálogo SUNAT sin conversiones; costo opcional; precio de venta con IGV incluido; afectación al IGV obligatoria.
 
 ---
 
@@ -327,8 +337,10 @@ Requiere configurar el envío de correo, que también usan las invitaciones de A
 
 ### A-26
 
-**¿El MVP incluye importar productos desde Excel/CSV?** · Bloquea: 002 · Abierta
+**¿El MVP incluye importar productos desde Excel/CSV?** · Bloquea: 002 · **Resuelta**
 
 Las empresas que vienen de otro sistema suelen tener cientos de productos.
 
 **Recomendación:** no en el MVP; spec propia después de la 002. Con 5 empresas iniciales, la carga manual o asistida es viable.
+
+> **Decisión (2026-09-28):** Aceptada la recomendación: la importación masiva queda fuera del MVP y tendrá spec propia.
