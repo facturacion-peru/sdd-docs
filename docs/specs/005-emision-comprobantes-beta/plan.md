@@ -1,6 +1,6 @@
 # Plan 005: Emisión y consulta de comprobantes en beta
 
-**Estado:** Borrador · **Fecha:** 2026-09-29 · **Spec:** [spec.md](./spec.md) (versión aprobada: 1.0)
+**Estado:** Aprobado (2026-09-29) · **Fecha:** 2026-09-29 · **Spec:** [spec.md](./spec.md) (versión aprobada: 1.0)
 
 ## Resumen técnico
 
@@ -161,8 +161,8 @@ El precio del catálogo incluye IGV (A-16) y el importe de cada línea se calcul
 
 ## Aprobación
 
-Pendiente. Puntos a confirmar:
+Aprobado por el usuario el 2026-09-29, incluidos:
 
 1. Reintentos con el *scheduler* (cron) en lugar de cola y worker.
 2. Todo en la feature `sales`, con «Comprobantes» como pestaña de «Ventas» y «Clientes» en «Más».
-3. **R-3:** cómo se resuelve el «duplicado» en beta.
+3. **R-3:** si en beta no existe la consulta de CDR, el «duplicado» (1033) se marca `accepted` con la nota «SUNAT ya lo tenía registrado; CDR no disponible en beta».
