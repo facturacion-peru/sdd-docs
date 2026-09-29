@@ -1,6 +1,6 @@
 # Plan 004: Configuración segura de SUNAT y series
 
-**Estado:** Borrador (pendiente de aprobación) · **Fecha:** 2026-09-29 · **Spec:** [spec.md](./spec.md) (versión aprobada: 1.0)
+**Estado:** Aprobado (2026-09-29) · **Fecha:** 2026-09-29 · **Spec:** [spec.md](./spec.md) (versión aprobada: 1.0)
 
 ## Resumen técnico
 
@@ -116,3 +116,7 @@ Sobre la base de las specs 001 a 003 (aislamiento, auditoría, `bcmath`):
 | Certificados reales con el RUC en campos distintos | Se buscan `serialNumber`, `OU` y `CN`; si no se encuentra, el error lo explica |
 | SUNAT beta caída durante la validación | Estado aparte, «SUNAT no responde»: no marca la configuración como errónea |
 | Correlativos duplicados en la 005 | `nextNumber()` bloqueante ya probado con concurrencia en esta spec |
+
+## Aprobación
+
+Aprobado por el usuario el 2026-09-29, incluidos el cuidado de `APP_KEY` (secretos cifrados con ella) y que el vendedor vea las series en solo lectura.
