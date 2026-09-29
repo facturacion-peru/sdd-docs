@@ -1,7 +1,7 @@
 # Spec 002: Productos, lotes y movimientos de inventario
 
-**Estado:** En aclaración (aclaraciones resueltas, pendiente de aprobación) · **Versión:** 0.3 · **Fecha:** 2026-09-28
-**Depende de:** 001 · **Aclaraciones:** A-12 a A-16, A-26
+**Estado:** Aprobada · **Versión:** 1.0 · **Fecha:** 2026-09-28
+**Depende de:** 001 · **Aclaraciones:** A-12 a A-16, A-26 a A-28
 
 > Las marcas `[A-xx]` indican la aclaración de la que sale cada requisito; todas están resueltas (ver *Clarificaciones*).
 
@@ -22,7 +22,7 @@ Como administrador de empresa, quiero registrar mis productos y servicios con su
 1. **Dado** que soy administrador de empresa, **cuando** registro un producto con código, nombre, tipo (bien o servicio), unidad de medida, precio de venta y afectación al IGV, **entonces** queda disponible en mi catálogo `[A-16]`.
 2. **Dado** un código que ya existe en mi empresa, **cuando** registro otro producto con él, **entonces** el sistema lo rechaza. El mismo código sí puede existir en otra empresa.
 3. **Dado** un producto desactivado, **cuando** un vendedor busca productos para vender, **entonces** no aparece; su historial se conserva.
-4. **Dado** que soy vendedor, **cuando** consulto el catálogo, **entonces** veo productos, precios y stock, pero no puedo crear ni editar productos.
+4. **Dado** que soy vendedor, **cuando** consulto el catálogo, **entonces** veo productos, precios y stock, pero **no** el costo, y no puedo crear ni editar productos `[A-27]`.
 
 ### HU-2 · Entrada de stock por lote (P1)
 
@@ -103,7 +103,8 @@ Como administrador de empresa, quiero ver el historial de cada producto y entera
 
 **Permisos y alertas**
 
-- **RF-020:** Solo el administrador de empresa DEBE poder crear y editar productos, registrar entradas, ajustes y reversiones. El vendedor solo consulta.
+- **RF-020:** Solo el administrador de empresa DEBE poder crear y editar productos, registrar entradas, ajustes y reversiones. El vendedor solo consulta `[A-28]`.
+- **RF-022:** El costo de productos y lotes solo DEBE mostrarse al administrador de empresa; las respuestas para el vendedor no lo incluyen `[A-27]`.
 - **RF-021:** El sistema DEBE listar productos con stock bajo y lotes próximos a vencer, con un plazo de aviso configurable por empresa (30 días por defecto).
 
 ## Entidades clave
@@ -131,5 +132,8 @@ Como administrador de empresa, quiero ver el historial de cada producto y entera
 
 | Fecha | Aclaración | Decisión |
 |---|---|---|
+| 2026-09-28 | A-27 · Costo | Solo lo ve el administrador (HU-1.4, RF-022) |
+| 2026-09-28 | A-28 · Entradas | Solo el administrador registra entradas, ajustes y reversiones (RF-020 confirmado) |
+| 2026-09-28 | **Aprobación** | Spec aprobada por el usuario (v1.0) |
 | 2026-09-28 | A-12 a A-16 y A-26 | Recomendaciones aceptadas: stock único; lote siempre y vencimiento por producto; salida automática FEFO/FIFO; sin stock negativo; modelo de producto tal cual (precio con IGV, afectación obligatoria); sin importación masiva en el MVP |
 | 2026-09-26 | Se elimina la alerta "una operación inmoviliza más stock del normal" del borrador | No era verificable; se reintroducirá con una definición medible si hace falta |

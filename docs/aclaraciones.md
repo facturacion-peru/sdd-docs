@@ -41,6 +41,8 @@ Registro único de preguntas abiertas y decisiones. Las specs las citan por su i
 | [A-24](#a-24) ⚖️ | Retención de documentos y protección de datos | Producción | Abierta |
 | [A-25](#a-25) | Recuperación de contraseña | 001 | Resuelta |
 | [A-26](#a-26) | Importación masiva de productos | 002 | Resuelta |
+| [A-27](#a-27) | Visibilidad del costo | 002 | Resuelta |
+| [A-28](#a-28) | Quién registra entradas de mercadería | 002 | Resuelta |
 
 ---
 
@@ -344,3 +346,19 @@ Las empresas que vienen de otro sistema suelen tener cientos de productos.
 **Recomendación:** no en el MVP; spec propia después de la 002. Con 5 empresas iniciales, la carga manual o asistida es viable.
 
 > **Decisión (2026-09-28):** Aceptada la recomendación: la importación masiva queda fuera del MVP y tendrá spec propia.
+
+### A-27
+
+**¿El vendedor ve el costo de productos y lotes?** · Bloquea: 002 · **Resuelta**
+
+Surgió al releer la spec 002 con las decisiones anteriores: el costo revela el margen del negocio.
+
+> **Decisión (2026-09-28):** No. El costo solo lo ve el administrador de empresa; el vendedor ve precio de venta y stock disponible.
+
+### A-28
+
+**¿Quién registra las entradas de mercadería?** · Bloquea: 002 · **Resuelta**
+
+En tiendas pequeñas a menudo recibe la mercadería el vendedor.
+
+> **Decisión (2026-09-28):** Solo el administrador de empresa, como ya decía RF-020. Ajustes y reversiones también.
