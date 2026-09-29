@@ -36,8 +36,8 @@ Registro único de preguntas abiertas y decisiones. Las specs las citan por su i
 | [A-19](#a-19) | Caja y medios de pago | 003 | Resuelta |
 | [A-20](#a-20) | Ambientes SUNAT del MVP | 004, 005 | Resuelta |
 | [A-21](#a-21) | Series y certificados | 004 | Resuelta |
-| [A-22](#a-22) ⚖️ | Comprobantes y casos tributarios del MVP | 005 | Abierta |
-| [A-23](#a-23) | Envío a SUNAT y fallos | 005 | Abierta |
+| [A-22](#a-22) ⚖️ | Comprobantes y casos tributarios del MVP | 005 | Resuelta |
+| [A-23](#a-23) | Envío a SUNAT y fallos | 005 | Resuelta |
 | [A-24](#a-24) ⚖️ | Retención de documentos y protección de datos | Producción | Abierta |
 | [A-25](#a-25) | Recuperación de contraseña | 001 | Resuelta |
 | [A-26](#a-26) | Importación masiva de productos | 002 | Resuelta |
@@ -46,6 +46,9 @@ Registro único de preguntas abiertas y decisiones. Las specs las citan por su i
 | [A-29](#a-29) | Cambiar el precio al vender | 003 | Resuelta |
 | [A-30](#a-30) | Quién registra ventas con ticket | 003 | Resuelta |
 | [A-31](#a-31) | Credenciales en el ambiente beta | 004, 005 | Resuelta |
+| [A-32](#a-32) | Qué comprobantes ve el vendedor | 005 | Resuelta |
+| [A-33](#a-33) | Dónde se emite el comprobante | 005 | Resuelta |
+| [A-34](#a-34) | Quién registra clientes | 005 | Resuelta |
 
 ---
 
@@ -310,7 +313,7 @@ En el Perú toda venta debe sustentarse con un comprobante de pago y casi todos 
 
 ### A-22 ⚖️
 
-**Comprobantes y casos tributarios del MVP.** · Bloquea: 005 · Abierta
+**Comprobantes y casos tributarios del MVP.** · Bloquea: 005 · **Resuelta**
 
 **Recomendación:**
 
@@ -320,15 +323,49 @@ En el Perú toda venta debe sustentarse con un comprobante de pago y casi todos 
 
 Consecuencia: en beta no se podrán anular comprobantes, lo cual es aceptable porque no tienen valor legal.
 
+> **Decisión (2026-09-29):** Aceptada la recomendación: factura y boleta; gravadas (IGV 18 %), exoneradas e inafectas; solo soles y al contado (con los medios de pago de A-19: efectivo, tarjeta, Yape/Plin y transferencia). La boleta va a «Cliente varios» hasta S/ 700 y por encima exige el documento del comprador. Todo lo demás queda fuera del MVP y en beta no se anulan comprobantes. ⚖️ Confirmar con un contador antes de producción, incluido el tope de S/ 700.
+
 ### A-23
 
-**Envío a SUNAT y qué pasa si SUNAT no responde.** · Bloquea: 005 · Abierta
+**Envío a SUNAT y qué pasa si SUNAT no responde.** · Bloquea: 005 · **Resuelta**
 
 **Recomendación:**
 
 - **Envío:** automático al emitir. El usuario no confirma aparte.
 - **Si SUNAT no responde:** el comprobante queda "pendiente de envío" y se reintenta en segundo plano con espera creciente. Además hay un botón de reintento manual. El número asignado se conserva.
 - **Si SUNAT rechaza:** estado "rechazado" con el motivo que devuelve SUNAT, sin reintentos.
+
+> **Decisión (2026-09-29):** Aceptada la recomendación: envío automático al emitir; si SUNAT no responde, «pendiente de envío» con reintentos en segundo plano con espera creciente y reintento manual, conservando el número; si SUNAT rechaza, «rechazado» con el motivo y sin reintentos.
+
+### A-32
+
+**¿Qué comprobantes ve el vendedor?** · Bloquea: 005 · **Resuelta**
+
+Surgió al releer la spec 005 (HU-5.2 lo dejaba para el plan). En la spec 003 el vendedor solo ve sus tickets.
+
+**Recomendación:** solo los que emitió, igual que los tickets; el administrador ve todos.
+
+> **Decisión (2026-09-29):** El vendedor ve **todos** los comprobantes de su empresa (útil cuando varios atienden la misma caja) y puede reintentar el envío de cualquiera. Los tickets siguen como en la 003: cada vendedor ve los suyos.
+
+### A-33
+
+**¿Dónde se emite el comprobante?** · Bloquea: 005 · **Resuelta**
+
+Surgió al releer la spec 005: el objetivo dice «desde la misma venta», pero no qué pantalla.
+
+**Recomendación:** en la pantalla «Vender» se elige Ticket, Boleta o Factura; el carrito, los precios y los descuentos son los mismos.
+
+> **Decisión (2026-09-29):** Aceptada la recomendación: en «Vender» se elige Ticket, Boleta o Factura.
+
+### A-34
+
+**¿Quién registra clientes?** · Bloquea: 005 · **Resuelta**
+
+RF-030 pide registrar clientes pero no decía quién.
+
+**Recomendación:** el vendedor puede buscar y registrar al cliente desde «Vender» (DNI, RUC o carné de extranjería, validando el formato); editarlos es del administrador.
+
+> **Decisión (2026-09-29):** Aceptada la recomendación: el vendedor busca y registra clientes al vender; editarlos queda para el administrador. No se borran clientes con comprobantes (RF-006 conserva los datos del momento de emitir).
 
 ### A-24 ⚖️
 
