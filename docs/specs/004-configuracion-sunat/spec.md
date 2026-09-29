@@ -1,6 +1,6 @@
 # Spec 004: Configuración segura de SUNAT y series
 
-**Estado:** En aclaración (aclaraciones resueltas, pendiente de aprobación) · **Versión:** 0.3 · **Fecha:** 2026-09-29
+**Estado:** Aprobada · **Versión:** 1.0 · **Fecha:** 2026-09-29
 **Depende de:** 001 · **Aclaraciones:** A-07, A-11, A-20, A-21, A-31
 
 > Las marcas `[A-xx]` indican la aclaración de la que sale cada requisito; todas están resueltas.
@@ -125,6 +125,7 @@ Como usuario de empresa, quiero ver si puedo emitir comprobantes y en qué ambie
 
 | Fecha | Aclaración | Decisión |
 |---|---|---|
+| 2026-09-29 | **Aprobación** | Spec aprobada por el usuario (v1.0) |
 | 2026-09-29 | A-20, A-21 | Solo beta; varias series por tipo con número inicial; un certificado vigente validado al subir |
 | 2026-09-29 | A-31 · Credenciales en beta | Genéricas de SUNAT en beta; las reales se guardan cifradas para producción (HU-2.1, HU-2.5, RF-014, RF-015) |
 | 2026-09-26 | El título del borrador incluía "y emisión fiscal" | La emisión pasa a la spec 005; esta cubre solo configuración y series |
