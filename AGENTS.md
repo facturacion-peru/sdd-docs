@@ -6,7 +6,7 @@ Notas para agentes (y personas) que trabajen en este espacio. Aquí va lo import
 
 | Carpeta | Qué es | Stack | README |
 |---|---|---|---|
-| `Api-de-facturacion-electronica-sunat-Peru/` | API REST multiempresa (empresas, usuarios, auditoría; emisión SUNAT en camino). Futuro panel de plataforma en Blade/Livewire (spec 006) | Laravel 12, PHP 8.2+, Greenter 5.1, Sanctum, Pest, PostgreSQL | [README](Api-de-facturacion-electronica-sunat-Peru/README.md) |
+| `Api-de-facturacion-electronica-sunat-Peru/` | API REST multiempresa (empresas, usuarios, inventario, tickets y emisión SUNAT en beta). Futuro panel de plataforma en Blade/Livewire (spec 006) | Laravel 12, PHP 8.2+, Greenter 5.1, Sanctum, Pest, PostgreSQL | [README](Api-de-facturacion-electronica-sunat-Peru/README.md) |
 | `frontend-api-facturacion-electronica-sunat/` | App de todos los usuarios de empresa, incluido su administrador (A-08). Futuro APK con Capacitor | Vue 3 + TS 5.9, Vite 8, Pinia, Tailwind 4, `openapi-fetch` | [README](frontend-api-facturacion-electronica-sunat/README.md) |
 
 Hay tres repositorios git independientes: la **raíz** (solo `docs/`, `AGENTS.md` y `CLAUDE.md`; ignora las dos carpetas de proyecto), la **API** (fork de `yorchavez9/Api-de-facturacion-electronica-sunat-Peru`) y el **frontend** (desde la tarea T002 de la spec 001).
@@ -36,7 +36,7 @@ cd frontend-api-facturacion-electronica-sunat && pnpm dev
 
 Verificación del frontend: `pnpm type-check && pnpm lint && pnpm test:unit --run && pnpm build-only`.
 Pruebas de la API: `php artisan test` (SQLite) **y** `composer test:pgsql` (PostgreSQL, base `db_api_sunat_testing`), más `vendor/bin/pint --test` (excluye `legacy/` y `lang/`).
-Primer arranque local: `php artisan migrate:fresh --seed` (crea las cuentas de prueba). Fuera de local: `php artisan platform:create-admin` y `php artisan company:create` (interactivos).
+Primer arranque local: `php artisan migrate:fresh --seed` (crea las cuentas de prueba). Para los reintentos de envío a SUNAT, `php artisan schedule:work` en otra terminal. Fuera de local: `php artisan platform:create-admin` y `php artisan company:create` (interactivos).
 
 ## Trampas conocidas
 
@@ -63,12 +63,19 @@ Primer arranque local: `php artisan migrate:fresh --seed` (crea las cuentas de p
 - Los dos layouts del router cuelgan de «/» con la misma prioridad: gana el primero declarado. `AppLayout` debe ir antes que `AuthLayout` (si no, recargar en «/» muestra un AuthLayout vacío); lo protege `app/router/__tests__/router.spec.ts`.
 - `DevelopmentSeeder` intenta validar la empresa demo contra SUNAT beta (red real). Sus pruebas simulan la respuesta con `Http::fake`; sin red, la configuración demo queda pendiente y el seeder no falla.
 - Certificados de prueba: `Tests\Support\TestCertificates::make()` (autofirmados con el RUC en `serialNumber`, `OU` o `CN`). Para uno ya vencido fuera de las pruebas, `openssl req -x509 … -not_before … -not_after …` (OpenSSL 3.5).
+- **SUNAT beta limita la frecuencia:** si se envía un documento a los pocos segundos de otro, responde `HTTP 401 Unauthorized`; a los 5 s lo acepta. El envío al emitir reintenta una vez (`SUNAT_RATE_LIMIT_PAUSE`, 0 en `phpunit.xml`). Beta tampoco detecta reenvíos ni ofrece la consulta de CDR.
+- Greenter usa `SoapClient`, no el cliente HTTP de Laravel: `Http::fake()` no lo intercepta. En pruebas se reemplaza `SunatSender` por `FakeSunatSender` (`app()->instance(...)`).
+- `tests/Beta/` (spike y `SunatBetaTest`) va contra SUNAT beta real y no está en `phpunit.xml`: `php artisan test tests/Beta/SunatBetaTest.php --group=sunat-beta`.
+- Para simular una caída de SUNAT sin tocar `.env`: `SUNAT_BETA_ENDPOINT=https://127.0.0.1:9/billService php artisan serve --port=8001 --no-reload`. Sin `--no-reload`, `artisan serve` no pasa las variables de entorno al servidor.
+- `composer update --lock` tras cambiar `require` necesita `--ignore-platform-req=php`: algunas dependencias aún no declaran PHP 8.5.
+- `php artisan tinker archivo.php` se queda en modo interactivo; usar `tinker --execute="require '...';"`.
 - El código heredado de `legacy/` no se ejecuta: antes de reincorporar algo, leer `docs/investigacion/001-evaluacion-api-existente.md`.
 
 ## Bitácora
 
 Entradas breves y fechadas de decisiones o cambios relevantes (la más reciente arriba).
 
+- **2026-09-29** — Spec 005 implementada (T001–T094) en la rama `005-emision-comprobantes` de API y frontend: 520 pruebas de API (SQLite y PostgreSQL, con emisión y envío concurrentes y tres mutaciones) y 137 de frontend. SUNAT beta real aceptó sin observaciones los 8 casos de CE-001; recorrido de extremo a extremo 16/16 con caída simulada y pantallas a 360 px revisadas. Aclaraciones A-22 ⚖️, A-23 y A-32 a A-34. La verificación corrigió las observaciones 4096–4098 (ubigeo del emisor) y el menú en rutas hermanas. Requisito `ext-gd`. Pendiente: CE-003 en el celular, revisión contable (A-22) y el merge (T095).
 - **2026-09-29** — Spec 004 integrada en `main` de la API y del frontend (merge local, T074); suites en verde sobre `main`. Siguiente: aclaraciones de la spec 005 (A-22 ⚖️, A-23).
 - **2026-09-29** — Spec 004 implementada (T001–T073) en la rama `004-configuracion-sunat` de API y frontend: 380 pruebas de API (SQLite y PostgreSQL, con correlativo concurrente y prueba de no filtración de secretos) y 114 de frontend; recorrido de extremo a extremo 21/21 con validación real contra SUNAT beta y pantallas a 360 px revisadas. Secretos cifrados con `APP_KEY` (requisito `ext-openssl`). La verificación encontró que «/» mostraba un AuthLayout vacío al recargar (desde la 001) y se corrigió. Pendiente: probar con un certificado real y el merge (T074).
 - **2026-09-29** — Spec 003 integrada en `main` de la API y del frontend (merge local, T084); suites en verde sobre `main`. Siguiente: aclaraciones de la spec 004 (A-20, A-21).

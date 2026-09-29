@@ -88,18 +88,18 @@
 
 ## Fase 9 · Frontend
 
-- [ ] **T080** `pnpm api:types`; tipos y API de comprobantes, clientes, estado SUNAT y series en `features/sales`, y descarga con token (`Blob`). — Verificación: `pnpm type-check`.
-- [ ] **T081** `CustomerPicker`: búsqueda y alta rápida en un diálogo, con errores del documento. Pruebas incluidas. — Verificación: pruebas en verde.
-- [ ] **T082** «Vender»: selector Ticket · Boleta · Factura con bloqueos y motivo (SUNAT no disponible, sin serie), selector de serie, cliente, aviso de S/ 700 y factura con RUC. Tras emitir, lleva al detalle con el resultado (aceptado, pendiente o rechazado). Pruebas incluidas. — Verificación: pruebas en verde.
-- [ ] **T083** «Ventas» con pestañas Tickets · Comprobantes (filtros, pendientes y rechazados resaltados) y detalle del comprobante (`EnvironmentBadge`, estado y mensaje de SUNAT, totales por afectación, descargas y «Reintentar»). Pruebas incluidas. — Verificación: pruebas en verde.
-- [ ] **T084** [P] `/clientes` para el administrador (lista y edición) y «Clientes» en «Más». Pruebas incluidas. — Verificación: pruebas en verde.
+- [x] **T080** `pnpm api:types`; tipos y API de comprobantes, clientes, estado SUNAT y series en `features/sales`, y descarga con token (`Blob`). — Verificación: `pnpm type-check`.
+- [x] **T081** `CustomerPicker`: búsqueda y alta rápida en un diálogo, con errores del documento. Pruebas incluidas. — Verificación: pruebas en verde.
+- [x] **T082** «Vender»: selector Ticket · Boleta · Factura con bloqueos y motivo (SUNAT no disponible, sin serie), selector de serie, cliente, aviso de S/ 700 y factura con RUC. Tras emitir, lleva al detalle con el resultado (aceptado, pendiente o rechazado). Pruebas incluidas. — Verificación: pruebas en verde.
+- [x] **T083** «Ventas» con pestañas Tickets · Comprobantes (filtros, pendientes y rechazados resaltados) y detalle del comprobante (`EnvironmentBadge`, estado y mensaje de SUNAT, totales por afectación, descargas y «Reintentar»). Pruebas incluidas. — Verificación: pruebas en verde.
+- [x] **T084** [P] `/clientes` para el administrador (lista y edición) y «Clientes» en «Más». Pruebas incluidas. — Verificación: pruebas en verde.
 
 ## Fase 10 · Cierre
 
-- [ ] **T090** Correr `tests/Beta/SunatBetaTest` (grupo `sunat-beta`) contra SUNAT beta real: los casos de CE-001 aceptados. — Verificación: salida adjunta en `verificacion.md`.
-- [ ] **T091** API: `php artisan test`, `composer test:pgsql` y `vendor/bin/pint --test` en verde (códigos de salida). — Verificación: salidas adjuntas.
-- [ ] **T092** Frontend: `pnpm type-check`, `pnpm lint`, `pnpm test:unit --run` y `pnpm build-only` en verde. — Verificación: salidas adjuntas.
-- [ ] **T093** Verificación de extremo a extremo por el proxy de Vite, con `schedule:work` corriendo:
+- [x] **T090** Correr `tests/Beta/SunatBetaTest` (grupo `sunat-beta`) contra SUNAT beta real: los casos de CE-001 aceptados. — Verificación: salida adjunta en `verificacion.md`.
+- [x] **T091** API: `php artisan test`, `composer test:pgsql` y `vendor/bin/pint --test` en verde (códigos de salida). — Verificación: salidas adjuntas.
+- [x] **T092** Frontend: `pnpm type-check`, `pnpm lint`, `pnpm test:unit --run` y `pnpm build-only` en verde. — Verificación: salidas adjuntas.
+- [x] **T093** Verificación de extremo a extremo por el proxy de Vite, con `schedule:work` corriendo:
   - Boleta a «Cliente varios», boleta con DNI de más de S/ 700 y factura, aceptadas por SUNAT beta real.
   - Descargas de PDF (A4 y 80 mm), XML y CDR.
   - Caída simulada (endpoint inalcanzable): pendiente, reintento automático al restablecer y reintento manual (CE-002).
@@ -107,7 +107,7 @@
   - Búsqueda de secretos en las respuestas.
   - Capturas a 360 px. Resultado en `verificacion.md`.
   - Verificación: `verificacion.md` con resultado por paso.
-- [ ] **T094** Documentación: README de la API y del frontend, `AGENTS.md` y estado de la spec en `specs/README.md`. — Verificación: enlaces válidos.
+- [x] **T094** Documentación: README de la API y del frontend, `AGENTS.md` y estado de la spec en `specs/README.md`. — Verificación: enlaces válidos.
 - [ ] **T095** 🔒 Merge local de `005-emision-comprobantes` a `main` en ambos repositorios y commit de la raíz. — Verificación: suites en verde sobre `main`.
 
 ## Trazabilidad
