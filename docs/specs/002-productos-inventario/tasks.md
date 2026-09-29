@@ -117,7 +117,7 @@
 - [x] **T091** Frontend: `pnpm type-check`, `pnpm lint`, `pnpm test:unit --run` y `pnpm build-only` en verde. — Verificación: salidas adjuntas.
 - [x] **T092** Verificación de extremo a extremo por el proxy de Vite (alta, entrada, consumo por servicio, ajuste, reversión, alertas, vendedor sin costo) y capturas a 360 px. Se cronometra la entrada de stock (CE-003). Resultado en `verificacion.md`. — Verificación: `verificacion.md` con resultado por paso.
 - [x] **T093** Documentación: README de la API y del frontend, `AGENTS.md` (bitácora y problemas conocidos) y spec 002 → estado final en `specs/README.md`. — Verificación: enlaces válidos.
-- [ ] **T094** 🔒 Merge local de `002-productos-inventario` a `main` en ambos repositorios y commit de la raíz. — Verificación: suites en verde sobre `main`.
+- [x] **T094** 🔒 Merge local de `002-productos-inventario` a `main` en ambos repositorios y commit de la raíz. — Verificación: suites en verde sobre `main`.
 
 ## Trazabilidad
 
