@@ -1,9 +1,9 @@
 # Spec 004: Configuración segura de SUNAT y series
 
-**Estado:** En aclaración · **Versión:** 0.2 · **Fecha:** 2026-09-26
-**Depende de:** 001 · **Aclaraciones:** A-07, A-11, A-20, A-21
+**Estado:** En aclaración (aclaraciones resueltas, pendiente de aprobación) · **Versión:** 0.3 · **Fecha:** 2026-09-29
+**Depende de:** 001 · **Aclaraciones:** A-07, A-11, A-20, A-21, A-31
 
-> Los requisitos marcados con `[A-xx]` siguen la recomendación de esa aclaración y se ajustarán si la decisión es otra.
+> Las marcas `[A-xx]` indican la aclaración de la que sale cada requisito; todas están resueltas.
 > La **emisión** de comprobantes está en la spec 005; esta spec deja la empresa lista para emitir.
 
 ## Objetivo
@@ -32,7 +32,8 @@ Como administrador de empresa, quiero probar la conexión antes de emitir, para 
 
 **Escenarios de aceptación**
 
-1. **Dado** una configuración completa, **cuando** pido validarla, **entonces** el sistema comprueba el certificado y la conexión con SUNAT beta, y la marca "validada" o "con error" con el motivo `[A-20]`.
+1. **Dado** una configuración completa, **cuando** pido validarla, **entonces** el sistema comprueba localmente el certificado (contraseña, vigencia, RUC) y la conexión con SUNAT beta usando las credenciales genéricas de prueba, y la marca "validada" o "con error" con el motivo `[A-20]` `[A-31]`.
+5. **Dado** el ambiente beta, **cuando** veo la configuración validada, **entonces** se me indica claramente que mi clave SOL real todavía no se verificó contra SUNAT y que se verificará al pasar a producción `[A-31]`.
 2. **Dado** una configuración incompleta, **cuando** pido validarla, **entonces** el sistema lista exactamente qué falta.
 3. **Dado** SUNAT sin responder, **cuando** valido, **entonces** la configuración no se marca como errónea: se informa que SUNAT no está disponible y que se reintente después.
 4. **Dado** una configuración validada, **cuando** cambio la clave SOL o el certificado, **entonces** vuelve a "pendiente de validación" y no se puede emitir hasta validarla de nuevo.
@@ -83,6 +84,8 @@ Como usuario de empresa, quiero ver si puedo emitir comprobantes y en qué ambie
 - **RF-011:** Una empresa solo DEBE poder emitir comprobantes si su configuración está "validada".
 - **RF-012:** Cambiar una credencial o el certificado DEBE devolver la configuración a "pendiente de validación".
 - **RF-013:** En el MVP, el único ambiente disponible DEBE ser beta `[A-20]`.
+- **RF-014:** En beta, los envíos a SUNAT DEBEN usar las credenciales genéricas de prueba de SUNAT; la clave SOL real se guarda cifrada y se verificará al pasar a producción `[A-31]`.
+- **RF-015:** La interfaz DEBE indicar que en beta la clave SOL real no está verificada contra SUNAT `[A-31]`.
 
 **Series**
 
@@ -122,5 +125,7 @@ Como usuario de empresa, quiero ver si puedo emitir comprobantes y en qué ambie
 
 | Fecha | Aclaración | Decisión |
 |---|---|---|
+| 2026-09-29 | A-20, A-21 | Solo beta; varias series por tipo con número inicial; un certificado vigente validado al subir |
+| 2026-09-29 | A-31 · Credenciales en beta | Genéricas de SUNAT en beta; las reales se guardan cifradas para producción (HU-2.1, HU-2.5, RF-014, RF-015) |
 | 2026-09-26 | El título del borrador incluía "y emisión fiscal" | La emisión pasa a la spec 005; esta cubre solo configuración y series |
 | 2026-09-26 | El borrador ocultaba también el usuario SOL | Se muestra enmascarado: no es secreto por sí solo y ayuda a reconocer la cuenta. La clave sí es secreta |

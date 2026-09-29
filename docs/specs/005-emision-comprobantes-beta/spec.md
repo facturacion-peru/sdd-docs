@@ -1,7 +1,7 @@
 # Spec 005: Emisión y consulta de comprobantes en beta
 
 **Estado:** En aclaración · **Versión:** 0.1 · **Fecha:** 2026-09-26
-**Depende de:** 001, 002, 004 · **Aclaraciones:** A-20, A-22, A-23
+**Depende de:** 001, 002, 004 · **Aclaraciones:** A-20, A-22, A-23, A-31
 
 > Los requisitos marcados con `[A-xx]` siguen la recomendación de esa aclaración y se ajustarán si la decisión es otra.
 > ⚖️ Los casos tributarios de esta spec deben revisarse con un contador ([A-22](../../aclaraciones.md#a-22)).

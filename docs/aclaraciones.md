@@ -34,8 +34,8 @@ Registro único de preguntas abiertas y decisiones. Las specs las citan por su i
 | [A-17](#a-17) ⚖️ | Propósito legal del ticket interno | 003 | Resuelta |
 | [A-18](#a-18) | Contenido, impresión y anulación del ticket | 003 | Resuelta |
 | [A-19](#a-19) | Caja y medios de pago | 003 | Resuelta |
-| [A-20](#a-20) | Ambientes SUNAT del MVP | 004, 005 | Abierta |
-| [A-21](#a-21) | Series y certificados | 004 | Abierta |
+| [A-20](#a-20) | Ambientes SUNAT del MVP | 004, 005 | Resuelta |
+| [A-21](#a-21) | Series y certificados | 004 | Resuelta |
 | [A-22](#a-22) ⚖️ | Comprobantes y casos tributarios del MVP | 005 | Abierta |
 | [A-23](#a-23) | Envío a SUNAT y fallos | 005 | Abierta |
 | [A-24](#a-24) ⚖️ | Retención de documentos y protección de datos | Producción | Abierta |
@@ -45,6 +45,7 @@ Registro único de preguntas abiertas y decisiones. Las specs las citan por su i
 | [A-28](#a-28) | Quién registra entradas de mercadería | 002 | Resuelta |
 | [A-29](#a-29) | Cambiar el precio al vender | 003 | Resuelta |
 | [A-30](#a-30) | Quién registra ventas con ticket | 003 | Resuelta |
+| [A-31](#a-31) | Credenciales en el ambiente beta | 004, 005 | Resuelta |
 
 ---
 
@@ -290,18 +291,22 @@ En el Perú toda venta debe sustentarse con un comprobante de pago y casi todos 
 
 ### A-20
 
-**¿El MVP incluye producción o solo beta?** · Bloquea: 004, 005 · Abierta
+**¿El MVP incluye producción o solo beta?** · Bloquea: 004, 005 · **Resuelta**
 
 **Recomendación:** solo beta. Pasar a producción es una spec propia, con controles adicionales y revisión legal ([A-24](#a-24)).
 
+> **Decisión (2026-09-29):** Aceptada la recomendación: solo beta en el MVP. Producción será una spec propia con controles adicionales y revisión legal (A-24).
+
 ### A-21
 
-**Series y certificados.** · Bloquea: 004 · Abierta
+**Series y certificados.** · Bloquea: 004 · **Resuelta**
 
 **Recomendación:**
 
 - **Series:** varias por tipo de comprobante, cada una con su correlativo independiente, asociadas al establecimiento. Al crear una serie se puede indicar el último número usado (para empresas que vienen de otro sistema). Después, el correlativo solo lo avanza la emisión y no puede editarse hacia atrás.
 - **Certificado:** uno vigente por empresa. Se valida al subirlo (contraseña correcta, no vencido, RUC coincidente) y se avisa 30 días antes de su vencimiento. Reemplazarlo conserva el historial.
+
+> **Decisión (2026-09-29):** Aceptada la recomendación: varias series por tipo, cada una con su correlativo, con último número usado al crearla y sin retroceso; con comprobantes solo se desactiva. Un certificado vigente por empresa, validado al subirlo (contraseña, vigencia, RUC), cifrado, con aviso 30 días antes de vencer; reemplazarlo conserva el historial.
 
 ### A-22 ⚖️
 
@@ -384,3 +389,11 @@ Surgió al releer la spec 003: solo hablaba de descuento por línea.
 **¿Quién registra ventas con ticket?** · Bloquea: 003 · **Resuelta**
 
 > **Decisión (2026-09-28):** El administrador de empresa y el vendedor. El vendedor ve solo sus tickets; el administrador, todos.
+
+### A-31
+
+**¿Qué credenciales se usan en el ambiente beta?** · Bloquea: 004, 005 · **Resuelta**
+
+Surgió al releer la spec 004: en beta SUNAT acepta credenciales genéricas de prueba (usuario `MODDATOS`) y cualquier certificado, así que una conexión exitosa en beta no demuestra que la clave SOL real de la empresa sea correcta.
+
+> **Decisión (2026-09-29):** En beta se envía con las credenciales genéricas de prueba de SUNAT. La empresa registra igual su clave SOL y su certificado reales (cifrados y validados localmente) para cuando pase a producción, y la interfaz indica claramente que la clave SOL real aún no se verificó contra SUNAT.
