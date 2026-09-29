@@ -91,7 +91,7 @@ El precio del catálogo incluye IGV (A-16) y el importe de cada línea se calcul
 | CDR con código 0 sin observaciones | `accepted` | — |
 | CDR con observaciones (códigos 4000 o más) | `observed`, con las notas | — |
 | Error de 2000 a 3999, o excepción de 1000 a 1999 | `rejected`, con código y motivo | No |
-| Tiempo agotado, error de red o de HTTP (incluido el **401 transitorio** de beta, ver abajo), o servicio de SUNAT no disponible (códigos 0100–0199) | `pending` | Sí: 1, 2, 5, 10 y 30 min, luego cada hora durante 24 h. Después sigue pendiente para el reintento manual y se avisa en la lista |
+| Tiempo agotado, error de red o de HTTP (incluido el **401 transitorio** de beta, ver abajo), o excepción del propio servicio de SUNAT (códigos 0100–0999, p. ej. 0109 «el sistema no puede responder») | `pending` | Sí: 1, 2, 5, 10 y 30 min, luego cada hora durante 24 h. Después sigue pendiente para el reintento manual y se avisa en la lista |
 | «Registrado previamente» (1033) | Ver riesgo R-3 | — |
 
 - **«Cliente varios»:** boleta de S/ 700 o menos sin cliente → tipo de documento `0` y número `-`, «CLIENTES VARIOS» (se confirma en el *spike*).

@@ -18,33 +18,33 @@
 
 ## Fase 2 · Fundamentos
 
-- [ ] **T010** Enums `SalesDocumentStatus` (con etiquetas), `CustomerDocumentType` (`1`, `4`, `6`, con validación de formato) y `SubmissionResult`, con pruebas. — Verificación: pruebas en verde.
-- [ ] **T011** Migraciones `customers`, `sales_documents`, `sales_document_lines` y `sunat_submissions`, según el plan. — Verificación: `test` y `test:pgsql` en verde; `php artisan migrate` en local.
-- [ ] **T012** Modelos `Customer`, `SalesDocument`, `SalesDocumentLine` y `SunatSubmission` con `BelongsToCompany`, casts decimales y *factories*. `SunatSubmission` es inmutable. — Verificación: pruebas de modelo en verde.
+- [x] **T010** Enums `SalesDocumentStatus` (con etiquetas), `CustomerDocumentType` (`1`, `4`, `6`, con validación de formato) y `SubmissionResult`, con pruebas. — Verificación: pruebas en verde.
+- [x] **T011** Migraciones `customers`, `sales_documents`, `sales_document_lines` y `sunat_submissions`, según el plan. — Verificación: `test` y `test:pgsql` en verde; `php artisan migrate` en local.
+- [x] **T012** Modelos `Customer`, `SalesDocument`, `SalesDocumentLine` y `SunatSubmission` con `BelongsToCompany`, casts decimales y *factories*. `SunatSubmission` es inmutable. — Verificación: pruebas de modelo en verde.
 
 ## Fase 3 · Clientes (HU-5)
 
-- [ ] **T020** Escribir pruebas `Sales/CustomersTest`:
+- [x] **T020** Escribir pruebas `Sales/CustomersTest`:
   - HU-5.1: búsqueda por documento o nombre, solo de la propia empresa.
   - HU-5.2: alta por cualquier rol; DNI de 8 dígitos, RUC con dígito verificador válido, carné de extranjería; documento duplicado rechazado.
   - HU-5.3: solo el administrador edita.
   - No hay ruta para borrar.
   - Auditoría del alta y la edición.
   - Verificación: en rojo.
-- [ ] **T021** Implementar `CustomerService`, `GET/POST /customers` y `PATCH /customers/{customer}`, con requests y recurso. — Verificación: T020 en verde en ambas bases.
+- [x] **T021** Implementar `CustomerService`, `GET/POST /customers` y `PATCH /customers/{customer}`, con requests y recurso. — Verificación: T020 en verde en ambas bases.
 
 ## Fase 4 · Cálculo y XML (HU-3)
 
-- [ ] **T030** Escribir pruebas `Unit/Sunat/TaxCalculatorTest`: la tabla de casos de T002 con sus importes esperados, totales por afectación, determinismo (HU-3.4) y que el total coincide con el de `TicketService` para las mismas líneas. — Verificación: en rojo.
-- [ ] **T031** Implementar `TaxCalculator`. — Verificación: T030 en verde.
-- [ ] **T032** [P] Escribir e implementar `Unit/Sunat/AmountInWordsTest` y `AmountInWords` (caracterización del número en letras heredado: 0, 1, 21, 100, 101, 1 000, 1 000 000, céntimos). — Verificación: en verde.
-- [ ] **T033** Escribir pruebas `Unit/Sunat/UblBuilderTest`: del comprobante guardado al `Invoice` de Greenter y al XML firmado con un certificado de prueba. Comprobar emisor, cliente o «Cliente varios», líneas con código de afectación y tributo, descuento de línea, totales, leyenda 1000, forma de pago contado y `hash`. — Verificación: en rojo.
-- [ ] **T034** Implementar `UblBuilder` y el firmado con el certificado vigente descifrado en memoria. — Verificación: T033 en verde.
+- [x] **T030** Escribir pruebas `Unit/Sunat/TaxCalculatorTest`: la tabla de casos de T002 con sus importes esperados, totales por afectación, determinismo (HU-3.4) y que el total coincide con el de `TicketService` para las mismas líneas. — Verificación: en rojo.
+- [x] **T031** Implementar `TaxCalculator`. — Verificación: T030 en verde.
+- [x] **T032** [P] Escribir e implementar `Unit/Sunat/AmountInWordsTest` y `AmountInWords` (caracterización del número en letras heredado: 0, 1, 21, 100, 101, 1 000, 1 000 000, céntimos). — Verificación: en verde.
+- [x] **T033** Escribir pruebas `Unit/Sunat/UblBuilderTest`: del comprobante guardado al `Invoice` de Greenter y al XML firmado con un certificado de prueba. Comprobar emisor, cliente o «Cliente varios», líneas con código de afectación y tributo, descuento de línea, totales, leyenda 1000, forma de pago contado y `hash`. — Verificación: en rojo.
+- [x] **T034** Implementar `UblBuilder` y el firmado con el certificado vigente descifrado en memoria. — Verificación: T033 en verde.
 
 ## Fase 5 · Emisión (HU-1, HU-2)
 
-- [ ] **T040** Interfaz `SunatSender` con `GreenterSender` (endpoint beta de `SunatEndpoints`, credenciales de `config('services.sunat')`, tiempo límite) y `FakeSunatSender` para pruebas (acepta, observa, rechaza, no responde, «duplicado»). — Verificación: prueba unitaria del *fake*; `GreenterSender` se prueba en T090.
-- [ ] **T041** Escribir pruebas `Sales/IssueSalesDocumentTest` (con `FakeSunatSender`):
+- [x] **T040** Interfaz `SunatSender` con `GreenterSender` (endpoint beta de `SunatEndpoints`, credenciales de `config('services.sunat')`, tiempo límite) y `FakeSunatSender` para pruebas (acepta, observa, rechaza, no responde, «duplicado»). — Verificación: prueba unitaria del *fake*; `GreenterSender` se prueba en T090.
+- [x] **T041** Escribir pruebas `Sales/IssueSalesDocumentTest` (con `FakeSunatSender`):
   - HU-1.1: boleta con gravados y exonerados: correlativo, stock descontado con el comprobante como origen, XML firmado y estado tras el primer envío.
   - HU-1.2: «Cliente varios» hasta S/ 700; por encima, 422 sin documento.
   - HU-2.1–2.3: factura con RUC; factura sin cliente o sin RUC → 422 que sugiere boleta; Nuevo RUS → 422.
@@ -55,12 +55,12 @@
   - HU-4.1: SUNAT sin responder → 201 con `pending`.
   - Auditoría `sales_document.issued`.
   - Verificación: en rojo.
-- [ ] **T042** Implementar `SalesDocumentService::issue()`, `POST /sales-documents`, request y recurso. — Verificación: T041 en verde en ambas bases.
-- [ ] **T043** [P] Escribir e implementar `Integration/Sales/ConcurrentIssueTest` (solo PostgreSQL): varios procesos emiten en la misma serie → números consecutivos sin repetir. Comprobar con una mutación (sin `nextNumber()` bloqueante) que la prueba falla. — Verificación: en verde, y en rojo con la mutación.
+- [x] **T042** Implementar `SalesDocumentService::issue()`, `POST /sales-documents`, request y recurso. — Verificación: T041 en verde en ambas bases.
+- [x] **T043** [P] Escribir e implementar `Integration/Sales/ConcurrentIssueTest` (solo PostgreSQL): varios procesos emiten en la misma serie → números consecutivos sin repetir. Comprobar con una mutación (sin `nextNumber()` bloqueante) que la prueba falla. — Verificación: en verde, y en rojo con la mutación.
 
 ## Fase 6 · Envío y reintentos (HU-4)
 
-- [ ] **T050** Escribir pruebas `Sales/SunatDispatchTest`:
+- [x] **T050** Escribir pruebas `Sales/SunatDispatchTest`:
   - Aceptado (CDR guardado), observado (notas), rechazado (código y motivo, sin reintento).
   - Sin respuesta → `pending` con `next_attempt_at` según la espera creciente del plan; tras 24 h sigue pendiente sin más reintentos automáticos.
   - HU-4.5: «duplicado» → `accepted` con la nota de R-3 (o el estado real, si T002 encontró la consulta de CDR en beta).
@@ -68,23 +68,23 @@
   - `sunat:send-pending` toma los vencidos y los `sent` con *lease* caducado.
   - Cada intento queda en `sunat_submissions`; auditoría de cambios de estado y reintentos (RF-022).
   - Verificación: en rojo.
-- [ ] **T051** Implementar `SunatDispatcher`, el comando `sunat:send-pending` en el *scheduler* (cada minuto), el primer intento tras el *commit* en `issue()` y la ruta de reintento. — Verificación: T050 en verde en ambas bases.
-- [ ] **T052** [P] Escribir e implementar `Integration/Sales/ConcurrentDispatchTest` (solo PostgreSQL): reintento manual y comando a la vez → un solo envío. Comprobar con una mutación (sin *lease*) que la prueba falla. — Verificación: en verde, y en rojo con la mutación.
-- [ ] **T053** Escribir e implementar `Integration/Sales/OutageRecoveryTest` (CE-002): N comprobantes con SUNAT caída; al volver, todos definitivos y exactamente un envío aceptado por comprobante. — Verificación: en verde.
+- [x] **T051** Implementar `SunatDispatcher`, el comando `sunat:send-pending` en el *scheduler* (cada minuto), el primer intento tras el *commit* en `issue()` y la ruta de reintento. — Verificación: T050 en verde en ambas bases.
+- [x] **T052** [P] Escribir e implementar `Integration/Sales/ConcurrentDispatchTest` (solo PostgreSQL): reintento manual y comando a la vez → un solo envío. Comprobar con una mutación (sin *lease*) que la prueba falla. — Verificación: en verde, y en rojo con la mutación.
+- [x] **T053** Escribir e implementar `Integration/Sales/OutageRecoveryTest` (CE-002): N comprobantes con SUNAT caída; al volver, todos definitivos y exactamente un envío aceptado por comprobante. — Verificación: en verde.
 
 ## Fase 7 · Consulta y descargas (HU-6, RF-007, RF-021)
 
-- [ ] **T060** Escribir pruebas `Sales/ListSalesDocumentsTest`: filtros por fecha, tipo, estado y cliente; el vendedor ve todos los de su empresa (A-32); detalle con líneas, totales por afectación, mensaje de SUNAT e intentos. — Verificación: en rojo.
-- [ ] **T061** Implementar `GET /sales-documents` y `GET /sales-documents/{id}` con request de filtros y recursos. — Verificación: T060 en verde.
-- [ ] **T062** Escribir pruebas `Sales/SalesDocumentPdfTest` y de descargas: PDF A4 y 80 mm (contenido, QR con los campos de SUNAT, marca «PRUEBAS — sin valor legal»), XML firmado y CDR (404 si no existe). — Verificación: en rojo.
-- [ ] **T063** Implementar `DocumentPdf` con las plantillas heredadas reescritas sobre un DTO del comprobante, y las rutas `/pdf`, `/xml` y `/cdr`. Retirar de `resources/views/pdf` las plantillas que no se usen (notas, guías, 50 mm, A5). — Verificación: T062 en verde; PDF revisado a ojo.
+- [x] **T060** Escribir pruebas `Sales/ListSalesDocumentsTest`: filtros por fecha, tipo, estado y cliente; el vendedor ve todos los de su empresa (A-32); detalle con líneas, totales por afectación, mensaje de SUNAT e intentos. — Verificación: en rojo.
+- [x] **T061** Implementar `GET /sales-documents` y `GET /sales-documents/{id}` con request de filtros y recursos. — Verificación: T060 en verde.
+- [x] **T062** Escribir pruebas `Sales/SalesDocumentPdfTest` y de descargas: PDF A4 y 80 mm (contenido, QR con los campos de SUNAT, marca «PRUEBAS — sin valor legal»), XML firmado y CDR (404 si no existe). — Verificación: en rojo.
+- [x] **T063** Implementar `DocumentPdf` con las plantillas heredadas reescritas sobre un DTO del comprobante, y las rutas `/pdf`, `/xml` y `/cdr`. Retirar de `resources/views/pdf` las plantillas que no se usen (notas, guías, 50 mm, A5). — Verificación: T062 en verde; PDF revisado a ojo.
 
 ## Fase 8 · Seguridad, aislamiento y contrato
 
-- [ ] **T070** Añadir las rutas nuevas a `TenantRoutes.php` y el cliente y el comprobante de la empresa B a `CrossTenantAccessTest` (incluidas las descargas). — Verificación: `TenantRoutesCoverageTest` y `CrossTenantAccessTest` en verde.
-- [ ] **T071** [P] Ampliar `NoSunatSecretsLeakTest` al flujo de emisión y envío: ni el PEM, ni la clave privada, ni la contraseña del certificado aparecen en respuestas, XML, logs ni auditoría. — Verificación: en verde, y en rojo con una mutación que registre el PEM en el log.
-- [ ] **T072** [P] `Contract/SalesDocumentResourcesTest` (comprobante, línea, intento y cliente). — Verificación: en verde.
-- [ ] **T073** `php artisan openapi:generate`. En `DevelopmentSeeder`, clientes demo (uno con DNI y otro con RUC) y, si SUNAT beta responde, una boleta y una factura demo emitidas. README de la API: emisión, estados, `schedule:run` y `schedule:work`. — Verificación: OpenAPI con las rutas nuevas; `migrate:fresh --seed` en local (autorizado).
+- [x] **T070** Añadir las rutas nuevas a `TenantRoutes.php` y el cliente y el comprobante de la empresa B a `CrossTenantAccessTest` (incluidas las descargas). — Verificación: `TenantRoutesCoverageTest` y `CrossTenantAccessTest` en verde.
+- [x] **T071** [P] Ampliar `NoSunatSecretsLeakTest` al flujo de emisión y envío: ni el PEM, ni la clave privada, ni la contraseña del certificado aparecen en respuestas, XML, logs ni auditoría. — Verificación: en verde, y en rojo con una mutación que registre el PEM en el log.
+- [x] **T072** [P] `Contract/SalesDocumentResourcesTest` (comprobante, línea, intento y cliente). — Verificación: en verde.
+- [x] **T073** `php artisan openapi:generate`. En `DevelopmentSeeder`, clientes demo (uno con DNI y otro con RUC) y, si SUNAT beta responde, una boleta y una factura demo emitidas. README de la API: emisión, estados, `schedule:run` y `schedule:work`. — Verificación: OpenAPI con las rutas nuevas; `migrate:fresh --seed` en local (autorizado).
 
 ## Fase 9 · Frontend
 
