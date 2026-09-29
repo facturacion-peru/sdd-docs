@@ -60,12 +60,16 @@ Primer arranque local: `php artisan migrate:fresh --seed` (crea las cuentas de p
 - El `TenantContext` persiste entre peticiones de una misma prueba: si la prueba crea datos de **otra** empresa después de una petición, limpiarlo antes con `app(TenantContext::class)->clear()`.
 - Las ventas de un ticket solo se revierten anulando el ticket (`InventoryService::reverse(..., fromSource: true)` desde `TicketService`).
 - Chrome headless (`--print-to-pdf`) ignora `@page size`: para comprobar los 80 mm hace falta el diálogo de impresión real.
+- Los dos layouts del router cuelgan de «/» con la misma prioridad: gana el primero declarado. `AppLayout` debe ir antes que `AuthLayout` (si no, recargar en «/» muestra un AuthLayout vacío); lo protege `app/router/__tests__/router.spec.ts`.
+- `DevelopmentSeeder` intenta validar la empresa demo contra SUNAT beta (red real). Sus pruebas simulan la respuesta con `Http::fake`; sin red, la configuración demo queda pendiente y el seeder no falla.
+- Certificados de prueba: `Tests\Support\TestCertificates::make()` (autofirmados con el RUC en `serialNumber`, `OU` o `CN`). Para uno ya vencido fuera de las pruebas, `openssl req -x509 … -not_before … -not_after …` (OpenSSL 3.5).
 - El código heredado de `legacy/` no se ejecuta: antes de reincorporar algo, leer `docs/investigacion/001-evaluacion-api-existente.md`.
 
 ## Bitácora
 
 Entradas breves y fechadas de decisiones o cambios relevantes (la más reciente arriba).
 
+- **2026-09-29** — Spec 004 implementada (T001–T073) en la rama `004-configuracion-sunat` de API y frontend: 380 pruebas de API (SQLite y PostgreSQL, con correlativo concurrente y prueba de no filtración de secretos) y 114 de frontend; recorrido de extremo a extremo 21/21 con validación real contra SUNAT beta y pantallas a 360 px revisadas. Secretos cifrados con `APP_KEY` (requisito `ext-openssl`). La verificación encontró que «/» mostraba un AuthLayout vacío al recargar (desde la 001) y se corrigió. Pendiente: probar con un certificado real y el merge (T074).
 - **2026-09-29** — Spec 003 integrada en `main` de la API y del frontend (merge local, T084); suites en verde sobre `main`. Siguiente: aclaraciones de la spec 004 (A-20, A-21).
 - **2026-09-28** — Spec 003 implementada (T001–T083) en la rama `003-tickets-venta`: 317 pruebas de API (SQLite y PostgreSQL, con numeración concurrente real) y 87 de frontend; recorrido de extremo a extremo 13/13 y pantallas a 360 px revisadas. Aclaraciones A-17 a A-19, A-29 y A-30. Navegación con menú «Más». Pendiente: cronometrar una venta (CE-001), probar la impresión en una térmica real y el merge (T084).
 - **2026-09-28** — Spec 002 integrada en `main` de la API y del frontend (merge local, T094); suites en verde sobre `main`. Siguiente: aclaraciones de la spec 003 (A-15, A-17 ⚖️, A-18, A-19).
