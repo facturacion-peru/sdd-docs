@@ -53,6 +53,10 @@ Registro único de preguntas abiertas y decisiones. Las specs las citan por su i
 | [A-36](#a-36) | Alcance del panel | 006 | Resuelta |
 | [A-37](#a-37) | Qué ve la plataforma de cada empresa | 006 | Resuelta |
 | [A-38](#a-38) | Protección del acceso de la plataforma | 006 | Resuelta |
+| [A-39](#a-39) ⚖️ | Instrumentos de corrección | 007 | Abierta |
+| [A-40](#a-40) | Cuándo vuelve el stock | 007 | Abierta |
+| [A-41](#a-41) | Quién emite notas de crédito | 007 | Abierta |
+| [A-42](#a-42) | Comprobantes rechazados | 007 | Abierta |
 
 ---
 
@@ -429,6 +433,41 @@ Es la cuenta con más poder del sistema. Hoy entra con correo y contraseña, igu
 **Recomendación:** B. En beta, con pocas empresas y sin valor legal, el riesgo es acotado y el segundo factor merece su propia spec; queda registrado como bloqueante de producción.
 
 > **Decisión (2026-09-29):** Aceptada la recomendación: en la 006, sesión de 8 h para la plataforma y auditoría de cada acceso. El segundo factor (TOTP) queda como **requisito previo a producción**, junto con A-24.
+
+## 007 · Anulación y corrección
+
+### A-39 ⚖️
+
+**¿Con qué instrumentos se corrige o anula un comprobante?** · Bloquea: 007 · Abierta
+
+SUNAT ofrece varios, con reglas distintas:
+
+- **Nota de crédito (07):** modifica una factura o boleta aceptada. Motivos del catálogo 09, entre ellos: 01 anulación de la operación, 02 anulación por error en el RUC, 03 corrección por error en la descripción, 04/05 descuentos, 06 devolución total, 07 devolución por ítem, 09 disminución en el valor.
+- **Nota de débito (08):** aumenta el valor (intereses, penalidades). Poco común en una tienda.
+- **Comunicación de baja:** anula facturas que **no se entregaron** al cliente, dentro de un plazo corto.
+- **Resumen diario:** la vía para anular boletas «por estado»; es un envío asíncrono con ticket de consulta.
+
+**Recomendación:** solo **nota de crédito**, con los motivos **01** (anulación de la operación), **06** (devolución total) y **07** (devolución por ítem). Cubren anular, devolver todo y devolver parte, para facturas y boletas, con el mismo flujo de envío que la 005. Los errores de RUC o descripción se corrigen anulando (01) y emitiendo un comprobante nuevo. Quedan fuera las notas de débito, la baja, el resumen diario y los descuentos posteriores. ⚖️ Confirmar con el contador.
+
+### A-40
+
+**¿Cuándo vuelve el stock?** · Bloquea: 007 · Abierta
+
+**Recomendación:** en una **devolución** (06, 07) el stock de lo devuelto se repone siempre. En una **anulación** (01) el administrador indica si la mercadería volvió, marcado por defecto que sí (por ejemplo, una venta anulada porque el cliente se arrepintió en caja). La reposición es una entrada nueva con el costo de los lotes que salieron, y referencia a la nota.
+
+### A-41
+
+**¿Quién emite notas de crédito?** · Bloquea: 007 · Abierta
+
+**Recomendación:** solo el **administrador de la empresa**, igual que anular tickets en la 003 (A-18): mueve dinero y stock. El vendedor ve las notas en el comprobante.
+
+### A-42
+
+**¿Qué pasa con un comprobante rechazado por SUNAT?** · Bloquea: 007 · Abierta
+
+Surgió al revisar la 005: al emitir se descuenta el stock y se consume el número; si SUNAT rechaza (casi siempre por un dato mal ingresado), el comprobante no existe para SUNAT pero la venta y el stock quedaron registrados. No se le puede emitir una nota de crédito porque SUNAT no lo aceptó.
+
+**Recomendación:** el administrador lo **descarta** con un motivo: queda «descartado», se repone su stock y su número queda como usado (no se reutiliza, para no romper la correlatividad). Luego se emite un comprobante nuevo con los datos corregidos.
 
 ---
 
