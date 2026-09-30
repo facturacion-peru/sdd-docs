@@ -1,6 +1,6 @@
 # Spec 009: Despliegue y operación
 
-**Estado:** Borrador para aprobación · **Versión:** 0.2 · **Fecha:** 2026-09-30
+**Estado:** Aprobada (2026-09-30) · **Versión:** 1.0 · **Fecha:** 2026-09-30
 **Depende de:** 001 a 007 · **Aclaraciones:** A-24 ⚖️, A-43, A-44, A-45, A-46, A-47, A-48
 
 ## Objetivo
@@ -100,3 +100,4 @@ Como desarrollador, quiero que cada versión pase las pruebas antes de llegar al
 | 2026-09-30 | A-46 | Repos privados propios, GitHub Actions y staging |
 | 2026-09-30 | A-47 | Proveedor de correo transaccional con dominio autenticado |
 | 2026-09-30 | A-48 | Monitoreo recomendado con avisos por correo |
+| 2026-09-30 | Aprobación | Spec aprobada por el usuario (v1.0), incluido el aviso de piloto en la aplicación (RF-009) |
