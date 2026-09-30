@@ -72,12 +72,16 @@ Primer arranque local: `php artisan migrate:fresh --seed` (crea las cuentas de p
 - Las rutas de plataforma resuelven el rol **antes** del *route model binding* (`EnsurePlatformAdmin` en la lista de prioridad, como `ResolveTenant`); si no, un usuario de empresa distinguiría ids existentes (404) de inexistentes (403).
 - `/auth/me` usa `tenant:allow-platform`: deja pasar al administrador de la plataforma (sin empresa) y conserva la revocación de tokens de cuentas o empresas desactivadas.
 - **Toda ruta nueva de plataforma** queda cubierta por `PlatformAccessTest` y `PlatformPrivacyTest` (se generan desde el router). Sus respuestas usan recursos `Platform*Resource` de lista blanca, nunca los de empresa.
+- **Notas de crédito:** la plantilla `notacr2.1` de Greenter no admite descuentos de línea; `UblBuilder` expresa esas líneas por sus valores netos. No volver a poner `setDescuentos` en líneas de nota.
+- Las ventas y reposiciones de un comprobante no se revierten desde el inventario: solo con una nota de crédito o descartando el rechazado (`reverse(..., fromSource: true)`).
+- Los errores por línea de la API usan claves planas (`"lines.0.quantity"`): en las pruebas, `->json('errors')['lines.0.quantity']`, no `assertJsonPath` (que trata los puntos como niveles).
 - El código heredado de `legacy/` no se ejecuta: antes de reincorporar algo, leer `docs/investigacion/001-evaluacion-api-existente.md`.
 
 ## Bitácora
 
 Entradas breves y fechadas de decisiones o cambios relevantes (la más reciente arriba).
 
+- **2026-09-30** — Spec 007 implementada (T001–T074) en la rama `007-notas-credito` de API y frontend: 609 pruebas de API (SQLite y PostgreSQL, con devoluciones concurrentes y consistencia aleatoria) y 162 de frontend. SUNAT beta aceptó sin observaciones notas de anulación, devolución parcial y total; recorrido de extremo a extremo 15/15 y pantallas a 360 px revisadas. Aclaraciones A-39 ⚖️ a A-42. Hallazgos: descuentos de línea en notas (Greenter), reversión manual de ventas de comprobantes, y `required_if` en el generador de OpenAPI. Pendiente: CE-003 en el celular, revisión contable (A-39) y el merge (T075).
 - **2026-09-29** — Spec 006 integrada en `main` de la API y del frontend (merge local, T074); suites en verde sobre `main`. Todas las capacidades del mapa de la visión (001–006) están integradas. Queda lo previo a producción: A-24 ⚖️ (datos personales, retención y 2FA de la plataforma) y la revisión contable de A-11, A-17 y A-22.
 - **2026-09-29** — Spec 006 implementada (T001–T073) en la rama `006-panel-plataforma` de API y frontend: 555 pruebas de API (SQLite y PostgreSQL, dos mutaciones) y 152 de frontend; recorrido de extremo a extremo 19/19 y pantallas a 360 px revisadas. Aclaraciones A-35 a A-38 (panel en Vue, A-08 actualizada). La verificación corrigió que la plataforma perdiera la sesión al recargar (`/auth/me`, desde la 001), una fuga 404/403 en rutas de plataforma y el generador de OpenAPI con objetos anidados. Pendiente: CE-001 cronometrado, 2FA antes de producción y el merge (T074).
 - **2026-09-29** — Spec 005 integrada en `main` de la API y del frontend (merge local, T095); suites en verde sobre `main`. Las specs 001–005 del MVP están completas; queda la spec 006 (panel de plataforma) y lo pendiente de producción (A-24 ⚖️).

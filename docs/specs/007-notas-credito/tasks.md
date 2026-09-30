@@ -25,8 +25,8 @@
 
 ## Fase 4 · Emisión de notas (HU-1, HU-2)
 
-- [ ] **T030** Bloquear la reversión manual de ventas de un comprobante en `InventoryService::reverse()` (hallazgo del plan) y añadir `InventoryService::restock()` hacia los lotes de la venta original. Pruebas incluidas. — Verificación: en verde.
-- [ ] **T031** Escribir pruebas `Sales/IssueCreditNoteTest` (con `FakeSunatSender`):
+- [x] **T030** Bloquear la reversión manual de ventas de un comprobante en `InventoryService::reverse()` (hallazgo del plan) y añadir `InventoryService::restock()` hacia los lotes de la venta original. Pruebas incluidas. — Verificación: en verde.
+- [x] **T031** Escribir pruebas `Sales/IssueCreditNoteTest` (con `FakeSunatSender`):
   - HU-1: anulación con y sin reposición; no se anula dos veces; el original pasa a «anulado» solo cuando la nota es aceptada.
   - HU-2: devolución parcial y total; límite por línea; segunda devolución; producto inactivo; el stock vuelve a los lotes originales.
   - A-41: el vendedor también emite.
@@ -34,42 +34,42 @@
   - Casos límite: sobre pendiente, rechazado o descartado → 422; SUNAT sin respuesta → nota pendiente y original sin cambios.
   - Auditoría de la nota y de la reposición.
   - Verificación: en rojo.
-- [ ] **T032** Implementar `CreditNoteService`, request, ruta y recurso ampliado (`correction_status`, `remaining`, `credit_notes`, `reference`). — Verificación: T031 en verde en ambas bases.
-- [ ] **T033** Escribir e implementar en `SunatDispatcher` el efecto del estado final de una nota: aceptada → `correction_status` del original; rechazada → se revierte su reposición. Pruebas incluidas. — Verificación: en verde.
-- [ ] **T034** [P] Escribir e implementar `Integration/Sales/ConcurrentReturnTest` (solo PostgreSQL): devoluciones simultáneas de la misma línea nunca superan lo emitido. Comprobar con una mutación (sin el bloqueo del original) que falla. — Verificación: en verde, y en rojo con la mutación.
+- [x] **T032** Implementar `CreditNoteService`, request, ruta y recurso ampliado (`correction_status`, `remaining`, `credit_notes`, `reference`). — Verificación: T031 en verde en ambas bases.
+- [x] **T033** Escribir e implementar en `SunatDispatcher` el efecto del estado final de una nota: aceptada → `correction_status` del original; rechazada → se revierte su reposición. Pruebas incluidas. — Verificación: en verde.
+- [x] **T034** [P] Escribir e implementar `Integration/Sales/ConcurrentReturnTest` (solo PostgreSQL): devoluciones simultáneas de la misma línea nunca superan lo emitido. Comprobar con una mutación (sin el bloqueo del original) que falla. — Verificación: en verde, y en rojo con la mutación.
 
 ## Fase 5 · Rechazados (HU-3)
 
-- [ ] **T040** Escribir pruebas `Sales/DiscardRejectedTest`: solo rechazados, solo el administrador, motivo obligatorio, stock repuesto, número usado, no admite notas, auditoría. — Verificación: en rojo.
-- [ ] **T041** Implementar `SalesDocumentService::discard()` y su ruta. — Verificación: T040 en verde.
+- [x] **T040** Escribir pruebas `Sales/DiscardRejectedTest`: solo rechazados, solo el administrador, motivo obligatorio, stock repuesto, número usado, no admite notas, auditoría. — Verificación: en rojo.
+- [x] **T041** Implementar `SalesDocumentService::discard()` y su ruta. — Verificación: T040 en verde.
 
 ## Fase 6 · Consistencia, seguridad y contrato
 
-- [ ] **T050** `Integration/Sales/ReturnConsistencyTest` (CE-002): secuencias aleatorias de ventas, devoluciones, anulaciones, notas rechazadas y descartes → el stock y los saldos cuadran con lo emitido menos lo devuelto. — Verificación: en verde con varias semillas.
-- [ ] **T051** [P] Rutas nuevas en `TenantRoutes.php` y casos de la empresa B en `CrossTenantAccessTest`; `NoSunatSecretsLeakTest` con una nota. — Verificación: en verde.
-- [ ] **T052** [P] `Contract/SalesDocumentResourcesTest` ampliado (nota, notas del comprobante, restantes). — Verificación: en verde.
-- [ ] **T053** PDF de la nota (título, comprobante modificado y motivo) con prueba; `php artisan openapi:generate`; series `FC01` y `BC01` en `DevelopmentSeeder`; README de la API. — Verificación: prueba en verde; OpenAPI con las rutas nuevas; `migrate:fresh --seed` en local (autorizado).
+- [x] **T050** `Integration/Sales/ReturnConsistencyTest` (CE-002): secuencias aleatorias de ventas, devoluciones, anulaciones, notas rechazadas y descartes → el stock y los saldos cuadran con lo emitido menos lo devuelto. — Verificación: en verde con varias semillas.
+- [x] **T051** [P] Rutas nuevas en `TenantRoutes.php` y casos de la empresa B en `CrossTenantAccessTest`; `NoSunatSecretsLeakTest` con una nota. — Verificación: en verde.
+- [x] **T052** [P] `Contract/SalesDocumentResourcesTest` ampliado (nota, notas del comprobante, restantes). — Verificación: en verde.
+- [x] **T053** PDF de la nota (título, comprobante modificado y motivo) con prueba; `php artisan openapi:generate`; series `FC01` y `BC01` en `DevelopmentSeeder`; README de la API. — Verificación: prueba en verde; OpenAPI con las rutas nuevas; `migrate:fresh --seed` en local (autorizado).
 
 ## Fase 7 · Frontend
 
-- [ ] **T060** `pnpm api:types`; tipos y API de notas, descarte y campos nuevos del comprobante. — Verificación: `pnpm type-check`.
-- [ ] **T061** Detalle del comprobante: «Registrar devolución» y «Anular» (diálogo con motivo, cantidades por línea o reposición), estado de corrección, notas y restantes por línea; detalle de una nota con su documento modificado. Pruebas incluidas. — Verificación: pruebas en verde.
-- [ ] **T062** «Descartar» para rechazados (solo el administrador), filtro «Notas de crédito» y distintivos «Anulado» y «Devuelto» en el listado. Pruebas incluidas. — Verificación: pruebas en verde.
-- [ ] **T063** [P] Series: crear series de nota de crédito. Pruebas incluidas. — Verificación: pruebas en verde.
+- [x] **T060** `pnpm api:types`; tipos y API de notas, descarte y campos nuevos del comprobante. — Verificación: `pnpm type-check`.
+- [x] **T061** Detalle del comprobante: «Registrar devolución» y «Anular» (diálogo con motivo, cantidades por línea o reposición), estado de corrección, notas y restantes por línea; detalle de una nota con su documento modificado. Pruebas incluidas. — Verificación: pruebas en verde.
+- [x] **T062** «Descartar» para rechazados (solo el administrador), filtro «Notas de crédito» y distintivos «Anulado» y «Devuelto» en el listado. Pruebas incluidas. — Verificación: pruebas en verde.
+- [x] **T063** [P] Series: crear series de nota de crédito. Pruebas incluidas. — Verificación: pruebas en verde.
 
 ## Fase 8 · Cierre
 
-- [ ] **T070** Ampliar `tests/Beta/SunatBetaTest` con notas de anulación y de devolución parcial sobre boleta y factura, y correrlo contra SUNAT beta real. — Verificación: casos aceptados; salida en `verificacion.md`.
-- [ ] **T071** API: `php artisan test`, `composer test:pgsql` y `vendor/bin/pint --test` en verde (códigos de salida). — Verificación: salidas adjuntas.
-- [ ] **T072** Frontend: `pnpm type-check`, `pnpm lint`, `pnpm test:unit --run` y `pnpm build-only` en verde. — Verificación: salidas adjuntas.
-- [ ] **T073** Verificación de extremo a extremo por el proxy de Vite:
+- [x] **T070** Ampliar `tests/Beta/SunatBetaTest` con notas de anulación y de devolución parcial sobre boleta y factura, y correrlo contra SUNAT beta real. — Verificación: casos aceptados; salida en `verificacion.md`.
+- [x] **T071** API: `php artisan test`, `composer test:pgsql` y `vendor/bin/pint --test` en verde (códigos de salida). — Verificación: salidas adjuntas.
+- [x] **T072** Frontend: `pnpm type-check`, `pnpm lint`, `pnpm test:unit --run` y `pnpm build-only` en verde. — Verificación: salidas adjuntas.
+- [x] **T073** Verificación de extremo a extremo por el proxy de Vite:
   - Devolución parcial (cronometrada, CE-003) y total; anulación con y sin reposición; notas aceptadas por SUNAT beta real.
   - Stock y saldos después de cada paso.
   - Nota con SUNAT caída (pendiente y reintento) y descarte de un rechazado.
   - El vendedor emite una nota; otra empresa recibe 404; búsqueda de secretos.
   - Capturas a 360 px. Resultado en `verificacion.md`.
   - Verificación: `verificacion.md` con resultado por paso.
-- [ ] **T074** Documentación: README de la API y del frontend, `AGENTS.md` y estado de la spec en `specs/README.md`. — Verificación: enlaces válidos.
+- [x] **T074** Documentación: README de la API y del frontend, `AGENTS.md` y estado de la spec en `specs/README.md`. — Verificación: enlaces válidos.
 - [ ] **T075** 🔒 Merge local de `007-notas-credito` a `main` en ambos repositorios y commit de la raíz. — Verificación: suites en verde sobre `main`.
 
 ## Trazabilidad
