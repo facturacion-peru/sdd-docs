@@ -524,6 +524,8 @@ Hoy el `origin` de la API apunta al repositorio del autor original (`yorchavez9`
 **Recomendación:** crear **repositorios privados propios** (API y frontend; la raíz de documentación también) en tu cuenta de GitHub. **GitHub Actions** corre las suites (API en SQLite y PostgreSQL, frontend completo) en cada cambio y, al integrar en `main`, despliega al servidor por SSH con un script sin tiempo de caída (carpetas de versión y enlace simbólico). Un ambiente de **pruebas (staging)** en el mismo servidor, con otra base de datos, para probar migraciones antes de producción.
 
 > **Decisión (2026-09-30):** Aceptada la recomendación: **repositorios privados propios** en GitHub, **GitHub Actions** con todas las suites en cada cambio y despliegue por SSH sin tiempo de caída al integrar en `main`, y un ambiente de **staging** en el mismo servidor.
+>
+> **Actualización (2026-09-30, del usuario):** los repositorios se publican **públicos** en GitHub; después se harán unos ajustes que quedarán **solo en privado**. El despliegue al servidor se **pospone**: por ahora no se contrata el VPS. Consecuencia: antes de publicar se audita el historial de git en busca de secretos, y ningún secreto (ni siquiera de prueba real) puede entrar en los repositorios.
 
 ### A-47
 

@@ -1,14 +1,16 @@
 # Tareas 009: Despliegue y operación
 
-**Estado:** Borrador · **Fecha:** 2026-09-30 · **Plan:** [plan.md](./plan.md) (aprobado)
+**Estado:** Aprobado (2026-09-30) · **Fecha:** 2026-09-30 · **Plan:** [plan.md](./plan.md) (aprobado)
 
 > Mismas convenciones que las specs anteriores: tareas pequeñas con su verificación; `[P]` = en paralelo con la anterior; 🔒 = confirmación del usuario al ejecutarla.
 > 👤 = **la hace el usuario** (cuentas, pagos, accesos y secretos); el agente deja preparada la guía. 🤝 = la hacen juntos: el usuario da el acceso y el agente ejecuta y documenta.
+> ⏸ = **en espera**: el despliegue al servidor se pospuso (A-46, actualización del 2026-09-30).
 > **Pruebas primero** en las tareas de código. Antes de cada commit se verifica con el **código de salida** de las suites.
 
 ## Fase 1 · Preparación (sin servidor)
 
 - [ ] **T001** Crear la rama `009-despliegue-operacion` desde `main` en la API y en el frontend. — Verificación: rama en ambos.
+- [ ] **T003** Auditoría de secretos antes de publicar (A-46): historial completo de los tres repositorios (claves privadas, certificados, contraseñas, `.env`, tokens, correos de terceros). Si aparece algo, se decide con el usuario cómo limpiarlo antes de subir. — Verificación: informe de la auditoría; nada sensible en lo que se publica.
 - [ ] **T002** Guía `deploy/PREPARACION.md` para el usuario: qué contratar y crear (VPS, dominio, DNS, repositorios, almacenamiento S3, correo, monitores), qué registros DNS poner (A, SPF, DKIM, DMARC), qué secretos generar y dónde guardarlos, y la lista de secretos de GitHub Actions. — Verificación: guía revisada por el usuario.
 
 ## Fase 2 · Cambios en la aplicación
@@ -30,20 +32,20 @@
 
 ## Fase 4 · Infraestructura (usuario)
 
-- [ ] **T030** 👤 Contratar el VPS (Ubuntu 24.04, región cercana al Perú) y el dominio; crear los registros DNS de los cuatro subdominios. — Verificación: los subdominios resuelven a la IP del VPS.
-- [ ] **T031** 👤 Crear los repositorios privados (API, frontend y documentación) y subir el código; cambiar el `origin` de la API (hoy apunta al autor original). — Verificación: los workflows de CI corren en GitHub.
-- [ ] **T032** 👤 Crear el almacenamiento S3, la cuenta del proveedor de correo (con SPF, DKIM y DMARC en el DNS) y los monitores (disponibilidad y latidos); generar sus claves. — Verificación: dominio verificado en el proveedor de correo; URLs de los monitores anotadas.
-- [ ] **T033** 👤 Generar `APP_KEY` y `BACKUP_ARCHIVE_PASSWORD` de cada ambiente, guardarlas en el gestor de contraseñas y cargar los secretos en GitHub Actions y en los `.env` del servidor según `PREPARACION.md`. — Verificación: lista de secretos de la guía completa.
+- [ ] ⏸ **T030** 👤 Contratar el VPS (Ubuntu 24.04, región cercana al Perú) y el dominio; crear los registros DNS de los cuatro subdominios. — Verificación: los subdominios resuelven a la IP del VPS.
+- [ ] **T031** 👤 Crear los repositorios **públicos** (API, frontend y documentación; A-46 actualizada) y subir el código; cambiar el `origin` de la API (hoy apunta al autor original). — Verificación: los workflows de CI corren en GitHub.
+- [ ] ⏸ **T032** 👤 Crear el almacenamiento S3, la cuenta del proveedor de correo (con SPF, DKIM y DMARC en el DNS) y los monitores (disponibilidad y latidos); generar sus claves. — Verificación: dominio verificado en el proveedor de correo; URLs de los monitores anotadas.
+- [ ] ⏸ **T033** 👤 Generar `APP_KEY` y `BACKUP_ARCHIVE_PASSWORD` de cada ambiente, guardarlas en el gestor de contraseñas y cargar los secretos en GitHub Actions y en los `.env` del servidor según `PREPARACION.md`. — Verificación: lista de secretos de la guía completa.
 
 ## Fase 5 · Primer despliegue y verificación (juntos)
 
-- [ ] **T040** 🤝 Ejecutar `provision.sh` en el VPS y emitir los certificados HTTPS. — Verificación: los cuatro subdominios responden con HTTPS; `ufw status`; SSH con contraseña rechazado.
-- [ ] **T041** 🤝 Primer despliegue a staging por CI, `migrate --force` y alta de la primera empresa con `platform:create-admin` y el panel. — Verificación: `/up` en verde; la web de staging entra con la cuenta de plataforma.
-- [ ] **T042** 🤝 Verificación de staging: correo de invitación recibido fuera de spam, boleta y nota de crédito aceptadas por SUNAT beta, *scheduler* corriendo, franja de piloto visible. — Verificación: resultado por paso en `verificacion.md`.
-- [ ] **T043** 🤝 Copia real a S3 y restauración completa en una base limpia, cronometrada (CE-001), más `restore-test.sh`. — Verificación: tiempo y resultado en `verificacion.md`.
-- [ ] **T044** 🤝 Caída simulada: detener PHP-FPM y el cron del *scheduler*, y crear un pendiente de más de 1 h → avisos por correo en menos de 5 minutos (CE-002). — Verificación: hora de cada aviso en `verificacion.md`.
-- [ ] **T045** 🔒 Primer despliegue a producción del piloto con aprobación manual. — Verificación: `/up` en verde; cuenta de plataforma creada; sin cuentas de prueba (`User::count()` solo con la de plataforma).
-- [ ] **T046** 🤝 Una empresa del piloto completa el flujo del MVP en producción (CE-003). — Verificación: resultado en `verificacion.md`.
+- [ ] ⏸ **T040** 🤝 Ejecutar `provision.sh` en el VPS y emitir los certificados HTTPS. — Verificación: los cuatro subdominios responden con HTTPS; `ufw status`; SSH con contraseña rechazado.
+- [ ] ⏸ **T041** 🤝 Primer despliegue a staging por CI, `migrate --force` y alta de la primera empresa con `platform:create-admin` y el panel. — Verificación: `/up` en verde; la web de staging entra con la cuenta de plataforma.
+- [ ] ⏸ **T042** 🤝 Verificación de staging: correo de invitación recibido fuera de spam, boleta y nota de crédito aceptadas por SUNAT beta, *scheduler* corriendo, franja de piloto visible. — Verificación: resultado por paso en `verificacion.md`.
+- [ ] ⏸ **T043** 🤝 Copia real a S3 y restauración completa en una base limpia, cronometrada (CE-001), más `restore-test.sh`. — Verificación: tiempo y resultado en `verificacion.md`.
+- [ ] ⏸ **T044** 🤝 Caída simulada: detener PHP-FPM y el cron del *scheduler*, y crear un pendiente de más de 1 h → avisos por correo en menos de 5 minutos (CE-002). — Verificación: hora de cada aviso en `verificacion.md`.
+- [ ] ⏸ **T045** 🔒 Primer despliegue a producción del piloto con aprobación manual. — Verificación: `/up` en verde; cuenta de plataforma creada; sin cuentas de prueba (`User::count()` solo con la de plataforma).
+- [ ] ⏸ **T046** 🤝 Una empresa del piloto completa el flujo del MVP en producción (CE-003). — Verificación: resultado en `verificacion.md`.
 
 ## Fase 6 · Cierre
 
