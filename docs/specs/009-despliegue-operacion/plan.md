@@ -1,6 +1,6 @@
 # Plan 009: Despliegue y operación
 
-**Estado:** Borrador · **Fecha:** 2026-09-30 · **Spec:** [spec.md](./spec.md) (versión aprobada: 1.0)
+**Estado:** Aprobado (2026-09-30) · **Fecha:** 2026-09-30 · **Spec:** [spec.md](./spec.md) (versión aprobada: 1.0)
 
 ## Resumen técnico
 
@@ -141,4 +141,4 @@ El script `deploy/provision.sh` deja el servidor en este estado y se puede volve
 
 ## Aprobación
 
-Pendiente.
+Aprobado por el usuario el 2026-09-30, incluidas las dependencias `spatie/laravel-backup` y `league/flysystem-aws-s3-v3`, y el reparto de responsabilidades.
