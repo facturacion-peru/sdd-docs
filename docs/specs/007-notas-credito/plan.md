@@ -51,6 +51,14 @@
 - **Importes de una devolución parcial:** `TaxCalculator::line()` con la cantidad devuelta y el mismo precio. El descuento de la línea se **prorratea**: `redondeo(descuento × devuelto / cantidad, 2)`. Cuando se devuelve lo último que queda de una línea, se toma el resto exacto de importe y descuento, para que la suma de todas las notas coincida al céntimo con la línea original (CE-002).
 - **Totales:** `TaxCalculator::totals()`; la leyenda y el QR como en la 005.
 
+**Resultado del *spike* (T002, 2026-09-30, `tests/Beta/spike_007.php`):** SUNAT beta aceptó con CDR 0 y **sin observaciones** una boleta (con descuento y un exonerado) y una factura, y sobre ellas tres notas de crédito:
+
+- **BC01 · motivo 07:** devolución de 1 de 4 unidades, con el descuento prorrateado (0.25 de 1.00).
+- **BC01 · motivo 01:** anulación del resto de la boleta, con el resto exacto del descuento (0.75).
+- **FC01 · motivo 06:** devolución total de la factura.
+
+La boleta (S/ 42.50) cuadra al céntimo con la suma de sus dos notas (7.25 + 35.25). La nota va sin forma de pago, como en el ejemplo de Greenter. La regla del plan no cambia.
+
 ## Servicios
 
 | Pieza | Responsabilidad | Spec |

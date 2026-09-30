@@ -8,8 +8,8 @@
 
 ## Fase 1 · Preparación y *spike*
 
-- [ ] **T001** Crear la rama `007-notas-credito` desde `main` en la API y en el frontend. — Verificación: rama en ambos.
-- [ ] **T002** *Spike* contra SUNAT beta (`tests/Beta/spike_007.php`): notas de crédito con motivos 01, 06 y 07 sobre una boleta y una factura aceptadas, con series `BC01` y `FC01`; devolución parcial con descuento prorrateado. — Verificación: resultado por caso anotado en `plan.md`; si algún caso falla, la regla corregida queda en el plan.
+- [x] **T001** Crear la rama `007-notas-credito` desde `main` en la API y en el frontend. — Verificación: rama en ambos.
+- [x] **T002** *Spike* contra SUNAT beta (`tests/Beta/spike_007.php`): notas de crédito con motivos 01, 06 y 07 sobre una boleta y una factura aceptadas, con series `BC01` y `FC01`; devolución parcial con descuento prorrateado. — Verificación: resultado por caso anotado en `plan.md`; si algún caso falla, la regla corregida queda en el plan.
 
 ## Fase 2 · Fundamentos
 
