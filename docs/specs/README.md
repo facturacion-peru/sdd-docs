@@ -11,7 +11,7 @@ Una carpeta por capacidad, numerada. Cada una avanza por el ciclo SDD de la [con
 | 003 | [Tickets de venta internos](003-tickets-venta/spec.md) | **Integrada en `main`** · [plan](003-tickets-venta/plan.md) · [tareas](003-tickets-venta/tasks.md) · [verificación](003-tickets-venta/verificacion.md) | 001, 002 | — (A-17 ⚖️ a confirmar antes de producción) |
 | 004 | [Configuración segura de SUNAT y series](004-configuracion-sunat/spec.md) | **Integrada en `main`** · [plan](004-configuracion-sunat/plan.md) · [tareas](004-configuracion-sunat/tasks.md) · [verificación](004-configuracion-sunat/verificacion.md) | 001 | — |
 | 005 | [Emisión y consulta de comprobantes en beta](005-emision-comprobantes-beta/spec.md) | **Integrada en `main`** · [plan](005-emision-comprobantes-beta/plan.md) · [tareas](005-emision-comprobantes-beta/tasks.md) · [verificación](005-emision-comprobantes-beta/verificacion.md) | 001, 002, 003, 004 | — (A-22 ⚖️ a confirmar antes de producción) |
-| 006 | [Panel de administración de la plataforma](006-panel-plataforma/spec.md) | En aprobación (v0.2) | 001, 004, 005 | — |
+| 006 | [Panel de administración de la plataforma](006-panel-plataforma/spec.md) | Aprobada · [plan](006-panel-plataforma/plan.md) (borrador) | 001, 004, 005 | — |
 
 Orden de trabajo: **001 → 002 → 003 → 004 → 005**. 003 y 004 son independientes entre sí; 004 puede adelantarse si se prioriza SUNAT.
 

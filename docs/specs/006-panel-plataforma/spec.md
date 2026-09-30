@@ -1,6 +1,6 @@
 # Spec 006: Panel de administración de la plataforma
 
-**Estado:** Borrador para aprobación · **Versión:** 0.2 · **Fecha:** 2026-09-29
+**Estado:** Aprobada (2026-09-29) · **Versión:** 1.0 · **Fecha:** 2026-09-29
 **Depende de:** 001, 004, 005 · **Aclaraciones:** A-08, A-24 ⚖️, A-35, A-36, A-37, A-38
 
 ## Objetivo
@@ -101,3 +101,4 @@ Como administrador de la plataforma, quiero ver el historial de acciones de la p
 | 2026-09-29 | A-36 | Alcance recomendado; administradores de la plataforma por consola |
 | 2026-09-29 | A-37 | Solo metadatos y contadores, más soporte de envío con reintento |
 | 2026-09-29 | A-38 | Sesión de 8 h y auditoría de accesos; 2FA antes de producción |
+| 2026-09-29 | Aprobación | Spec aprobada por el usuario (v1.0) |
