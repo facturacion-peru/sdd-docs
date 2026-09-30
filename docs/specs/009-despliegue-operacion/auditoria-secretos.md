@@ -22,4 +22,13 @@ No hay claves de servicios en la nube, tokens de GitHub ni claves privadas reale
 
 ## Decisión sobre `.env.beta`
 
-Pendiente del usuario (ver la respuesta del agente del 2026-09-30).
+**Decisión del usuario (2026-09-30):** limpiar ese archivo del historial.
+
+**Hecho:**
+
+1. Copia completa previa: `respaldos/api-antes-de-limpiar-historial-2026-09-30.bundle` (todas las ramas; fuera de los repositorios, ignorada por git).
+2. `git filter-branch --index-filter 'git rm --cached --ignore-unmatch .env.beta' -- --branches` sobre las 9 ramas locales.
+3. Verificado: 189 commits antes y después, con su autoría (60 del autor original, 129 propios); el contenido de `main` y de la rama de trabajo es idéntico al anterior; `.env.beta` no es alcanzable desde ninguna rama.
+4. El remoto del autor original pasó a llamarse `upstream`; `origin` queda libre para el repositorio propio.
+
+**Consecuencia:** cambiaron los identificadores de todos los commits de la API. Las referencias a *hashes* de la API en documentos anteriores (bitácora, verificaciones) apuntan a los identificadores viejos, que siguen en la copia.

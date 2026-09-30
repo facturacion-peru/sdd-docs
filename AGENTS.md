@@ -9,7 +9,7 @@ Notas para agentes (y personas) que trabajen en este espacio. Aquí va lo import
 | `Api-de-facturacion-electronica-sunat-Peru/` | API REST multiempresa (empresas, usuarios, inventario, tickets y emisión SUNAT en beta). El panel de plataforma irá en el frontend Vue (spec 006, A-35) | Laravel 12, PHP 8.2+, Greenter 5.1, Sanctum, Pest, PostgreSQL | [README](Api-de-facturacion-electronica-sunat-Peru/README.md) |
 | `frontend-api-facturacion-electronica-sunat/` | App de todos los usuarios de empresa, incluido su administrador (A-08), y del administrador de la plataforma en `/plataforma` (A-35). Futuro APK con Capacitor | Vue 3 + TS 5.9, Vite 8, Pinia, Tailwind 4, `openapi-fetch` | [README](frontend-api-facturacion-electronica-sunat/README.md) |
 
-Hay tres repositorios git independientes: la **raíz** (solo `docs/`, `AGENTS.md` y `CLAUDE.md`; ignora las dos carpetas de proyecto), la **API** (fork de `yorchavez9/Api-de-facturacion-electronica-sunat-Peru`) y el **frontend** (desde la tarea T002 de la spec 001).
+Hay tres repositorios git independientes: la **raíz** (solo `docs/`, `AGENTS.md` y `CLAUDE.md`; ignora las dos carpetas de proyecto y `respaldos/`), la **API** (fork de `yorchavez9/Api-de-facturacion-electronica-sunat-Peru`, remoto `upstream`) y el **frontend** (desde la tarea T002 de la spec 001). Se publicarán **públicos** en GitHub (A-46): nada secreto entra en ellos.
 
 ## Reglas
 
@@ -75,6 +75,7 @@ Primer arranque local: `php artisan migrate:fresh --seed` (crea las cuentas de p
 - **Notas de crédito:** la plantilla `notacr2.1` de Greenter no admite descuentos de línea; `UblBuilder` expresa esas líneas por sus valores netos. No volver a poner `setDescuentos` en líneas de nota.
 - Las ventas y reposiciones de un comprobante no se revierten desde el inventario: solo con una nota de crédito o descartando el rechazado (`reverse(..., fromSource: true)`).
 - Los errores por línea de la API usan claves planas (`"lines.0.quantity"`): en las pruebas, `->json('errors')['lines.0.quantity']`, no `assertJsonPath` (que trata los puntos como niveles).
+- El historial de la API se reescribió el 2026-09-30 para quitar un `.env.beta` del autor original con sus credenciales (auditoría de la 009). Los *hashes* de la API anteriores a esa fecha que aparezcan en documentos ya no existen; la copia está en `respaldos/`.
 - El código heredado de `legacy/` no se ejecuta: antes de reincorporar algo, leer `docs/investigacion/001-evaluacion-api-existente.md`.
 
 ## Bitácora

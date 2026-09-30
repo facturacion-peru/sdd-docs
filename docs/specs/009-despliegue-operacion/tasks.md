@@ -10,7 +10,7 @@
 ## Fase 1 · Preparación (sin servidor)
 
 - [x] **T001** Crear la rama `009-despliegue-operacion` desde `main` en la API y en el frontend. — Verificación: rama en ambos.
-- [ ] **T003** Auditoría de secretos antes de publicar (A-46): historial completo de los tres repositorios (claves privadas, certificados, contraseñas, `.env`, tokens, correos de terceros). Si aparece algo, se decide con el usuario cómo limpiarlo antes de subir. — Verificación: informe de la auditoría; nada sensible en lo que se publica.
+- [x] **T003** Auditoría de secretos antes de publicar (A-46): historial completo de los tres repositorios (claves privadas, certificados, contraseñas, `.env`, tokens, correos de terceros). Si aparece algo, se decide con el usuario cómo limpiarlo antes de subir. — Verificación: informe de la auditoría; nada sensible en lo que se publica.
 - [ ] **T002** Guía `deploy/PREPARACION.md` para el usuario: qué contratar y crear (VPS, dominio, DNS, repositorios, almacenamiento S3, correo, monitores), qué registros DNS poner (A, SPF, DKIM, DMARC), qué secretos generar y dónde guardarlos, y la lista de secretos de GitHub Actions. — Verificación: guía revisada por el usuario.
 
 ## Fase 2 · Cambios en la aplicación
