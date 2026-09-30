@@ -1,6 +1,6 @@
 # Tareas 007: Anulación y corrección de comprobantes
 
-**Estado:** Borrador · **Fecha:** 2026-09-30 · **Plan:** [plan.md](./plan.md) (aprobado)
+**Estado:** Aprobado (2026-09-30) · **Fecha:** 2026-09-30 · **Plan:** [plan.md](./plan.md) (aprobado)
 
 > Mismas convenciones que las specs anteriores: tareas pequeñas con su verificación; `[P]` = en paralelo con la anterior; 🔒 = confirmación del usuario al ejecutarla.
 > **Pruebas primero:** las tareas «Escribir pruebas» terminan en rojo y la siguiente las pone en verde.
