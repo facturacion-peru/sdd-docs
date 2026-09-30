@@ -57,12 +57,12 @@ Registro único de preguntas abiertas y decisiones. Las specs las citan por su i
 | [A-40](#a-40) | Cuándo vuelve el stock | 007 | Resuelta |
 | [A-41](#a-41) | Quién emite notas de crédito | 007 | Resuelta |
 | [A-42](#a-42) | Comprobantes rechazados | 007 | Resuelta |
-| [A-43](#a-43) | Alcance del primer despliegue | 009 | Abierta |
-| [A-44](#a-44) | Alojamiento | 009 | Abierta |
-| [A-45](#a-45) | Copias de seguridad | 009 | Abierta |
-| [A-46](#a-46) | Despliegue y repositorios | 009 | Abierta |
-| [A-47](#a-47) | Correo | 009 | Abierta |
-| [A-48](#a-48) | Monitoreo y avisos | 009 | Abierta |
+| [A-43](#a-43) | Alcance del primer despliegue | 009 | Resuelta |
+| [A-44](#a-44) | Alojamiento | 009 | Resuelta |
+| [A-45](#a-45) | Copias de seguridad | 009 | Resuelta |
+| [A-46](#a-46) | Despliegue y repositorios | 009 | Resuelta |
+| [A-47](#a-47) | Correo | 009 | Resuelta |
+| [A-48](#a-48) | Monitoreo y avisos | 009 | Resuelta |
 
 ---
 
@@ -487,7 +487,7 @@ Surgió al revisar la 005: al emitir se descuenta el stock y se consume el núme
 
 ### A-43
 
-**¿Para qué es el primer despliegue?** · Bloquea: 009 · Abierta
+**¿Para qué es el primer despliegue?** · Bloquea: 009 · **Resuelta**
 
 La revisión legal (A-24 ⚖️) de datos personales sigue pendiente, y todo es beta (sin valor legal). Los clientes que registran las empresas (DNI, nombres) son datos personales de terceros.
 
@@ -497,35 +497,45 @@ La revisión legal (A-24 ⚖️) de datos personales sigue pendiente, y todo es 
 
 **Recomendación:** A. Permite validar la operación (servidor, copias, avisos, uso en el celular) sin exponer datos personales de terceros antes de la revisión legal.
 
+> **Decisión (2026-09-30):** Aceptada la recomendación: **piloto con empresas reales sin datos reales de sus clientes**. Emiten a «Cliente varios» o con datos ficticios hasta cerrar A-24 ⚖️; así se valida la operación sin exponer datos personales de terceros.
+
 ### A-44
 
-**¿Dónde se aloja?** · Bloquea: 009 · Abierta
+**¿Dónde se aloja?** · Bloquea: 009 · **Resuelta**
 
 **Recomendación:** **un solo servidor virtual (VPS)** en un proveedor con región cercana al Perú (p. ej. São Paulo o Miami): Ubuntu LTS, Nginx, PHP 8.5-FPM, PostgreSQL y la aplicación web como archivos estáticos en el mismo Nginx, con HTTPS de Let's Encrypt. Dos subdominios (aplicación y API). Para el volumen de A-06 un servidor basta y es lo más simple y barato; la base de datos local se protege con las copias de A-45. Una base de datos gestionada (más cara) queda para cuando haya más empresas.
 
+> **Decisión (2026-09-30):** Aceptada la recomendación: **un VPS propio** en región cercana al Perú, con Ubuntu LTS, Nginx, PHP 8.5-FPM, PostgreSQL local y la aplicación web estática en el mismo Nginx, HTTPS de Let's Encrypt y dos subdominios.
+
 ### A-45
 
-**¿Cómo son las copias de seguridad?** · Bloquea: 009 · Abierta
+**¿Cómo son las copias de seguridad?** · Bloquea: 009 · **Resuelta**
 
 **Recomendación:** copia **diaria** de PostgreSQL y de `storage/app/public` (logos), **cifrada** y enviada a un almacenamiento de objetos externo (compatible con S3), con retención de **30 copias diarias y 12 semanales**. `APP_KEY` se guarda **aparte** (gestor de contraseñas del responsable), porque sin ella los secretos de SUNAT de las copias no se descifran. Restauración de prueba **mensual**. La retención legal de comprobantes (A-24 ⚖️) se ajusta cuando se resuelva.
 
+> **Decisión (2026-09-30):** Aceptada la recomendación: copia **diaria y cifrada** de PostgreSQL y de los logos en un almacenamiento externo compatible con S3, con 30 diarias y 12 semanales; `APP_KEY` aparte en un gestor de contraseñas; restauración de prueba mensual.
+
 ### A-46
 
-**¿Cómo se despliega y dónde viven los repositorios?** · Bloquea: 009 · Abierta
+**¿Cómo se despliega y dónde viven los repositorios?** · Bloquea: 009 · **Resuelta**
 
 Hoy el `origin` de la API apunta al repositorio del autor original (`yorchavez9`) y el frontend no tiene remoto.
 
 **Recomendación:** crear **repositorios privados propios** (API y frontend; la raíz de documentación también) en tu cuenta de GitHub. **GitHub Actions** corre las suites (API en SQLite y PostgreSQL, frontend completo) en cada cambio y, al integrar en `main`, despliega al servidor por SSH con un script sin tiempo de caída (carpetas de versión y enlace simbólico). Un ambiente de **pruebas (staging)** en el mismo servidor, con otra base de datos, para probar migraciones antes de producción.
 
+> **Decisión (2026-09-30):** Aceptada la recomendación: **repositorios privados propios** en GitHub, **GitHub Actions** con todas las suites en cada cambio y despliegue por SSH sin tiempo de caída al integrar en `main`, y un ambiente de **staging** en el mismo servidor.
+
 ### A-47
 
-**¿Con qué se envían los correos?** · Bloquea: 009 · Abierta
+**¿Con qué se envían los correos?** · Bloquea: 009 · **Resuelta**
 
 **Recomendación:** un **proveedor de correo transaccional** (p. ej. Amazon SES, Resend o Brevo) con el **dominio propio** autenticado (SPF, DKIM y DMARC). El SMTP de un correo personal termina en spam y tiene límites bajos.
 
+> **Decisión (2026-09-30):** Aceptada la recomendación: **proveedor de correo transaccional** con el dominio propio autenticado (SPF, DKIM, DMARC).
+
 ### A-48
 
-**¿Qué se vigila y a quién se avisa?** · Bloquea: 009 · Abierta
+**¿Qué se vigila y a quién se avisa?** · Bloquea: 009 · **Resuelta**
 
 **Recomendación:**
 
@@ -534,6 +544,8 @@ Hoy el `origin` de la API apunta al repositorio del autor original (`yorchavez9`
 - Una revisión cada 15 minutos que avisa si hay comprobantes pendientes hace más de 1 hora, si falló la última copia o si el disco pasa del 80 %.
 - Errores 500 registrados con su detalle en el log (sin secretos) y aviso si se repiten.
 - **Canal:** correo al responsable del SaaS.
+
+> **Decisión (2026-09-30):** Aceptada la recomendación, con avisos **por correo** al responsable del SaaS.
 
 ---
 

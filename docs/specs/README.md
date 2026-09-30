@@ -14,7 +14,7 @@ Una carpeta por capacidad, numerada. Cada una avanza por el ciclo SDD de la [con
 | 006 | [Panel de administración de la plataforma](006-panel-plataforma/spec.md) | **Integrada en `main`** · [plan](006-panel-plataforma/plan.md) · [tareas](006-panel-plataforma/tasks.md) · [verificación](006-panel-plataforma/verificacion.md) | 001, 004, 005 | — |
 | 007 | [Anulación y corrección de comprobantes](007-notas-credito/spec.md) | **Integrada en `main`** · [plan](007-notas-credito/plan.md) · [tareas](007-notas-credito/tasks.md) · [verificación](007-notas-credito/verificacion.md) | 002, 004, 005 | — (A-39 ⚖️ a confirmar antes de producción) |
 | 008 | Paso a producción SUNAT | Por especificar (espera la revisión legal A-24 ⚖️) | 005, 007, 009 | A-24 ⚖️ |
-| 009 | [Despliegue y operación](009-despliegue-operacion/spec.md) | En aclaración | 001–007 | A-43 a A-48 |
+| 009 | [Despliegue y operación](009-despliegue-operacion/spec.md) | En aprobación (v0.2) | 001–007 | — |
 
 Orden de trabajo: **001 → 002 → 003 → 004 → 005**. 003 y 004 son independientes entre sí; 004 puede adelantarse si se prioriza SUNAT.
 
