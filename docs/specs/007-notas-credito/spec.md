@@ -1,6 +1,6 @@
 # Spec 007: Anulación y corrección de comprobantes
 
-**Estado:** Borrador para aprobación · **Versión:** 0.2 · **Fecha:** 2026-09-30
+**Estado:** Aprobada (2026-09-30) · **Versión:** 1.0 · **Fecha:** 2026-09-30
 **Depende de:** 002, 004, 005 · **Aclaraciones:** A-22 ⚖️, A-39 ⚖️, A-40, A-41, A-42
 
 > ⚖️ Los motivos y el uso de la nota de crédito deben revisarse con un contador antes de producción (A-39).
@@ -99,3 +99,4 @@ Como usuario de empresa, quiero ver en cada comprobante sus notas de crédito y 
 | 2026-09-30 | A-40 | La devolución repone el stock; en la anulación se pregunta (por defecto, sí) |
 | 2026-09-30 | A-41 | También el vendedor emite notas de crédito, auditado |
 | 2026-09-30 | A-42 | El administrador descarta los rechazados y se repone el stock |
+| 2026-09-30 | Aprobación | Spec aprobada por el usuario (v1.0) |
