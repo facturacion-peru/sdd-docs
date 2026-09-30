@@ -13,15 +13,15 @@
 
 ## Fase 2 · Fundamentos
 
-- [ ] **T010** Enums: `DocumentType::CreditNote` (`07`, prefijo según el comprobante modificado), `CreditNoteReason` (`01`, `06`, `07`, con etiquetas), `CorrectionStatus` y el estado `discarded` en `SalesDocumentStatus`. Con pruebas. — Verificación: pruebas en verde.
-- [ ] **T011** Migración: columnas nuevas de `sales_documents` y `sales_document_lines`; `series` admite `07`. Modelos actualizados (relaciones `reference`, `creditNotes`, `referenceLine`; campos mutables tras emitir). — Verificación: `test` y `test:pgsql` en verde; `php artisan migrate` en local.
-- [ ] **T012** Series de nota de crédito en la 004: `StoreSeriesRequest` admite `07` con código `F…` o `B…`, y el Nuevo RUS no puede crear `F…`. Ampliar `SeriesTest`. — Verificación: pruebas en verde.
+- [x] **T010** Enums: `DocumentType::CreditNote` (`07`, prefijo según el comprobante modificado), `CreditNoteReason` (`01`, `06`, `07`, con etiquetas), `CorrectionStatus` y el estado `discarded` en `SalesDocumentStatus`. Con pruebas. — Verificación: pruebas en verde.
+- [x] **T011** Migración: columnas nuevas de `sales_documents` y `sales_document_lines`; `series` admite `07`. Modelos actualizados (relaciones `reference`, `creditNotes`, `referenceLine`; campos mutables tras emitir). — Verificación: `test` y `test:pgsql` en verde; `php artisan migrate` en local.
+- [x] **T012** Series de nota de crédito en la 004: `StoreSeriesRequest` admite `07` con código `F…` o `B…`, y el Nuevo RUS no puede crear `F…`. Ampliar `SeriesTest`. — Verificación: pruebas en verde.
 
 ## Fase 3 · Cálculo y XML
 
-- [ ] **T020** Escribir pruebas `Unit/Sunat/CreditNoteCalculatorTest`: devolución parcial de una línea con descuento, devoluciones sucesivas que suman exacto al céntimo, resto final, anulación del restante. — Verificación: en rojo.
-- [ ] **T021** Implementar el cálculo de las líneas de la nota (prorrateo y resto) sobre `TaxCalculator`. — Verificación: T020 en verde.
-- [ ] **T022** Escribir e implementar el caso de nota en `UblBuilderTest` y en `UblBuilder` (`Note` de Greenter: documento afectado, motivo, descripción, totales). — Verificación: en verde.
+- [x] **T020** Escribir pruebas `Unit/Sunat/CreditNoteCalculatorTest`: devolución parcial de una línea con descuento, devoluciones sucesivas que suman exacto al céntimo, resto final, anulación del restante. — Verificación: en rojo.
+- [x] **T021** Implementar el cálculo de las líneas de la nota (prorrateo y resto) sobre `TaxCalculator`. — Verificación: T020 en verde.
+- [x] **T022** Escribir e implementar el caso de nota en `UblBuilderTest` y en `UblBuilder` (`Note` de Greenter: documento afectado, motivo, descripción, totales). — Verificación: en verde.
 
 ## Fase 4 · Emisión de notas (HU-1, HU-2)
 

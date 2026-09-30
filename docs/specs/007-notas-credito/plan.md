@@ -59,6 +59,10 @@
 
 La boleta (S/ 42.50) cuadra al céntimo con la suma de sus dos notas (7.25 + 35.25). La nota va sin forma de pago, como en el ejemplo de Greenter. La regla del plan no cambia.
 
+**Hallazgo al construir el XML (T022):** la plantilla de nota de crédito de Greenter (`notacr2.1`) **no incluye descuentos de línea**: el descuento del *spike* se descartó sin aviso y SUNAT lo aceptó solo por su tolerancia de ±1. En la nota, cada línea con descuento se expresa por sus **valores netos** (valor unitario = base / cantidad; precio = importe / cantidad), sin descuento aparte. Se confirmó con el código de producción contra SUNAT beta (`SunatBetaTest`, caso 007): las tres notas fueron aceptadas sin observaciones.
+
+La última devolución de una línea toma el resto exacto del **bruto** además del descuento: con cantidades fraccionadas (0.333 kg × 3.00 = 1.00) el bruto redondeado no se reparte en partes iguales.
+
 ## Servicios
 
 | Pieza | Responsabilidad | Spec |
