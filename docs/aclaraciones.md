@@ -57,6 +57,12 @@ Registro único de preguntas abiertas y decisiones. Las specs las citan por su i
 | [A-40](#a-40) | Cuándo vuelve el stock | 007 | Resuelta |
 | [A-41](#a-41) | Quién emite notas de crédito | 007 | Resuelta |
 | [A-42](#a-42) | Comprobantes rechazados | 007 | Resuelta |
+| [A-43](#a-43) | Alcance del primer despliegue | 009 | Abierta |
+| [A-44](#a-44) | Alojamiento | 009 | Abierta |
+| [A-45](#a-45) | Copias de seguridad | 009 | Abierta |
+| [A-46](#a-46) | Despliegue y repositorios | 009 | Abierta |
+| [A-47](#a-47) | Correo | 009 | Abierta |
+| [A-48](#a-48) | Monitoreo y avisos | 009 | Abierta |
 
 ---
 
@@ -476,6 +482,58 @@ Surgió al revisar la 005: al emitir se descuenta el stock y se consume el núme
 **Recomendación:** el administrador lo **descarta** con un motivo: queda «descartado», se repone su stock y su número queda como usado (no se reutiliza, para no romper la correlatividad). Luego se emite un comprobante nuevo con los datos corregidos.
 
 > **Decisión (2026-09-30):** Aceptada la recomendación: el **administrador** descarta el rechazado con un motivo; queda «descartado», se repone su stock y su número queda como usado. Luego se emite uno nuevo.
+
+## 009 · Despliegue y operación
+
+### A-43
+
+**¿Para qué es el primer despliegue?** · Bloquea: 009 · Abierta
+
+La revisión legal (A-24 ⚖️) de datos personales sigue pendiente, y todo es beta (sin valor legal). Los clientes que registran las empresas (DNI, nombres) son datos personales de terceros.
+
+- **A. Piloto con empresas reales, sin datos de clientes reales:** las empresas prueban con sus productos, pero emiten a «Cliente varios» o con datos ficticios hasta cerrar A-24.
+- **B. Piloto completo:** datos reales de clientes desde el primer día, con un aviso de privacidad provisional.
+- **C. Solo demostración interna:** nadie de fuera la usa todavía.
+
+**Recomendación:** A. Permite validar la operación (servidor, copias, avisos, uso en el celular) sin exponer datos personales de terceros antes de la revisión legal.
+
+### A-44
+
+**¿Dónde se aloja?** · Bloquea: 009 · Abierta
+
+**Recomendación:** **un solo servidor virtual (VPS)** en un proveedor con región cercana al Perú (p. ej. São Paulo o Miami): Ubuntu LTS, Nginx, PHP 8.5-FPM, PostgreSQL y la aplicación web como archivos estáticos en el mismo Nginx, con HTTPS de Let's Encrypt. Dos subdominios (aplicación y API). Para el volumen de A-06 un servidor basta y es lo más simple y barato; la base de datos local se protege con las copias de A-45. Una base de datos gestionada (más cara) queda para cuando haya más empresas.
+
+### A-45
+
+**¿Cómo son las copias de seguridad?** · Bloquea: 009 · Abierta
+
+**Recomendación:** copia **diaria** de PostgreSQL y de `storage/app/public` (logos), **cifrada** y enviada a un almacenamiento de objetos externo (compatible con S3), con retención de **30 copias diarias y 12 semanales**. `APP_KEY` se guarda **aparte** (gestor de contraseñas del responsable), porque sin ella los secretos de SUNAT de las copias no se descifran. Restauración de prueba **mensual**. La retención legal de comprobantes (A-24 ⚖️) se ajusta cuando se resuelva.
+
+### A-46
+
+**¿Cómo se despliega y dónde viven los repositorios?** · Bloquea: 009 · Abierta
+
+Hoy el `origin` de la API apunta al repositorio del autor original (`yorchavez9`) y el frontend no tiene remoto.
+
+**Recomendación:** crear **repositorios privados propios** (API y frontend; la raíz de documentación también) en tu cuenta de GitHub. **GitHub Actions** corre las suites (API en SQLite y PostgreSQL, frontend completo) en cada cambio y, al integrar en `main`, despliega al servidor por SSH con un script sin tiempo de caída (carpetas de versión y enlace simbólico). Un ambiente de **pruebas (staging)** en el mismo servidor, con otra base de datos, para probar migraciones antes de producción.
+
+### A-47
+
+**¿Con qué se envían los correos?** · Bloquea: 009 · Abierta
+
+**Recomendación:** un **proveedor de correo transaccional** (p. ej. Amazon SES, Resend o Brevo) con el **dominio propio** autenticado (SPF, DKIM y DMARC). El SMTP de un correo personal termina en spam y tiene límites bajos.
+
+### A-48
+
+**¿Qué se vigila y a quién se avisa?** · Bloquea: 009 · Abierta
+
+**Recomendación:**
+
+- Un monitor externo de disponibilidad (servicio gratuito de *uptime*) sobre la web y un endpoint de salud de la API.
+- Un «latido» del *scheduler*: si deja de correr, el monitor avisa.
+- Una revisión cada 15 minutos que avisa si hay comprobantes pendientes hace más de 1 hora, si falló la última copia o si el disco pasa del 80 %.
+- Errores 500 registrados con su detalle en el log (sin secretos) y aviso si se repiten.
+- **Canal:** correo al responsable del SaaS.
 
 ---
 
