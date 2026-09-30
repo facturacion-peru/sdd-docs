@@ -69,12 +69,16 @@ Primer arranque local: `php artisan migrate:fresh --seed` (crea las cuentas de p
 - Para simular una caída de SUNAT sin tocar `.env`: `SUNAT_BETA_ENDPOINT=https://127.0.0.1:9/billService php artisan serve --port=8001 --no-reload`. Sin `--no-reload`, `artisan serve` no pasa las variables de entorno al servidor.
 - `composer update --lock` tras cambiar `require` necesita `--ignore-platform-req=php`: algunas dependencias aún no declaran PHP 8.5.
 - `php artisan tinker archivo.php` se queda en modo interactivo; usar `tinker --execute="require '...';"`.
+- Las rutas de plataforma resuelven el rol **antes** del *route model binding* (`EnsurePlatformAdmin` en la lista de prioridad, como `ResolveTenant`); si no, un usuario de empresa distinguiría ids existentes (404) de inexistentes (403).
+- `/auth/me` usa `tenant:allow-platform`: deja pasar al administrador de la plataforma (sin empresa) y conserva la revocación de tokens de cuentas o empresas desactivadas.
+- **Toda ruta nueva de plataforma** queda cubierta por `PlatformAccessTest` y `PlatformPrivacyTest` (se generan desde el router). Sus respuestas usan recursos `Platform*Resource` de lista blanca, nunca los de empresa.
 - El código heredado de `legacy/` no se ejecuta: antes de reincorporar algo, leer `docs/investigacion/001-evaluacion-api-existente.md`.
 
 ## Bitácora
 
 Entradas breves y fechadas de decisiones o cambios relevantes (la más reciente arriba).
 
+- **2026-09-29** — Spec 006 implementada (T001–T073) en la rama `006-panel-plataforma` de API y frontend: 555 pruebas de API (SQLite y PostgreSQL, dos mutaciones) y 152 de frontend; recorrido de extremo a extremo 19/19 y pantallas a 360 px revisadas. Aclaraciones A-35 a A-38 (panel en Vue, A-08 actualizada). La verificación corrigió que la plataforma perdiera la sesión al recargar (`/auth/me`, desde la 001), una fuga 404/403 en rutas de plataforma y el generador de OpenAPI con objetos anidados. Pendiente: CE-001 cronometrado, 2FA antes de producción y el merge (T074).
 - **2026-09-29** — Spec 005 integrada en `main` de la API y del frontend (merge local, T095); suites en verde sobre `main`. Las specs 001–005 del MVP están completas; queda la spec 006 (panel de plataforma) y lo pendiente de producción (A-24 ⚖️).
 - **2026-09-29** — Spec 005 implementada (T001–T094) en la rama `005-emision-comprobantes` de API y frontend: 520 pruebas de API (SQLite y PostgreSQL, con emisión y envío concurrentes y tres mutaciones) y 137 de frontend. SUNAT beta real aceptó sin observaciones los 8 casos de CE-001; recorrido de extremo a extremo 16/16 con caída simulada y pantallas a 360 px revisadas. Aclaraciones A-22 ⚖️, A-23 y A-32 a A-34. La verificación corrigió las observaciones 4096–4098 (ubigeo del emisor) y el menú en rutas hermanas. Requisito `ext-gd`. Pendiente: CE-003 en el celular, revisión contable (A-22) y el merge (T095).
 - **2026-09-29** — Spec 004 integrada en `main` de la API y del frontend (merge local, T074); suites en verde sobre `main`. Siguiente: aclaraciones de la spec 005 (A-22 ⚖️, A-23).
