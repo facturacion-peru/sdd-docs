@@ -1,9 +1,7 @@
 # Spec 006: Panel de administración de la plataforma
 
-**Estado:** En aclaración · **Versión:** 0.1 · **Fecha:** 2026-09-29
+**Estado:** Borrador para aprobación · **Versión:** 0.2 · **Fecha:** 2026-09-29
 **Depende de:** 001, 004, 005 · **Aclaraciones:** A-08, A-24 ⚖️, A-35, A-36, A-37, A-38
-
-> Los requisitos marcados con `[A-xx]` siguen la recomendación de esa aclaración y se ajustarán si la decisión es otra.
 
 ## Objetivo
 
@@ -19,9 +17,9 @@ Como administrador de la plataforma, quiero ver todas las empresas con su estado
 
 **Escenarios de aceptación**
 
-1. **Dado** varias empresas, **cuando** abro el panel, **entonces** veo por cada una: RUC, razón social, activa o no, estado de la configuración SUNAT y cuántos comprobantes tiene pendientes o rechazados `[A-37]`.
+1. **Dado** varias empresas, **cuando** abro el panel, **entonces** veo por cada una: RUC, razón social, activa o no, estado de la configuración SUNAT y cuántos comprobantes tiene pendientes o rechazados (A-37).
 2. **Dado** muchas empresas, **cuando** busco por RUC o razón social, o filtro por «con problemas de emisión», **entonces** veo solo esas.
-3. **Dado** una empresa, **cuando** abro su ficha, **entonces** veo sus datos legales, su administrador (nombre y correo, y si ya aceptó la invitación), cuántos usuarios tiene y la fecha de su última venta o comprobante, pero **nunca** secretos ni el detalle de productos, ventas o clientes `[A-37]`.
+3. **Dado** una empresa, **cuando** abro su ficha, **entonces** veo sus datos legales, su administrador (nombre y correo, y si ya aceptó la invitación), cuántos usuarios tiene y la fecha de su última venta o comprobante, pero **nunca** secretos ni el detalle de productos, ventas o clientes (A-37).
 
 ### HU-2 · Dar de alta una empresa (P1)
 
@@ -31,7 +29,7 @@ Como administrador de la plataforma, quiero registrar una empresa desde el panel
 
 1. **Dado** los datos legales, el domicilio fiscal con ubigeo y el correo de su administrador, **cuando** registro la empresa, **entonces** queda activa con su establecimiento principal y el administrador recibe la invitación (mismas reglas que HU-1 de la 001).
 2. **Dado** un RUC ya registrado o inválido, **cuando** lo ingreso, **entonces** el panel lo explica.
-3. **Dado** un administrador que no recibió o perdió la invitación, **cuando** la reenvío, **entonces** recibe un enlace nuevo y el anterior deja de valer `[A-36]`.
+3. **Dado** un administrador que no recibió o perdió la invitación, **cuando** la reenvío, **entonces** recibe un enlace nuevo y el anterior deja de valer (A-36).
 
 ### HU-3 · Corregir datos legales (P1)
 
@@ -53,7 +51,7 @@ Como administrador de la plataforma, quiero desactivar y reactivar empresas, par
 
 ### HU-5 · Soporte de la emisión (P2)
 
-Como administrador de la plataforma, quiero ver qué comprobantes de las empresas están pendientes o rechazados, para ayudarles a resolverlo `[A-37]`.
+Como administrador de la plataforma, quiero ver qué comprobantes de las empresas están pendientes o rechazados, para ayudarles a resolverlo (A-37).
 
 **Escenarios de aceptación**
 
@@ -73,12 +71,12 @@ Como administrador de la plataforma, quiero ver el historial de acciones de la p
 
 ## Requisitos funcionales
 
-- **RF-001:** El panel DEBE ser accesible solo para administradores de la plataforma `[A-35]`.
-- **RF-002:** El panel NO DEBE mostrar secretos (clave SOL, certificado, contraseñas) ni el detalle de productos, ventas, clientes o comprobantes de las empresas, salvo los metadatos de envío de HU-5 `[A-37]`.
+- **RF-001:** El panel DEBE ser accesible solo para administradores de la plataforma, en un área propia de la aplicación web, separada de la de las empresas (A-35).
+- **RF-002:** El panel NO DEBE mostrar secretos (clave SOL, certificado, contraseñas) ni el detalle de productos, ventas, clientes o comprobantes de las empresas, salvo los metadatos de envío de HU-5 (A-37).
 - **RF-003:** Toda acción de la plataforma DEBE auditarse con su autor y su motivo cuando corresponda.
 - **RF-004:** El alta, la edición, la desactivación y la reactivación DEBEN seguir las reglas de la spec 001.
-- **RF-005:** Los administradores de la plataforma se siguen creando por consola (`platform:create-admin`) `[A-36]`.
-- **RF-006:** El acceso del administrador de la plataforma DEBE protegerse según A-38.
+- **RF-005:** Los administradores de la plataforma se siguen creando por consola (`platform:create-admin`) (A-36).
+- **RF-006:** La sesión del administrador de la plataforma DEBE durar como máximo 8 horas y cada inicio de sesión DEBE auditarse. El segundo factor es requisito previo a producción (A-38, A-24).
 
 ## Criterios de éxito
 
@@ -89,8 +87,8 @@ Como administrador de la plataforma, quiero ver el historial de acciones de la p
 ## Fuera de alcance
 
 - Suscripciones, planes y cobros del SaaS (visión, fuera del MVP).
-- Suplantar a un usuario de empresa («entrar como») `[A-37]`.
-- Crear o gestionar administradores de la plataforma desde el panel `[A-36]`.
+- Suplantar a un usuario de empresa («entrar como») (A-37).
+- Crear o gestionar administradores de la plataforma desde el panel (A-36).
 - Métricas de negocio de las empresas (ventas, ingresos).
 - Paso a producción de SUNAT (A-20, A-24).
 
@@ -99,3 +97,7 @@ Como administrador de la plataforma, quiero ver el historial de acciones de la p
 | Fecha | Aclaración | Decisión |
 |---|---|---|
 | 2026-09-29 | Spec creada a partir de la visión (persona «administrador de la plataforma») y de lo que la 001 dejó pendiente (HU-7) | — |
+| 2026-09-29 | A-35 | Vue, en el mismo frontend, área `/plataforma` |
+| 2026-09-29 | A-36 | Alcance recomendado; administradores de la plataforma por consola |
+| 2026-09-29 | A-37 | Solo metadatos y contadores, más soporte de envío con reintento |
+| 2026-09-29 | A-38 | Sesión de 8 h y auditoría de accesos; 2FA antes de producción |

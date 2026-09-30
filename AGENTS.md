@@ -6,8 +6,8 @@ Notas para agentes (y personas) que trabajen en este espacio. Aquí va lo import
 
 | Carpeta | Qué es | Stack | README |
 |---|---|---|---|
-| `Api-de-facturacion-electronica-sunat-Peru/` | API REST multiempresa (empresas, usuarios, inventario, tickets y emisión SUNAT en beta). Futuro panel de plataforma en Blade/Livewire (spec 006) | Laravel 12, PHP 8.2+, Greenter 5.1, Sanctum, Pest, PostgreSQL | [README](Api-de-facturacion-electronica-sunat-Peru/README.md) |
-| `frontend-api-facturacion-electronica-sunat/` | App de todos los usuarios de empresa, incluido su administrador (A-08). Futuro APK con Capacitor | Vue 3 + TS 5.9, Vite 8, Pinia, Tailwind 4, `openapi-fetch` | [README](frontend-api-facturacion-electronica-sunat/README.md) |
+| `Api-de-facturacion-electronica-sunat-Peru/` | API REST multiempresa (empresas, usuarios, inventario, tickets y emisión SUNAT en beta). El panel de plataforma irá en el frontend Vue (spec 006, A-35) | Laravel 12, PHP 8.2+, Greenter 5.1, Sanctum, Pest, PostgreSQL | [README](Api-de-facturacion-electronica-sunat-Peru/README.md) |
+| `frontend-api-facturacion-electronica-sunat/` | App de todos los usuarios de empresa, incluido su administrador (A-08), y del administrador de la plataforma en `/plataforma` (A-35). Futuro APK con Capacitor | Vue 3 + TS 5.9, Vite 8, Pinia, Tailwind 4, `openapi-fetch` | [README](frontend-api-facturacion-electronica-sunat/README.md) |
 
 Hay tres repositorios git independientes: la **raíz** (solo `docs/`, `AGENTS.md` y `CLAUDE.md`; ignora las dos carpetas de proyecto), la **API** (fork de `yorchavez9/Api-de-facturacion-electronica-sunat-Peru`) y el **frontend** (desde la tarea T002 de la spec 001).
 
