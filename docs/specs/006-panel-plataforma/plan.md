@@ -1,6 +1,6 @@
 # Plan 006: Panel de administración de la plataforma
 
-**Estado:** Borrador · **Fecha:** 2026-09-29 · **Spec:** [spec.md](./spec.md) (versión aprobada: 1.0)
+**Estado:** Aprobado (2026-09-29) · **Fecha:** 2026-09-29 · **Spec:** [spec.md](./spec.md) (versión aprobada: 1.0)
 
 ## Resumen técnico
 
@@ -113,4 +113,4 @@
 
 ## Aprobación
 
-Pendiente.
+Aprobado por el usuario el 2026-09-29, incluidos la búsqueda de ubigeo propia de la plataforma y la prueba que recorre todas las rutas `platform/*`.
