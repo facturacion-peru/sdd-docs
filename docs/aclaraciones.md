@@ -53,10 +53,10 @@ Registro único de preguntas abiertas y decisiones. Las specs las citan por su i
 | [A-36](#a-36) | Alcance del panel | 006 | Resuelta |
 | [A-37](#a-37) | Qué ve la plataforma de cada empresa | 006 | Resuelta |
 | [A-38](#a-38) | Protección del acceso de la plataforma | 006 | Resuelta |
-| [A-39](#a-39) ⚖️ | Instrumentos de corrección | 007 | Abierta |
-| [A-40](#a-40) | Cuándo vuelve el stock | 007 | Abierta |
-| [A-41](#a-41) | Quién emite notas de crédito | 007 | Abierta |
-| [A-42](#a-42) | Comprobantes rechazados | 007 | Abierta |
+| [A-39](#a-39) ⚖️ | Instrumentos de corrección | 007 | Resuelta |
+| [A-40](#a-40) | Cuándo vuelve el stock | 007 | Resuelta |
+| [A-41](#a-41) | Quién emite notas de crédito | 007 | Resuelta |
+| [A-42](#a-42) | Comprobantes rechazados | 007 | Resuelta |
 
 ---
 
@@ -438,7 +438,7 @@ Es la cuenta con más poder del sistema. Hoy entra con correo y contraseña, igu
 
 ### A-39 ⚖️
 
-**¿Con qué instrumentos se corrige o anula un comprobante?** · Bloquea: 007 · Abierta
+**¿Con qué instrumentos se corrige o anula un comprobante?** · Bloquea: 007 · **Resuelta**
 
 SUNAT ofrece varios, con reglas distintas:
 
@@ -449,25 +449,33 @@ SUNAT ofrece varios, con reglas distintas:
 
 **Recomendación:** solo **nota de crédito**, con los motivos **01** (anulación de la operación), **06** (devolución total) y **07** (devolución por ítem). Cubren anular, devolver todo y devolver parte, para facturas y boletas, con el mismo flujo de envío que la 005. Los errores de RUC o descripción se corrigen anulando (01) y emitiendo un comprobante nuevo. Quedan fuera las notas de débito, la baja, el resumen diario y los descuentos posteriores. ⚖️ Confirmar con el contador.
 
+> **Decisión (2026-09-30):** Aceptada la recomendación: solo **nota de crédito**, con los motivos 01 (anulación de la operación), 06 (devolución total) y 07 (devolución por ítem), para facturas y boletas. Fuera: notas de débito, comunicación de baja, resumen diario y descuentos posteriores. ⚖️ Confirmar con el contador antes de producción.
+
 ### A-40
 
-**¿Cuándo vuelve el stock?** · Bloquea: 007 · Abierta
+**¿Cuándo vuelve el stock?** · Bloquea: 007 · **Resuelta**
 
 **Recomendación:** en una **devolución** (06, 07) el stock de lo devuelto se repone siempre. En una **anulación** (01) el administrador indica si la mercadería volvió, marcado por defecto que sí (por ejemplo, una venta anulada porque el cliente se arrepintió en caja). La reposición es una entrada nueva con el costo de los lotes que salieron, y referencia a la nota.
 
+> **Decisión (2026-09-30):** Aceptada la recomendación: la devolución repone siempre lo devuelto; en la anulación se indica si la mercadería volvió (por defecto, sí). La reposición es una entrada con el costo de los lotes que salieron.
+
 ### A-41
 
-**¿Quién emite notas de crédito?** · Bloquea: 007 · Abierta
+**¿Quién emite notas de crédito?** · Bloquea: 007 · **Resuelta**
 
 **Recomendación:** solo el **administrador de la empresa**, igual que anular tickets en la 003 (A-18): mueve dinero y stock. El vendedor ve las notas en el comprobante.
 
+> **Decisión (2026-09-30):** **Cualquier usuario de la empresa**, también el vendedor, puede emitir notas de crédito (devoluciones y anulaciones), sobre cualquier comprobante de su empresa (A-32). Queda auditado quién la emitió. Descartar comprobantes rechazados sigue siendo solo del administrador (A-42).
+
 ### A-42
 
-**¿Qué pasa con un comprobante rechazado por SUNAT?** · Bloquea: 007 · Abierta
+**¿Qué pasa con un comprobante rechazado por SUNAT?** · Bloquea: 007 · **Resuelta**
 
 Surgió al revisar la 005: al emitir se descuenta el stock y se consume el número; si SUNAT rechaza (casi siempre por un dato mal ingresado), el comprobante no existe para SUNAT pero la venta y el stock quedaron registrados. No se le puede emitir una nota de crédito porque SUNAT no lo aceptó.
 
 **Recomendación:** el administrador lo **descarta** con un motivo: queda «descartado», se repone su stock y su número queda como usado (no se reutiliza, para no romper la correlatividad). Luego se emite un comprobante nuevo con los datos corregidos.
+
+> **Decisión (2026-09-30):** Aceptada la recomendación: el **administrador** descarta el rechazado con un motivo; queda «descartado», se repone su stock y su número queda como usado. Luego se emite uno nuevo.
 
 ---
 

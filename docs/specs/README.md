@@ -12,7 +12,7 @@ Una carpeta por capacidad, numerada. Cada una avanza por el ciclo SDD de la [con
 | 004 | [Configuración segura de SUNAT y series](004-configuracion-sunat/spec.md) | **Integrada en `main`** · [plan](004-configuracion-sunat/plan.md) · [tareas](004-configuracion-sunat/tasks.md) · [verificación](004-configuracion-sunat/verificacion.md) | 001 | — |
 | 005 | [Emisión y consulta de comprobantes en beta](005-emision-comprobantes-beta/spec.md) | **Integrada en `main`** · [plan](005-emision-comprobantes-beta/plan.md) · [tareas](005-emision-comprobantes-beta/tasks.md) · [verificación](005-emision-comprobantes-beta/verificacion.md) | 001, 002, 003, 004 | — (A-22 ⚖️ a confirmar antes de producción) |
 | 006 | [Panel de administración de la plataforma](006-panel-plataforma/spec.md) | **Integrada en `main`** · [plan](006-panel-plataforma/plan.md) · [tareas](006-panel-plataforma/tasks.md) · [verificación](006-panel-plataforma/verificacion.md) | 001, 004, 005 | — |
-| 007 | [Anulación y corrección de comprobantes](007-notas-credito/spec.md) | En aclaración | 002, 004, 005 | A-39 ⚖️, A-40, A-41, A-42 |
+| 007 | [Anulación y corrección de comprobantes](007-notas-credito/spec.md) | En aprobación (v0.2) | 002, 004, 005 | — (A-39 ⚖️ a confirmar antes de producción) |
 
 Orden de trabajo: **001 → 002 → 003 → 004 → 005**. 003 y 004 son independientes entre sí; 004 puede adelantarse si se prioriza SUNAT.
 
