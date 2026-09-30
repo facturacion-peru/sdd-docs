@@ -1,6 +1,6 @@
 # Plan 007: Anulación y corrección de comprobantes
 
-**Estado:** Borrador · **Fecha:** 2026-09-30 · **Spec:** [spec.md](./spec.md) (versión aprobada: 1.0)
+**Estado:** Aprobado (2026-09-30) · **Fecha:** 2026-09-30 · **Spec:** [spec.md](./spec.md) (versión aprobada: 1.0)
 
 ## Resumen técnico
 
@@ -119,4 +119,4 @@ Las descargas (PDF, XML, CDR) y el reintento de la 005 sirven igual para las not
 
 ## Aprobación
 
-Pendiente.
+Aprobado por el usuario el 2026-09-30, incluido el bloqueo de la reversión manual de ventas de comprobantes.
