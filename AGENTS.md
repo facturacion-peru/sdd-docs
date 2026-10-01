@@ -6,10 +6,10 @@ Notas para agentes (y personas) que trabajen en este espacio. Aquí va lo import
 
 | Carpeta | Qué es | Stack | README |
 |---|---|---|---|
-| `Api-de-facturacion-electronica-sunat-Peru/` | API REST multiempresa (empresas, usuarios, inventario, tickets y emisión SUNAT en beta). El panel de plataforma irá en el frontend Vue (spec 006, A-35) | Laravel 12, PHP 8.2+, Greenter 5.1, Sanctum, Pest, PostgreSQL | [README](Api-de-facturacion-electronica-sunat-Peru/README.md) |
-| `frontend-api-facturacion-electronica-sunat/` | App de todos los usuarios de empresa, incluido su administrador (A-08), y del administrador de la plataforma en `/plataforma` (A-35). Futuro APK con Capacitor | Vue 3 + TS 5.9, Vite 8, Pinia, Tailwind 4, `openapi-fetch` | [README](frontend-api-facturacion-electronica-sunat/README.md) |
+| `Api-de-facturacion-electronica-sunat-Peru/` | API REST multiempresa (empresas, usuarios, inventario, tickets y emisión SUNAT en beta). El panel de plataforma irá en el frontend Vue (spec 006, A-35) | Laravel 12, PHP 8.2+, Greenter 5.1, Sanctum, Pest, PostgreSQL | [README](https://github.com/facturacion-peru/Api-de-facturacion-electronica-sunat-Peru#readme) |
+| `frontend-api-facturacion-electronica-sunat/` | App de todos los usuarios de empresa, incluido su administrador (A-08), y del administrador de la plataforma en `/plataforma` (A-35). Futuro APK con Capacitor | Vue 3 + TS 5.9, Vite 8, Pinia, Tailwind 4, `openapi-fetch` | [README](https://github.com/facturacion-peru/frontend-api-facturacion-electronica-sunat#readme) |
 
-Hay tres repositorios git independientes: la **raíz** (solo `docs/`, `AGENTS.md` y `CLAUDE.md`; ignora las dos carpetas de proyecto y `respaldos/`), la **API** (fork de `yorchavez9/Api-de-facturacion-electronica-sunat-Peru`, remoto `upstream`) y el **frontend** (desde la tarea T002 de la spec 001). Se publicarán **públicos** en GitHub (A-46): nada secreto entra en ellos.
+Hay tres repositorios git independientes ([sdd-docs](https://github.com/facturacion-peru/sdd-docs), [API](https://github.com/facturacion-peru/Api-de-facturacion-electronica-sunat-Peru) y [frontend](https://github.com/facturacion-peru/frontend-api-facturacion-electronica-sunat)): la **raíz** (solo `README.md`, `docs/`, `AGENTS.md` y `CLAUDE.md`; ignora las dos carpetas de proyecto y `respaldos/`), la **API** (fork de `yorchavez9/Api-de-facturacion-electronica-sunat-Peru`, remoto `upstream`) y el **frontend** (desde la tarea T002 de la spec 001). Son **públicos** (A-46): nada secreto entra en ellos. Cómo clonarlos juntos: [README](README.md).
 
 ## Reglas
 
