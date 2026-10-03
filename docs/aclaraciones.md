@@ -63,6 +63,17 @@ Registro único de preguntas abiertas y decisiones. Las specs las citan por su i
 | [A-46](#a-46) | Despliegue y repositorios | 009 | Resuelta |
 | [A-47](#a-47) | Correo | 009 | Resuelta |
 | [A-48](#a-48) | Monitoreo y avisos | 009 | Resuelta |
+| [A-49](#a-49) | Tema visual | 010 | Resuelta |
+| [A-50](#a-50) | Tipografía | 010 | Resuelta |
+| [A-51](#a-51) | Logo de la aplicación | 010 | Resuelta |
+| [A-55](#a-55) | Modo oscuro y fondo | 010 | Resuelta |
+| [A-52](#a-52) | Indicadores del inicio | 011 | Resuelta |
+| [A-53](#a-53) | Qué ve el vendedor en el inicio | 011 | Resuelta |
+| [A-54](#a-54) | Qué suma como venta en el inicio | 011 | Resuelta |
+| [A-56](#a-56) | Diseño de «Vender» | 012 | Resuelta |
+| [A-57](#a-57) | Catálogo en «Vender» | 012 | Resuelta |
+| [A-58](#a-58) | Persistencia de la venta en curso | 012 | Resuelta |
+| [A-59](#a-59) | Vaciar el carrito | 012 | Resuelta |
 
 ---
 
@@ -550,6 +561,120 @@ Hoy el `origin` de la API apunta al repositorio del autor original (`yorchavez9`
 > **Decisión (2026-09-30):** Aceptada la recomendación, con avisos **por correo** al responsable del SaaS.
 
 ---
+
+## 010 · Identidad visual
+
+### A-49
+
+**¿Qué tema visual usa la aplicación?** · Bloquea: 010 · **Resuelta**
+
+- **A.** «Petróleo»: verde azulado sobrio con neutros pizarra.
+- **B.** Índigo, más «tecnológico».
+- **C.** Azul marino con acento ámbar, más corporativo.
+
+**Recomendación:** A. Transmite seriedad sin parecerse al azul por defecto de muchos SaaS. Cualquiera se cambia después en un solo lugar.
+
+> **Decisión (2026-10-03):** A, «Petróleo».
+
+### A-50
+
+**¿Qué tipografía usa la aplicación?** · Bloquea: 010 · **Resuelta**
+
+**Recomendación:** Inter, servida por la propia aplicación (sin pedirla a terceros), con dígitos de ancho fijo en montos.
+
+> **Decisión (2026-10-03):** Aceptada la recomendación.
+
+### A-51
+
+**¿Qué logo usa la aplicación?** · Bloquea: 010 · **Resuelta**
+
+El proyecto es público y reutilizable: no debe llevar una marca ajena.
+
+> **Decisión (2026-10-03):** Un logo provisional y genérico (un comprobante con un visto), reemplazable en un solo lugar y pintado con los colores del tema. El definitivo se decide más adelante.
+
+### A-55
+
+**¿La aplicación tiene modo oscuro? ¿Qué fondo usa el modo claro?** · Bloquea: 010 · **Resuelta**
+
+Surgió al revisar el Inicio (2026-10-03): el fondo casi blanco se ve muy claro.
+
+- **A.** Claro y oscuro: por defecto sigue al sistema, con un selector Claro / Oscuro / Sistema que se recuerda en el dispositivo.
+- **B.** Solo oscuro.
+- **C.** Solo según el sistema, sin selector.
+
+**Recomendación:** A. Quien vende de día al sol lee mejor en claro; de noche, en oscuro. Fondo claro gris pizarra suave (`#eef2f6`) para que las tarjetas blancas resalten.
+
+> **Decisión (2026-10-03):** A, con el fondo gris pizarra suave.
+
+## 011 · Panel de inicio
+
+### A-52
+
+**¿Qué indicadores muestra el inicio?** · Bloquea: 011 · **Resuelta**
+
+**Recomendación:** pocos y accionables: ventas de hoy (monto y cantidad), evolución de los últimos 7 días, comprobantes pendientes de envío y rechazados, alertas de inventario, últimas 5 ventas y la acción «Nueva venta». Nada de reportes por rango (fuera del MVP).
+
+> **Decisión (2026-10-03):** Aceptada la recomendación: ventas de hoy, últimos 7 días, por atender, últimas 5 ventas y «Nueva venta».
+
+### A-53
+
+**¿Qué ve el vendedor en el inicio?** · Bloquea: 011 · **Resuelta**
+
+El vendedor ve solo sus tickets (A-30) pero todos los comprobantes (A-32).
+
+- **A.** Solo sus propias ventas en los totales y en las últimas ventas; los comprobantes por atender de toda la empresa (puede reintentarlos); sin alertas de inventario (hoy solo el administrador puede consultarlas).
+- **B.** Los totales de toda la empresa.
+
+**Recomendación:** A. Coherente con A-30 y no expone la facturación total de la empresa a cada vendedor.
+
+> **Decisión (2026-10-03):** A, solo lo suyo.
+
+### A-54
+
+**¿Qué suma como venta en los totales del inicio?** · Bloquea: 011 · **Resuelta**
+
+**Recomendación:** tickets no anulados más comprobantes no rechazados ni descartados (pendientes, enviados y aceptados), menos las notas de crédito emitidas en el período; montos con IGV, en soles. Se presenta como un indicador operativo, no como un reporte contable.
+
+> **Decisión (2026-10-03):** Aceptada la recomendación (neto operativo).
+
+## 012 · Vender
+
+### A-56
+
+**¿Qué diseño usa «Vender»?** · Bloquea: 012 · **Resuelta**
+
+- **A.** Dos columnas en pantallas anchas (productos y carrito fijo); en el celular, una columna con barra fija (cantidad · total · Cobrar) que abre el carrito.
+- **B.** Dos columnas siempre.
+- **C.** Una columna mejorada.
+
+**Recomendación:** A. Dos columnas es el estándar de los puntos de venta, pero a 360 px no cabe.
+
+> **Decisión (2026-10-03):** A.
+
+### A-57
+
+**¿Qué muestra la columna de productos sin búsqueda?** · Bloquea: 012 · **Resuelta**
+
+**Recomendación:** el catálogo de productos activos, paginado, para agregar con un toque; la búsqueda lo filtra.
+
+> **Decisión (2026-10-03):** Aceptada la recomendación.
+
+### A-58
+
+**¿Cómo persiste la venta en curso?** · Bloquea: 012 · **Resuelta**
+
+- **A.** En el dispositivo, por usuario y empresa: sobrevive a cambiar de pantalla, recargar o cerrar la aplicación; se borra al cobrar, vaciar o cerrar sesión. Al volver se actualizan precios y disponible.
+- **B.** Solo mientras la aplicación está abierta.
+
+**Recomendación:** A. Incluye el cliente elegido: queda en el dispositivo de la empresa y se borra al cerrar sesión (tener en cuenta en A-24 ⚖️).
+
+> **Decisión (2026-10-03):** A.
+
+### A-59
+
+**¿«Vaciar carrito» pide confirmación?** · Bloquea: 012 · **Resuelta**
+
+> **Decisión (2026-10-03):** Sí, con confirmación que indica cuántos productos se quitarán.
 
 ## Pendientes menores
 

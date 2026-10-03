@@ -76,11 +76,20 @@ Primer arranque local: `php artisan migrate:fresh --seed` (crea las cuentas de p
 - Las ventas y reposiciones de un comprobante no se revierten desde el inventario: solo con una nota de crédito o descartando el rechazado (`reverse(..., fromSource: true)`).
 - Los errores por línea de la API usan claves planas (`"lines.0.quantity"`): en las pruebas, `->json('errors')['lines.0.quantity']`, no `assertJsonPath` (que trata los puntos como niveles).
 - El historial de la API se reescribió el 2026-09-30 para quitar un `.env.beta` del autor original con sus credenciales (auditoría de la 009). Los *hashes* de la API anteriores a esa fecha que aparezcan en documentos ya no existen; la copia está en `respaldos/`.
+- **Colores solo del tema:** las pantallas usan los tokens de `main.css` (`brand-*`, `success-*`, `warning-*`, `danger-*`, `ink`, `line`, `subtle`…), nunca `red-*`, `green-*`, `amber-*` ni `slate-*`; `shared/ui/__tests__/theme.spec.ts` lo comprueba (excepción: `TicketReceipt`, que se imprime en blanco y negro). Si cambia el logo (`LogoApp.vue`), actualizar también `public/favicon.svg`.
+- **Campos:** `BaseInput`, `BaseSelect` y `SearchInput` comparten `shared/ui/field.ts`; ninguna vista escribe clases propias en un `<input>` de texto ni usa `<select>` directo (lo comprueba `theme.spec.ts`). Las búsquedas usan `SearchInput` con `@clear` apuntando al mismo manejador que recarga la lista.
+- **Modo oscuro:** `main.css` redefine los mismos tokens bajo `:root[data-theme='dark']`; `useTheme` siempre deja `data-theme` en `<html>`. Cada tono tiene un papel fijo (50–200 fondos tenues, 300–400 gráficos, 600 relleno con texto blanco, 700 texto de acento, 800 *hover* del relleno, 900–950 siempre oscuros): no usar `700` como fondo ni `600` como texto, o se rompe en oscuro.
+- En Vue, `:inert="cond"` con `false` deja `inert="false"` en el DOM y el navegador lo trata como inerte: usar `:inert="cond || undefined"`.
+- `sr-only` sobre un `<table>` no la oculta bien (ignora el ancho y el `caption` puede verse): ponerlo en un `div` que la envuelva.
+- En un grid de una columna con texto truncado, usar `grid-cols-1` (`minmax(0,1fr)`): la columna implícita crece con el texto y desborda a 360 px.
+- `trustPolicyExclude` en `pnpm-workspace.yaml` admite solo versiones exactas revisadas y aprobadas por el usuario (hoy `semver@6.3.1`, falso positivo). Ante un `ERR_PNPM_TRUST_DOWNGRADE` nuevo: revisar, preguntar y documentar; nunca desactivar `trustPolicy`.
 - El código heredado de `legacy/` no se ejecuta: antes de reincorporar algo, leer `docs/investigacion/001-evaluacion-api-existente.md`.
 
 ## Bitácora
 
 Entradas breves y fechadas de decisiones o cambios relevantes (la más reciente arriba).
+
+- **2026-10-03** — Specs 010 (identidad visual, v1.3) y 011 (panel de inicio) implementadas y confirmadas; falta el merge. 010 en la rama `010-identidad-visual` del frontend (desde la 009); 011 en `011-panel-inicio` de la API (desde la 009) y del frontend (desde la 010). Spec 012 (Vender: carrito persistente y dos columnas, A-56 a A-59) en estado *Lista*. Detalle de la 010: tema «Petróleo» con tokens de marca, neutros y estados, logo provisional `LogoApp.vue` y favicon SVG, Inter autoalojada (`semver@6.3.1` excluido de `trustPolicy` tras revisarlo), campos unificados (`BaseSelect`, `SearchInput` con lupa y botón de limpiar) modo claro/oscuro con selector (A-55, fondo claro `#eef2f6`) y barra lateral en `AppLayout` (panel desplegable en el celular; desaparece el menú «Más»). 011: `GET /api/v1/dashboard` en la rama `011-panel-inicio` de la API (A-52 a A-54; 639 pruebas SQLite y 650 PostgreSQL) y el nuevo Inicio en el frontend (195 pruebas). Pantallas a 360 px y en escritorio revisadas.
 
 - **2026-09-30** — Repositorios publicados en GitHub (organización `facturacion-peru`, públicos; T031): `sdd-docs` (raíz, rama renombrada de `master` a `main`), API y frontend con todas sus ramas. README en la raíz y enlaces absolutos entre los tres. Spec 009 avanzada hasta T023 (copias, alertas, scripts de servidor, restauración y GitHub Actions); el despliegue sigue apagado (`DEPLOY_ENABLED`) hasta tener servidor.
 
