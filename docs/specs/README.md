@@ -15,9 +15,9 @@ Una carpeta por capacidad, numerada. Cada una avanza por el ciclo SDD de la [con
 | 007 | [Anulación y corrección de comprobantes](007-notas-credito/spec.md) | **Integrada en `main`** · [plan](007-notas-credito/plan.md) · [tareas](007-notas-credito/tasks.md) · [verificación](007-notas-credito/verificacion.md) | 002, 004, 005 | — (A-39 ⚖️ a confirmar antes de producción) |
 | 008 | Paso a producción SUNAT | Por especificar (espera la revisión legal A-24 ⚖️) | 005, 007, 009 | A-24 ⚖️ |
 | 009 | [Despliegue y operación](009-despliegue-operacion/spec.md) | **Lista** (despliegue al servidor en espera) · [plan](009-despliegue-operacion/plan.md) · [tareas](009-despliegue-operacion/tasks.md) | 001–007 | — |
-| 010 | [Identidad visual y tema](010-identidad-visual/spec.md) | **Implementada** (v1.3) en la rama `010-identidad-visual` del frontend (falta el merge) · [plan](010-identidad-visual/plan.md) · [tareas](010-identidad-visual/tasks.md) | 001–007 | — |
+| 010 | [Identidad visual y tema](010-identidad-visual/spec.md) | **Implementada** (v1.3 en la rama `010-identidad-visual`; v1.4 junto a la 012) · falta el merge · [plan](010-identidad-visual/plan.md) · [tareas](010-identidad-visual/tasks.md) | 001–007 | — |
 | 011 | [Panel de inicio](011-panel-inicio/spec.md) | **Implementada** en las ramas `011-panel-inicio` de API y frontend (falta el merge) · [plan](011-panel-inicio/plan.md) · [tareas](011-panel-inicio/tasks.md) | 003, 005, 007, 010 | — |
-| 012 | [Vender: carrito persistente y dos columnas](012-vender-mejorado/spec.md) | **Lista** · [plan](012-vender-mejorado/plan.md) · [tareas](012-vender-mejorado/tasks.md) | 003, 005, 010 | — |
+| 012 | [Vender: carrito persistente y dos columnas](012-vender-mejorado/spec.md) | **Implementada** en las ramas `012-vender-mejorado` del frontend y de la API (seeder) (falta commit y merge) · [plan](012-vender-mejorado/plan.md) · [tareas](012-vender-mejorado/tasks.md) | 003, 005, 010 | — |
 
 Orden de trabajo: **001 → 002 → 003 → 004 → 005**. 003 y 004 son independientes entre sí; 004 puede adelantarse si se prioriza SUNAT.
 

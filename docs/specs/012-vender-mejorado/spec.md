@@ -1,6 +1,6 @@
 # Spec 012: Vender — carrito persistente y diseño en dos columnas
 
-**Estado:** Aprobada (2026-10-03) · **Versión:** 1.0 · **Fecha:** 2026-10-03
+**Estado:** Aprobada (2026-10-03) · **Versión:** 1.3 · **Fecha:** 2026-10-03
 **Depende de:** 003, 005, 010 · **Aclaraciones:** A-56, A-57, A-58, A-59
 
 > Qué y por qué. Sin frameworks, tablas, endpoints ni componentes: eso va en `plan.md`.
@@ -58,6 +58,8 @@ Como vendedor, quiero ver el carrito y el total mientras agrego productos (A-56)
 
 1. **Dado** una pantalla ancha, **cuando** vendo, **entonces** los productos están a un lado y el carrito, el total y el botón de cobrar al otro, siempre visibles.
 2. **Dado** el celular, **cuando** hay productos en el carrito, **entonces** una barra fija abajo muestra cuántos productos y el total, y abre el carrito completo para revisar y cobrar.
+3. **Dado** una pantalla ancha, **cuando** vendo, **entonces** «Vender» ocupa todo el ancho y el alto de la ventana: catálogo y carrito se desplazan cada uno por su cuenta y la página no se desplaza (v1.1).
+4. **Dado** el carrito, **cuando** elijo qué emitir (ticket, boleta o factura), **entonces** el selector está en el propio carrito, después de los productos y antes del cliente y del medio de pago (orden del cobro: qué llevo, qué emito y a quién, cómo me pagan, cobrar; v1.3), con el aviso de pruebas y el motivo si boleta o factura no están disponibles; en el celular, la barra fija muestra el tipo elegido (v1.2).
 
 ## Casos límite
 
@@ -96,3 +98,6 @@ Como vendedor, quiero ver el carrito y el total mientras agrego productos (A-56)
 | 2026-10-03 | A-57 Catálogo | Mostrar el catálogo para tocar; la búsqueda filtra |
 | 2026-10-03 | A-58 Persistencia | Toda la venta en curso en el dispositivo, por usuario y empresa |
 | 2026-10-03 | A-59 Vaciar | Con confirmación |
+| 2026-10-03 | Pedido del usuario (v1.3) | Dentro del carrito: productos → qué emitir → serie y cliente → medio de pago → total |
+| 2026-10-03 | Pedido del usuario (v1.2) | El selector Ticket / Boleta / Factura pasa al carrito |
+| 2026-10-03 | Pedido del usuario (v1.1) | «Vender» a pantalla completa en escritorio; barra lateral contraíble (spec 010 v1.4) |

@@ -1,6 +1,6 @@
 # Spec 010: Identidad visual y tema
 
-**Estado:** Lista (2026-10-03) · **Versión:** 1.3 · **Fecha:** 2026-10-03
+**Estado:** Lista (2026-10-03) · **Versión:** 1.4 · **Fecha:** 2026-10-03
 **Depende de:** 001 a 007 (pantallas existentes) · **Aclaraciones:** A-49, A-50, A-51, A-55
 
 > Qué y por qué. Sin frameworks, tablas, endpoints ni componentes: eso va en `plan.md`.
@@ -86,6 +86,7 @@ Como usuario, quiero el menú, el logo, el tema y «Cerrar sesión» en una barr
 2. **Dado** el celular, **cuando** pulso el botón de menú, **entonces** se abre el panel con la misma navegación; se cierra con Escape, tocando fuera o al navegar, y el foco vuelve al botón.
 3. **Dado** un vendedor, **cuando** abre la navegación, **entonces** ve solo las entradas del día a día; el administrador ve además la gestión de la empresa.
 4. **Dado** el panel cerrado en el celular, **cuando** navego con el teclado, **entonces** sus enlaces no reciben el foco.
+5. **Dado** una pantalla ancha, **cuando** contraigo la barra lateral, **entonces** queda una franja de íconos con sus nombres al pasar el cursor y para lectores de pantalla; la elección se recuerda en el dispositivo (v1.4).
 
 ## Casos límite
 
@@ -127,6 +128,7 @@ Como usuario, quiero el menú, el logo, el tema y «Cerrar sesión» en una barr
 | 2026-10-03 | A-49 Tema | «Petróleo»: verde azulado sobrio con neutros pizarra |
 | 2026-10-03 | A-50 Tipografía | Inter, servida por la aplicación |
 | 2026-10-03 | A-51 Logo | Provisional y genérico, reemplazable en un solo lugar |
+| 2026-10-03 | Pedido del usuario (v1.4) | Barra lateral contraíble también en pantallas anchas |
 | 2026-10-03 | Pedido del usuario (v1.3) | Barra lateral en escritorio y panel desplegable en el celular (HU-6) |
 | 2026-10-03 | A-55 Modo oscuro (v1.2) | Claro y oscuro con selector; fondo claro `#eef2f6` |
 | 2026-10-03 | Pedido del usuario (v1.1) | Unificar campos y búsqueda con lupa y botón de limpiar (HU-4) |

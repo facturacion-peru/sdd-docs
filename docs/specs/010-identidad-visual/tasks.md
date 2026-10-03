@@ -52,6 +52,11 @@
 - [x] **T027** `AppLayout` con barra lateral y panel en el celular — Verificación: pruebas de `AppLayout` en verde
 - [x] **T028** Capturas en claro y oscuro a 360 px (cerrado y abierto) y en escritorio — Verificación: revisión manual. Corrigió: `:inert="false"` dejaba el atributo en el DOM (el panel quedaba inerte también abierto; ahora `|| undefined`) y el pie del panel no dejaba ver «Series» en 800 px (pie en una fila)
 
+## Fase 8 · Barra contraíble (HU-6 esc. 5, spec v1.4)
+
+- [x] **T029** Pruebas de contraer y expandir (deben fallar) — Verificación: en rojo
+- [x] **T030** `AppLayout` y `MainNav` contraíbles; `meta.fullWidth` — Verificación: T029 en verde y capturas. El botón de contraer va en la cabecera de la barra (en el pie dejaba ilegible el nombre); contraída, las entradas miden 40 px para que la navegación del administrador quepa en 800 px
+
 ## Cierre
 
 - [x] **T012** CE-001: cambiar la escala de marca y comprobar que cambia toda la app (luego revertir) — hecho con `brand-600` violeta: logo, navegación y enlaces cambiaron sin tocar pantallas

@@ -1,6 +1,6 @@
 # Plan 012: Vender — carrito persistente y diseño en dos columnas
 
-**Estado:** Aprobado (2026-10-03) · **Fecha:** 2026-10-03 · **Spec:** [spec.md](./spec.md) (versión aprobada: 1.0)
+**Estado:** Aprobado (2026-10-03) · **Fecha:** 2026-10-03 · **Spec:** [spec.md](./spec.md) (versión aprobada: 1.3)
 
 ## Resumen técnico
 
@@ -13,7 +13,7 @@ Solo frontend: la API ya ofrece todo (`GET /products` paginado con `search` y `s
 | Proyectos afectados | Frontend |
 | Rama | `012-vender-mejorado`, desde la rama del frontend con 010 y 011 (usa la barra lateral y los campos unificados) |
 | Dependencias nuevas | Ninguna (`@vueuse/core` y Pinia ya están) |
-| Cambios de API | Ninguno |
+| Cambios de API | Ninguno en el contrato. Solo datos de demostración en `DevelopmentSeeder` (v1.3, rama `012-vender-mejorado` de la API) |
 
 ## Chequeo de constitución
 
@@ -42,6 +42,9 @@ Solo frontend: la API ya ofrece todo (`GET /products` paginado con `search` y `s
 - `components/ProductCatalog.vue`: `SearchInput` y tarjetas en cuadrícula (nombre, precio, disponible, «En el carrito: N»). Sin disponible: deshabilitada con el motivo. «Cargar más» con la paginación de `/products`.
 - `components/SaleCart.vue`: líneas (pasos −/+, cantidad, descuento y quitar), cliente (ticket o `CustomerPicker`), serie, medio de pago, total, «Cobrar» o «Emitir» y «Vaciar carrito» (confirmación con `BaseDialog`).
 - Celular: el carrito no se muestra en la columna; una barra fija abajo («N productos · S/ total · Ver carrito») abre `SaleCart` dentro de `BaseDialog`, que ya se muestra como hoja inferior en el celular. Escritorio o celular con `useMediaQuery`, como `AppLayout`.
+- v1.1: la ruta `new-sale` lleva `meta.fullWidth`. Desde `lg`, la vista ocupa la altura disponible: el catálogo (con la búsqueda fija arriba) y el carrito se desplazan por separado; el carrito ya no necesita `sticky` ni alto máximo.
+- v1.2: el selector Ticket / Boleta / Factura, el distintivo de pruebas y el motivo de bloqueo pasan a la cabecera de `SaleCart` (la vista le pasa las opciones con su estado y escucha `kind-changed`). La barra del celular muestra el tipo elegido.
+- v1.3: orden dentro de `SaleCart`: cabecera (Carrito · Vaciar), líneas, qué emitir (con distintivo y motivo), serie y cliente, medio de pago, y el pie fijo con total y botón. Con el carrito vacío solo se ve la invitación a agregar productos.
 - `salesApi`: `listProducts({ search, page })` (sustituye a `searchProducts`) y `getProduct(id)`.
 
 ## Estrategia de pruebas

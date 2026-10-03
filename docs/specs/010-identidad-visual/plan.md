@@ -1,6 +1,6 @@
 # Plan 010: Identidad visual y tema
 
-**Estado:** Aprobado (2026-10-03) · **Fecha:** 2026-10-03 · **Spec:** [spec.md](./spec.md) (versión aprobada: 1.3)
+**Estado:** Aprobado (2026-10-03) · **Fecha:** 2026-10-03 · **Spec:** [spec.md](./spec.md) (versión aprobada: 1.4)
 
 ## Resumen técnico
 
@@ -56,6 +56,8 @@ Solo frontend. Los tokens de Tailwind 4 (`@theme` en `src/assets/main.css`) son 
 - Pie del panel en una sola fila: avatar, usuario y rol, `ThemeToggle` y «Cerrar sesión» como ícono con texto para lectores de pantalla (así la navegación del administrador cabe en 800 px de alto).
 - El Inicio deja de mostrar los accesos «Gestión» (Usuarios, Mi empresa, Auditoría): ya están siempre visibles en la barra lateral.
 - `PlatformLayout` no cambia en esta versión.
+- v1.4: botón «Contraer menú» / «Expandir menú» (`aria-pressed`) al pie de la barra, solo desde `lg`; contraída mide 4.5 rem y muestra solo íconos (`MainNav` recibe `collapsed`: etiquetas `sr-only` y `title`). Preferencia en `localStorage` (`sunat.sidebar.collapsed`, con try/catch).
+- v1.4: rutas con `meta.fullWidth` (hoy «Vender», spec 012) usan todo el ancho y, desde `lg`, todo el alto de la ventana (`h-dvh`), sin el contenedor de 5xl.
 
 ### Modo oscuro (HU-5, spec v1.2)
 
@@ -81,6 +83,7 @@ Solo frontend. Los tokens de Tailwind 4 (`@theme` en `src/assets/main.css`) son 
 | RF-002, CE-002 | `shared/ui/__tests__/theme.spec.ts`: recorre `src/**/*.vue` y falla si encuentra `red-`, `green-`, `amber-`, `slate-` (salvo `TicketReceipt`) | Unitaria |
 | RF-003, HU-2 esc. 2 | `LogoApp.spec.ts` | Unitaria |
 | HU-5, RF-009 | `useTheme.spec.ts`: preferencia guardada, «Sistema» sigue a `matchMedia`, sin almacenamiento no falla | Unitaria |
+| HU-6 esc. 5 | `AppLayout.spec.ts`: contraer y expandir, recordado al volver a montar; los enlaces conservan su nombre accesible | Unitaria |
 | HU-6, RF-011 | `MainNav.spec.ts` (roles, grupo «Gestión», ruta activa) y `AppLayout.spec.ts` (abre y cierra el panel, Escape devuelve el foco, `inert`, cierra al navegar, cerrar sesión) | Unitaria |
 | RF-010 | `ThemeToggle.spec.ts`: alterna y anuncia el tema | Unitaria |
 | HU-5 esc. 3 | Capturas en oscuro del acceso, el inicio, productos, vender y plataforma | Manual |
