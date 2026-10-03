@@ -34,8 +34,14 @@
 - [x] **T014** Prueba del orden dentro del carrito (debe fallar) y reorden de `SaleCart` — Verificación: pruebas en verde y capturas (factura: comprobante, cliente con RUC, medio de pago y «Emitir factura» deshabilitado hasta elegir cliente)
 - [x] **T015** Más productos de demostración en `DevelopmentSeeder` (API, solo `local`) para ver la paginación del catálogo — Verificación: pruebas del seeder y «Cargar más» en pantalla. 41 productos de bodega (rama `012-vender-mejorado` de la API); ejecutado con `db:seed --class=DevelopmentSeeder` (idempotente, sin `migrate:fresh`): «Bodega Demo» con 46 activos, 20 → 40 → 46 con «Cargar más»
 
+## Fase 7 · Confirmación sin salir (v1.4)
+
+- [x] **T016** Pruebas del modal (ticket y comprobante, pendiente o rechazado, nueva venta con foco, imprimir y ver detalle) (deben fallar) — Verificación: en rojo
+- [x] **T017** `document-result.ts`, `data-autofocus` en `BaseDialog`, `SaleDoneDialog` y su uso en `NewSaleView` — Verificación: T016 en verde. Además: el catálogo se recarga tras la venta (el disponible descuenta lo vendido) y el ticket a imprimir se retira en `afterprint` (en móviles `print()` no siempre bloquea)
+- [x] **T018** Venta real con ticket y con boleta contra SUNAT beta; capturas en claro, oscuro y 360 px — Verificación: revisión manual. T-000008 y T-000009 (celular) y B001-00000008 aceptada por SUNAT beta, sin salir de `/vender`; en el celular la hoja del carrito se cierra y el foco queda en «Nueva venta»
+
 ## Cierre
 
 - [x] **T009** Capturas a 360 px (barra y hoja) y en escritorio, en claro y oscuro; venta de 3 productos solo con toques (CE-002) — Verificación: revisión manual. CE-002 contra la API local: tres toques y «Cobrar» crearon el ticket T-000006 y borraron la venta guardada. Corrigió: el total y «Cobrar» quedaban fuera de vista con carritos largos (pie `sticky` en columna y hoja; `BaseDialog` con alto máximo y desplazamiento) y la columna del carrito pasó a 24 rem
-- [x] **T010** Comprobaciones del principio VI en verde (frontend 211 pruebas; API 639 SQLite y PostgreSQL, Pint)
+- [x] **T010** Comprobaciones del principio VI en verde (frontend 214 pruebas; API 639 SQLite y PostgreSQL, Pint)
 - [x] **T011** Bitácora de `AGENTS.md` y estado en `docs/specs/README.md`

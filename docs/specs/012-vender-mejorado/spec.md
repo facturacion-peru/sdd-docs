@@ -1,6 +1,6 @@
 # Spec 012: Vender — carrito persistente y diseño en dos columnas
 
-**Estado:** Aprobada (2026-10-03) · **Versión:** 1.3 · **Fecha:** 2026-10-03
+**Estado:** Aprobada (2026-10-03) · **Versión:** 1.4 · **Fecha:** 2026-10-03
 **Depende de:** 003, 005, 010 · **Aclaraciones:** A-56, A-57, A-58, A-59
 
 > Qué y por qué. Sin frameworks, tablas, endpoints ni componentes: eso va en `plan.md`.
@@ -61,6 +61,20 @@ Como vendedor, quiero ver el carrito y el total mientras agrego productos (A-56)
 3. **Dado** una pantalla ancha, **cuando** vendo, **entonces** «Vender» ocupa todo el ancho y el alto de la ventana: catálogo y carrito se desplazan cada uno por su cuenta y la página no se desplaza (v1.1).
 4. **Dado** el carrito, **cuando** elijo qué emitir (ticket, boleta o factura), **entonces** el selector está en el propio carrito, después de los productos y antes del cliente y del medio de pago (orden del cobro: qué llevo, qué emito y a quién, cómo me pagan, cobrar; v1.3), con el aviso de pruebas y el motivo si boleta o factura no están disponibles; en el celular, la barra fija muestra el tipo elegido (v1.2).
 
+### HU-5 · Seguir vendiendo tras cobrar (P1, v1.4)
+
+Como vendedor, quiero que al cobrar se confirme la venta sin salir de «Vender», para atender al siguiente cliente con un toque.
+
+**Por qué esta prioridad:** «Vender» es la pantalla donde se pasa el día; salir a otra pantalla tras cada venta obliga a volver siempre.
+
+**Escenarios de aceptación**
+
+1. **Dado** un cobro o una emisión exitosa, **cuando** termina, **entonces** sigo en «Vender», el carrito queda vacío y un modal muestra «Venta registrada» con el número y el total.
+2. **Dado** una boleta o factura, **cuando** se muestra la confirmación, **entonces** indica el resultado de SUNAT; si quedó pendiente de envío o fue rechazada, lo destaca y explica qué pasará.
+3. **Dado** el modal, **cuando** pulso «Nueva venta», Escape o fuera, **entonces** se cierra y el foco queda en la búsqueda de productos.
+4. **Dado** el modal, **cuando** pulso «Imprimir», **entonces** se imprime el ticket de 80 mm, o se abre el PDF de 80 mm del comprobante.
+5. **Dado** el modal, **cuando** pulso «Ver detalle», **entonces** voy al detalle del ticket o comprobante (anular, nota de crédito, descargas).
+
 ## Casos límite
 
 - **Almacenamiento no disponible** (navegación privada): la venta en curso dura mientras la aplicación esté abierta, sin errores.
@@ -77,6 +91,7 @@ Como vendedor, quiero ver el carrito y el total mientras agrego productos (A-56)
 - **RF-005:** «Vender» DEBE mostrar el catálogo de productos activos sin necesidad de buscar, paginado.
 - **RF-006:** En pantallas anchas, productos y carrito DEBEN mostrarse en dos columnas, con el carrito fijo a la vista; en el celular, una barra fija con cantidad, total y acceso al carrito.
 - **RF-007:** Los importes siguen siendo una vista previa; el servidor calcula y guarda los definitivos (principio II).
+- **RF-008:** Tras cobrar o emitir con éxito, «Vender» DEBE quedarse en pantalla y confirmar la venta en un modal con número, total, resultado de SUNAT (si aplica) y las acciones Nueva venta, Imprimir y Ver detalle. Sustituye el paso «va al ticket / al comprobante» de las specs 003 y 005.
 
 ## Criterios de éxito
 
@@ -98,6 +113,7 @@ Como vendedor, quiero ver el carrito y el total mientras agrego productos (A-56)
 | 2026-10-03 | A-57 Catálogo | Mostrar el catálogo para tocar; la búsqueda filtra |
 | 2026-10-03 | A-58 Persistencia | Toda la venta en curso en el dispositivo, por usuario y empresa |
 | 2026-10-03 | A-59 Vaciar | Con confirmación |
+| 2026-10-03 | Pedido del usuario (v1.4) | Confirmación en un modal sin salir de «Vender» (HU-5) |
 | 2026-10-03 | Pedido del usuario (v1.3) | Dentro del carrito: productos → qué emitir → serie y cliente → medio de pago → total |
 | 2026-10-03 | Pedido del usuario (v1.2) | El selector Ticket / Boleta / Factura pasa al carrito |
 | 2026-10-03 | Pedido del usuario (v1.1) | «Vender» a pantalla completa en escritorio; barra lateral contraíble (spec 010 v1.4) |

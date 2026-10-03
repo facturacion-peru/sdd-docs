@@ -1,6 +1,6 @@
 # Plan 012: Vender — carrito persistente y diseño en dos columnas
 
-**Estado:** Aprobado (2026-10-03) · **Fecha:** 2026-10-03 · **Spec:** [spec.md](./spec.md) (versión aprobada: 1.3)
+**Estado:** Aprobado (2026-10-03) · **Fecha:** 2026-10-03 · **Spec:** [spec.md](./spec.md) (versión aprobada: 1.4)
 
 ## Resumen técnico
 
@@ -45,6 +45,7 @@ Solo frontend: la API ya ofrece todo (`GET /products` paginado con `search` y `s
 - v1.1: la ruta `new-sale` lleva `meta.fullWidth`. Desde `lg`, la vista ocupa la altura disponible: el catálogo (con la búsqueda fija arriba) y el carrito se desplazan por separado; el carrito ya no necesita `sticky` ni alto máximo.
 - v1.2: el selector Ticket / Boleta / Factura, el distintivo de pruebas y el motivo de bloqueo pasan a la cabecera de `SaleCart` (la vista le pasa las opciones con su estado y escucha `kind-changed`). La barra del celular muestra el tipo elegido.
 - v1.3: orden dentro de `SaleCart`: cabecera (Carrito · Vaciar), líneas, qué emitir (con distintivo y motivo), serie y cliente, medio de pago, y el pie fijo con total y botón. Con el carrito vacío solo se ve la invitación a agregar productos.
+- v1.4: `components/SaleDoneDialog.vue` (sobre `BaseDialog`): «Venta registrada», número, total y, para comprobantes, el resultado de SUNAT con los mismos textos del detalle (extraídos a `document-result.ts`). Acciones: «Nueva venta» (principal y con el foco; `BaseDialog` admite `data-autofocus`), «Imprimir» (ticket: `TicketReceipt` oculto en pantalla y `window.print()`; comprobante: `salesDocumentsApi.download(…, '80mm')`) y «Ver detalle». Al cerrarse, el foco va a la búsqueda. En el celular se cierra antes la hoja del carrito.
 - `salesApi`: `listProducts({ search, page })` (sustituye a `searchProducts`) y `getProduct(id)`.
 
 ## Estrategia de pruebas

@@ -17,7 +17,7 @@ Una carpeta por capacidad, numerada. Cada una avanza por el ciclo SDD de la [con
 | 009 | [Despliegue y operación](009-despliegue-operacion/spec.md) | **Lista** (despliegue al servidor en espera) · [plan](009-despliegue-operacion/plan.md) · [tareas](009-despliegue-operacion/tasks.md) | 001–007 | — |
 | 010 | [Identidad visual y tema](010-identidad-visual/spec.md) | **Implementada** (v1.3 en la rama `010-identidad-visual`; v1.4 junto a la 012) · falta el merge · [plan](010-identidad-visual/plan.md) · [tareas](010-identidad-visual/tasks.md) | 001–007 | — |
 | 011 | [Panel de inicio](011-panel-inicio/spec.md) | **Implementada** en las ramas `011-panel-inicio` de API y frontend (falta el merge) · [plan](011-panel-inicio/plan.md) · [tareas](011-panel-inicio/tasks.md) | 003, 005, 007, 010 | — |
-| 012 | [Vender: carrito persistente y dos columnas](012-vender-mejorado/spec.md) | **Implementada** en las ramas `012-vender-mejorado` del frontend y de la API (seeder) (falta commit y merge) · [plan](012-vender-mejorado/plan.md) · [tareas](012-vender-mejorado/tasks.md) | 003, 005, 010 | — |
+| 012 | [Vender: carrito persistente y dos columnas](012-vender-mejorado/spec.md) | **Implementada** (v1.4) en las ramas `012-vender-mejorado` del frontend y de la API (seeder) (falta el merge) · [plan](012-vender-mejorado/plan.md) · [tareas](012-vender-mejorado/tasks.md) | 003, 005, 010 | — |
 
 Orden de trabajo: **001 → 002 → 003 → 004 → 005**. 003 y 004 son independientes entre sí; 004 puede adelantarse si se prioriza SUNAT.
 
