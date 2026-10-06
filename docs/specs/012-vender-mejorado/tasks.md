@@ -1,6 +1,6 @@
 # Tareas 012: Vender — carrito persistente y diseño en dos columnas
 
-**Estado:** Implementada (2026-10-03) · **Fecha:** 2026-10-03 · **Plan:** [plan.md](./plan.md)
+**Estado:** Implementada (v1.5: 2026-10-06) · **Fecha:** 2026-10-06 · **Plan:** [plan.md](./plan.md)
 
 > Cada tarea es pequeña, deja el proyecto funcionando y tiene su verificación.
 
@@ -39,6 +39,16 @@
 - [x] **T016** Pruebas del modal (ticket y comprobante, pendiente o rechazado, nueva venta con foco, imprimir y ver detalle) (deben fallar) — Verificación: en rojo
 - [x] **T017** `document-result.ts`, `data-autofocus` en `BaseDialog`, `SaleDoneDialog` y su uso en `NewSaleView` — Verificación: T016 en verde. Además: el catálogo se recarga tras la venta (el disponible descuenta lo vendido) y el ticket a imprimir se retira en `afterprint` (en móviles `print()` no siempre bloquea)
 - [x] **T018** Venta real con ticket y con boleta contra SUNAT beta; capturas en claro, oscuro y 360 px — Verificación: revisión manual. T-000008 y T-000009 (celular) y B001-00000008 aceptada por SUNAT beta, sin salir de `/vender`; en el celular la hoja del carrito se cierra y el foco queda en «Nueva venta»
+
+## Fase 8 · Recordar comprobante y serie (v1.5)
+
+- [x] **T019** Rama `012-recordar-comprobante` en el frontend, desde `main` — Verificación: `git branch --show-current`
+- [x] **T020** Pruebas del store: preferencia separada de la venta, `clear()` la conserva, por empresa y usuario, sobrevive al cierre de sesión, sin almacenamiento en memoria (deben fallar) — Verificación: en rojo
+- [x] **T021** Preferencia en `sale-draft` (`sunat.sale-preference.<empresa>.<usuario>`, `remember()`, `reset()` y `load()`) — Verificación: T020 en verde
+- [x] **T022** Pruebas de la vista: boleta B002 recordada tras «Nueva venta», elección sin cobrar recordada al volver, serie inactiva y SUNAT no disponible sin perder la preferencia, botón «Emitir boleta · B001» y barra «Boleta B001» (deben fallar) — Verificación: en rojo
+- [x] **T023** `remember()` en `onKindChanged`, en el nuevo evento `series-changed` de `SaleCart` y en `finish()`; `chargeLabel` y barra con la serie — Verificación: T022 en verde
+- [x] **T024** Boleta real contra SUNAT beta, «Nueva venta», otra boleta sin tocar el selector; cerrar sesión, entrar y repetir (CE-004); capturas del botón en escritorio y 360 px, claro y oscuro — Verificación: revisión manual. B001-00000010 y B001-00000011 aceptadas por SUNAT beta, la segunda sin tocar el selector; tras cerrar sesión con el botón real se borró la venta y quedó `sunat.sale-preference.1.3`; al volver a entrar, «Emitir boleta · B001». Barra del celular: «Boleta B001 · 1 producto»
+- [x] **T025** Comprobaciones del principio VI (`pnpm type-check && pnpm lint && pnpm test:unit --run && pnpm build-only`), bitácora de `AGENTS.md` y estado en `docs/specs/README.md` — Verificación: códigos de salida 0 (225 pruebas)
 
 ## Cierre
 

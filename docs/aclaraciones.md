@@ -74,6 +74,7 @@ Registro único de preguntas abiertas y decisiones. Las specs las citan por su i
 | [A-57](#a-57) | Catálogo en «Vender» | 012 | Resuelta |
 | [A-58](#a-58) | Persistencia de la venta en curso | 012 | Resuelta |
 | [A-59](#a-59) | Vaciar el carrito | 012 | Resuelta |
+| [A-60](#a-60) | Recordar comprobante y serie | 012 | Resuelta |
 
 ---
 
@@ -675,6 +676,20 @@ El vendedor ve solo sus tickets (A-30) pero todos los comprobantes (A-32).
 **¿«Vaciar carrito» pide confirmación?** · Bloquea: 012 · **Resuelta**
 
 > **Decisión (2026-10-03):** Sí, con confirmación que indica cuántos productos se quitarán.
+
+### A-60
+
+**¿«Vender» recuerda el último comprobante y serie elegidos?** · Bloquea: 012 v1.5 · **Resuelta**
+
+Pedido del usuario: quien emite casi siempre boletas debe cambiar comprobante y serie en cada venta, porque al cobrar todo vuelve a ticket. Puntos a decidir:
+
+1. **Qué se recuerda:** solo comprobante y serie, o también el medio de pago.
+2. **Cuánto dura:** solo mientras dure la sesión, o también tras cerrar sesión.
+3. **Aviso en el botón:** si el botón de cobro muestra comprobante y serie.
+
+**Recomendación:** (1) solo comprobante y serie: el cliente es de cada venta y un medio de pago distinto de efectivo pasa inadvertido con facilidad; (2) también tras cerrar sesión, guardado por usuario y empresa (no es dato sensible); (3) sí, porque una boleta o factura emitida por error va a SUNAT y solo se corrige con una nota de crédito.
+
+> **Decisión (2026-10-06):** Aceptada la recomendación en los tres puntos.
 
 ## Pendientes menores
 

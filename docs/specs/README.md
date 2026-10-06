@@ -17,7 +17,7 @@ Una carpeta por capacidad, numerada. Cada una avanza por el ciclo SDD de la [con
 | 009 | [Despliegue y operación](009-despliegue-operacion/spec.md) | **Lista** (T001–T023 integradas en `main`; despliegue al servidor en espera) · [plan](009-despliegue-operacion/plan.md) · [tareas](009-despliegue-operacion/tasks.md) | 001–007 | — |
 | 010 | [Identidad visual y tema](010-identidad-visual/spec.md) | **Integrada en `main`** (v1.4) · [plan](010-identidad-visual/plan.md) · [tareas](010-identidad-visual/tasks.md) | 001–007 | — |
 | 011 | [Panel de inicio](011-panel-inicio/spec.md) | **Integrada en `main`** · [plan](011-panel-inicio/plan.md) · [tareas](011-panel-inicio/tasks.md) | 003, 005, 007, 010 | — |
-| 012 | [Vender: carrito persistente y dos columnas](012-vender-mejorado/spec.md) | **Integrada en `main`** (v1.4) · [plan](012-vender-mejorado/plan.md) · [tareas](012-vender-mejorado/tasks.md) | 003, 005, 010 | — |
+| 012 | [Vender: carrito persistente y dos columnas](012-vender-mejorado/spec.md) | **Integrada en `main`** (v1.5) · [plan](012-vender-mejorado/plan.md) · [tareas](012-vender-mejorado/tasks.md) | 003, 005, 010 | — |
 
 Orden de trabajo: **001 → 002 → 003 → 004 → 005**. 003 y 004 son independientes entre sí; 004 puede adelantarse si se prioriza SUNAT.
 

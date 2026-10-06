@@ -81,7 +81,7 @@ Primer arranque local: `php artisan migrate:fresh --seed` (crea las cuentas de p
 - **Campos:** `BaseInput`, `BaseSelect` y `SearchInput` comparten `shared/ui/field.ts`; ninguna vista escribe clases propias en un `<input>` de texto ni usa `<select>` directo (lo comprueba `theme.spec.ts`). Las búsquedas usan `SearchInput` con `@clear` apuntando al mismo manejador que recarga la lista.
 - **Modo oscuro:** `main.css` redefine los mismos tokens bajo `:root[data-theme='dark']`; `useTheme` siempre deja `data-theme` en `<html>`. Cada tono tiene un papel fijo (50–200 fondos tenues, 300–400 gráficos, 600 relleno con texto blanco, 700 texto de acento, 800 *hover* del relleno, 900–950 siempre oscuros): no usar `700` como fondo ni `600` como texto, o se rompe en oscuro.
 - En Vue, `:inert="cond"` con `false` deja `inert="false"` en el DOM y el navegador lo trata como inerte: usar `:inert="cond || undefined"`.
-- **Venta en curso:** `sunat.sale-draft.<empresa>.<usuario>` en `localStorage`. Solo `AppLayout.logout()` la borra al salir; no engancharla a `onTokenCleared` (también salta con un 401 y se perdería la venta, principio VII).
+- **Venta en curso:** `sunat.sale-draft.<empresa>.<usuario>` en `localStorage`. Solo `AppLayout.logout()` la borra al salir; no engancharla a `onTokenCleared` (también salta con un 401 y se perdería la venta, principio VII). El último comprobante y serie van aparte (`sunat.sale-preference.…`) y no se borran al salir; guardarlos solo con `remember()`, nunca con un `watch` (la corrección automática los pisaría).
 - `BaseDialog` enfoca el hijo con `data-autofocus` al abrir y solo devuelve el foco al que lo abrió si sigue en la página.
 - `sr-only` sobre un `<table>` no la oculta bien (ignora el ancho y el `caption` puede verse): ponerlo en un `div` que la envuelva.
 - En un grid de una columna con texto truncado, usar `grid-cols-1` (`minmax(0,1fr)`): la columna implícita crece con el texto y desborda a 360 px.
@@ -91,6 +91,8 @@ Primer arranque local: `php artisan migrate:fresh --seed` (crea las cuentas de p
 ## Bitácora
 
 Entradas breves y fechadas de decisiones o cambios relevantes (la más reciente arriba).
+
+- **2026-10-06** — Spec 012 v1.5 (A-60) implementada en la rama `012-recordar-comprobante` del frontend (desde `main`): «Vender» recuerda el último comprobante y serie por empresa y usuario en `sunat.sale-preference.<empresa>.<usuario>`, aparte de la venta en curso (no la borran cobrar, vaciar ni cerrar sesión; cliente y medio de pago sí vuelven al inicio). Solo se guarda con elecciones del usuario y ventas cobradas, nunca con la corrección automática (serie inactiva o SUNAT sin responder). El botón dice comprobante y serie («Emitir boleta · B001»). 225 pruebas; CE-004 verificado con dos boletas en SUNAT beta. Integrada en `main` del frontend.
 
 - **2026-10-03** — Specs 010, 011 y 012 integradas en `main` de la API y del frontend (merge local, sin push). Como sus ramas salían de la 009, entró antes lo hecho de la 009 (T001–T023: copias, avisos de operación, scripts de despliegue y CI); la 009 sigue abierta por las tareas del servidor (T030, T032, T033…), con el despliegue apagado (`DEPLOY_ENABLED`). Suites en verde sobre `main`: 639 pruebas SQLite y 650 PostgreSQL en la API, 214 en el frontend.
 

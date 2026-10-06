@@ -1,7 +1,7 @@
 # Spec 012: Vender — carrito persistente y diseño en dos columnas
 
-**Estado:** Aprobada (2026-10-03) · **Versión:** 1.4 · **Fecha:** 2026-10-03
-**Depende de:** 003, 005, 010 · **Aclaraciones:** A-56, A-57, A-58, A-59
+**Estado:** Aprobada (v1.5: 2026-10-06) · **Versión:** 1.5 · **Fecha:** 2026-10-06
+**Depende de:** 003, 005, 010 · **Aclaraciones:** A-56, A-57, A-58, A-59, A-60
 
 > Qué y por qué. Sin frameworks, tablas, endpoints ni componentes: eso va en `plan.md`.
 
@@ -24,7 +24,7 @@ Como vendedor, quiero que los productos agregados sigan en el carrito si voy a o
 
 1. **Dado** un carrito con productos, tipo, cliente y medio de pago, **cuando** cambio de pantalla, recargo o cierro y vuelvo a abrir la aplicación, **entonces** «Vender» muestra la misma venta en curso.
 2. **Dado** una venta en curso guardada, **cuando** vuelvo, **entonces** los precios y el disponible se actualizan con los del catálogo; si un producto ya no existe o se desactivó, se quita y se me avisa.
-3. **Dado** una venta cobrada o emitida, **cuando** termina bien, **entonces** el carrito queda vacío.
+3. **Dado** una venta cobrada o emitida, **cuando** termina bien, **entonces** el carrito queda vacío; el comprobante y la serie se conservan (HU-6, v1.5).
 4. **Dado** que cierro sesión, **cuando** otra persona entra en el mismo dispositivo, **entonces** no ve mi venta en curso; cada usuario y empresa tiene la suya.
 5. **Dado** que mi sesión vence a mitad de una venta, **cuando** vuelvo a entrar, **entonces** la venta en curso sigue ahí (principio VII).
 6. **Dado** un cobro que falló por la red, **cuando** reintento tras volver a la pantalla, **entonces** no se crea una venta duplicada.
@@ -75,12 +75,29 @@ Como vendedor, quiero que al cobrar se confirme la venta sin salir de «Vender»
 4. **Dado** el modal, **cuando** pulso «Imprimir», **entonces** se imprime el ticket de 80 mm, o se abre el PDF de 80 mm del comprobante.
 5. **Dado** el modal, **cuando** pulso «Ver detalle», **entonces** voy al detalle del ticket o comprobante (anular, nota de crédito, descargas).
 
+### HU-6 · Recordar el comprobante y la serie (P1, v1.5)
+
+Como vendedor de un negocio que casi siempre emite el mismo comprobante (por ejemplo, boletas), quiero que «Vender» recuerde el último comprobante y la última serie que usé, para no elegirlos de nuevo en cada venta (A-60).
+
+**Por qué esta prioridad:** hoy cada venta vuelve a ticket; quien emite solo boletas cambia comprobante y serie en cada cobro, con el cliente delante.
+**Prueba independiente:** emitir una boleta con la serie B002, pulsar «Nueva venta»: el carrito está vacío con Boleta y B002 ya elegidos.
+
+**Escenarios de aceptación**
+
+1. **Dado** una venta cobrada o emitida, **cuando** empiezo la siguiente, **entonces** el comprobante y la serie son los de la venta anterior; el cliente y el medio de pago vuelven a su valor inicial (sin cliente, efectivo).
+2. **Dado** que vacío el carrito, cierro sesión o cierro la aplicación, **cuando** vuelvo a «Vender», **entonces** se mantienen el último comprobante y la última serie que elegí.
+3. **Dado** que cambio el comprobante o la serie en el carrito, **cuando** empiezo otra venta, **entonces** se recuerda lo último elegido, aunque esa venta no se haya cobrado.
+4. **Dado** que la serie recordada se desactivó o el comprobante ya no está disponible (por ejemplo, la empresa dejó de tener SUNAT configurado), **cuando** abro «Vender», **entonces** se elige la serie por defecto del comprobante o se vuelve a ticket, sin errores.
+5. **Dado** otro usuario u otra empresa en el mismo dispositivo, **cuando** entra a «Vender», **entonces** no hereda mi elección; cada usuario y empresa tiene la suya.
+6. **Dado** un comprobante recordado, **cuando** veo el botón de cobro, **entonces** dice qué se emitirá y con qué serie (por ejemplo, «Emitir boleta · B001»), en la columna del carrito y en la barra del celular, para no emitir sin darme cuenta un comprobante que va a SUNAT.
+
 ## Casos límite
 
 - **Almacenamiento no disponible** (navegación privada): la venta en curso dura mientras la aplicación esté abierta, sin errores.
 - **Venta guardada de otra versión** o con datos dañados: se descarta en silencio y se empieza vacía.
 - **Precio cambiado** desde que se agregó: se muestra el actual (el servidor siempre cobra el del catálogo, spec 003 RF-011).
-- **Serie elegida ya inactiva** o SUNAT no disponible al volver: se elige la serie por defecto o se vuelve a ticket, como al abrir la pantalla.
+- **Serie elegida ya inactiva** o SUNAT no disponible al volver: se elige la serie por defecto o se vuelve a ticket, como al abrir la pantalla. Vale igual para la venta en curso y para el comprobante recordado (HU-6).
+- **Una sola serie del comprobante:** se recuerda igual; el resultado es el mismo que hoy.
 
 ## Requisitos funcionales
 
@@ -92,12 +109,16 @@ Como vendedor, quiero que al cobrar se confirme la venta sin salir de «Vender»
 - **RF-006:** En pantallas anchas, productos y carrito DEBEN mostrarse en dos columnas, con el carrito fijo a la vista; en el celular, una barra fija con cantidad, total y acceso al carrito.
 - **RF-007:** Los importes siguen siendo una vista previa; el servidor calcula y guarda los definitivos (principio II).
 - **RF-008:** Tras cobrar o emitir con éxito, «Vender» DEBE quedarse en pantalla y confirmar la venta en un modal con número, total, resultado de SUNAT (si aplica) y las acciones Nueva venta, Imprimir y Ver detalle. Sustituye el paso «va al ticket / al comprobante» de las specs 003 y 005.
+- **RF-009:** El sistema DEBE recordar en el dispositivo, por usuario y empresa, el último comprobante y la última serie elegidos, y usarlos al empezar cada venta. Este recuerdo NO DEBE borrarse al cobrar, vaciar el carrito ni cerrar sesión; NO incluye cliente ni medio de pago (A-60, v1.5).
+- **RF-010:** Si el comprobante o la serie recordados ya no están disponibles, el sistema DEBE usar la serie por defecto del comprobante o ticket.
+- **RF-011:** El botón de cobro DEBE indicar el comprobante y, si lo hay, la serie que se emitirá.
 
 ## Criterios de éxito
 
 - **CE-001:** Agregar productos, cambiar de pantalla, recargar y volver conserva el carrito (prueba automatizada y verificación manual).
 - **CE-002:** Una venta típica de 3 productos del catálogo se cobra sin escribir (solo toques).
 - **CE-003:** «Vender» se ve correctamente a 360 px y en escritorio, en claro y en oscuro.
+- **CE-004:** Tras emitir una boleta, la siguiente venta se cobra con la misma boleta y serie sin tocar el selector, también después de cerrar sesión y volver a entrar (prueba automatizada y verificación manual).
 
 ## Fuera de alcance
 
@@ -113,6 +134,7 @@ Como vendedor, quiero que al cobrar se confirme la venta sin salir de «Vender»
 | 2026-10-03 | A-57 Catálogo | Mostrar el catálogo para tocar; la búsqueda filtra |
 | 2026-10-03 | A-58 Persistencia | Toda la venta en curso en el dispositivo, por usuario y empresa |
 | 2026-10-03 | A-59 Vaciar | Con confirmación |
+| 2026-10-06 | A-60 Recordar comprobante (v1.5) | Se recuerdan comprobante y serie por usuario y empresa, también tras cerrar sesión; no cliente ni medio de pago; el botón de cobro muestra comprobante y serie |
 | 2026-10-03 | Pedido del usuario (v1.4) | Confirmación en un modal sin salir de «Vender» (HU-5) |
 | 2026-10-03 | Pedido del usuario (v1.3) | Dentro del carrito: productos → qué emitir → serie y cliente → medio de pago → total |
 | 2026-10-03 | Pedido del usuario (v1.2) | El selector Ticket / Boleta / Factura pasa al carrito |

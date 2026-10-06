@@ -1,6 +1,6 @@
 # Plan 012: Vender — carrito persistente y diseño en dos columnas
 
-**Estado:** Aprobado (2026-10-03) · **Fecha:** 2026-10-03 · **Spec:** [spec.md](./spec.md) (versión aprobada: 1.4)
+**Estado:** Aprobado (v1.5: 2026-10-06) · **Fecha:** 2026-10-06 · **Spec:** [spec.md](./spec.md) (versión aprobada: 1.5)
 
 ## Resumen técnico
 
@@ -11,7 +11,7 @@ Solo frontend: la API ya ofrece todo (`GET /products` paginado con `search` y `s
 | Aspecto | Decisión |
 |---|---|
 | Proyectos afectados | Frontend |
-| Rama | `012-vender-mejorado`, desde la rama del frontend con 010 y 011 (usa la barra lateral y los campos unificados) |
+| Rama | `012-vender-mejorado`, desde la rama del frontend con 010 y 011 (usa la barra lateral y los campos unificados). v1.5: `012-recordar-comprobante`, desde `main` del frontend (la 012 ya está integrada) |
 | Dependencias nuevas | Ninguna (`@vueuse/core` y Pinia ya están) |
 | Cambios de API | Ninguno en el contrato. Solo datos de demostración en `DevelopmentSeeder` (v1.3, rama `012-vender-mejorado` de la API) |
 
@@ -35,6 +35,10 @@ Solo frontend: la API ya ofrece todo (`GET /products` paginado con `search` y `s
 - `clear()` vacía el estado y borra la clave. Se llama al cobrar o emitir con éxito, al «Vaciar carrito» y al cerrar sesión desde `AppLayout` (la capa `app/` puede usar features; `core/` no conoce la venta). El 401 por sesión vencida **no** la borra (RF-003).
 - `refresh()` al restaurar: `GET /products/{id}` por línea (`Promise.allSettled`); actualiza precio y disponible; quita los inexistentes o desactivados y devuelve sus nombres para avisar.
 - La clave de idempotencia se guarda: un cobro reintentado tras volver a la pantalla no duplica la venta (spec 003, RF-008).
+- v1.5 (A-60): **preferencia de comprobante** aparte de la venta en curso, en `sunat.sale-preference.<companyId>.<userId>` con `{ v: 1, kind, seriesId }`. Una clave propia porque su vida es otra: `clear()` (cobrar, vaciar, cerrar sesión) borra la venta, nunca la preferencia.
+  - `load()` lee primero la preferencia de la clave actual y luego la venta; `reset()` toma `kind` y `seriesId` de la preferencia en vez de `'ticket'` y `null`. Así, otro usuario en el mismo dispositivo arranca con la suya (HU-6 esc. 5).
+  - La preferencia **no** se guarda con un `watch` sobre `kind` y `seriesId`: la vista los corrige sola cuando la serie se desactivó o SUNAT no respondió (`validateRestoredKind`), y un fallo de red momentáneo dejaría «Ticket» recordado para siempre. Se guarda solo con `remember()`, que la vista llama cuando el usuario elige comprobante (`onKindChanged`) o serie (nuevo evento `series-changed` de `SaleCart`), y en `finish()` antes de `clear()` (cubre ventas restauradas de antes de la v1.5).
+  - Comprobante o serie que ya no sirven (RF-010): lo resuelve el mismo `validateRestoredKind` al montar, que ahora se aplica igual a la venta restaurada que a la preferencia, sin sobrescribirla.
 
 ## Pantalla
 
@@ -46,6 +50,7 @@ Solo frontend: la API ya ofrece todo (`GET /products` paginado con `search` y `s
 - v1.2: el selector Ticket / Boleta / Factura, el distintivo de pruebas y el motivo de bloqueo pasan a la cabecera de `SaleCart` (la vista le pasa las opciones con su estado y escucha `kind-changed`). La barra del celular muestra el tipo elegido.
 - v1.3: orden dentro de `SaleCart`: cabecera (Carrito · Vaciar), líneas, qué emitir (con distintivo y motivo), serie y cliente, medio de pago, y el pie fijo con total y botón. Con el carrito vacío solo se ve la invitación a agregar productos.
 - v1.4: `components/SaleDoneDialog.vue` (sobre `BaseDialog`): «Venta registrada», número, total y, para comprobantes, el resultado de SUNAT con los mismos textos del detalle (extraídos a `document-result.ts`). Acciones: «Nueva venta» (principal y con el foco; `BaseDialog` admite `data-autofocus`), «Imprimir» (ticket: `TicketReceipt` oculto en pantalla y `window.print()`; comprobante: `salesDocumentsApi.download(…, '80mm')`) y «Ver detalle». Al cerrarse, el foco va a la búsqueda. En el celular se cierra antes la hoja del carrito.
+- v1.5: el botón de cobro muestra el comprobante y la serie (`chargeLabel`: «Cobrar», «Emitir boleta · B001», «Emitir factura · F001»; sin la serie si aún no hay). La barra del celular pasa de «Boleta · 3 productos» a «Boleta B001 · 3 productos» (RF-011).
 - `salesApi`: `listProducts({ search, page })` (sustituye a `searchProducts`) y `getProduct(id)`.
 
 ## Estrategia de pruebas
@@ -60,6 +65,10 @@ Solo frontend: la API ya ofrece todo (`GET /products` paginado con `search` y `s
 | RF-003 | `AppLayout.spec.ts`: cerrar sesión borra la venta en curso; un 401 no | Unitaria |
 | RF-004, HU-2 | `NewSaleView.spec.ts`: «Vaciar carrito» confirma; cancelar no cambia nada | Unitaria |
 | RF-005, HU-3 | `NewSaleView.spec.ts`: catálogo sin búsqueda, filtro, «Cargar más» y sin disponible deshabilitado | Unitaria |
+| RF-009, HU-6 esc. 1–3 y 5 | `sale-draft.spec.ts`: `clear()` deja comprobante y serie recordados y borra cliente y medio de pago; la preferencia sobrevive al cerrar sesión y es por empresa y usuario; sin almacenamiento, en memoria | Unitaria |
+| RF-010, HU-6 esc. 4 | `NewSaleView.spec.ts`: serie recordada inactiva → serie por defecto; boleta recordada sin SUNAT o con error de consulta → ticket, sin perder la preferencia | Unitaria |
+| HU-6 esc. 1 y 3, CE-004 | `NewSaleView.spec.ts`: tras emitir una boleta B002, «Nueva venta» la deja elegida; cambiar a factura sin cobrar y volver a montar la recuerda | Unitaria |
+| RF-011 | `NewSaleView.spec.ts`: el botón dice «Emitir boleta · B001» y la barra del celular «Boleta B001» | Unitaria |
 | RF-006, CE-002, CE-003 | Capturas a 360 px (con barra y con hoja abierta) y en escritorio, en claro y oscuro; venta de 3 productos solo con toques | Manual |
 
 ## Riesgos
@@ -69,3 +78,5 @@ Solo frontend: la API ya ofrece todo (`GET /products` paginado con `search` y `s
 | Venta guardada con precios viejos | `refresh()` al restaurar; el servidor cobra el precio vigente |
 | Datos del cliente en el dispositivo | Por usuario y empresa, se borran al cerrar sesión; anotado para A-24 ⚖️ |
 | Cobro doble tras volver a la pantalla | La clave de idempotencia se guarda con la venta |
+| Emitir sin querer una boleta recordada (va a SUNAT) | El botón dice comprobante y serie (RF-011); el selector sigue visible en el carrito |
+| Fallo momentáneo de SUNAT borra la preferencia | La corrección automática no la guarda; solo las elecciones del usuario y las ventas cobradas |
