@@ -7,7 +7,7 @@ Notas para agentes (y personas) que trabajen en este espacio. Aquí va lo import
 | Carpeta | Qué es | Stack | README |
 |---|---|---|---|
 | `Api-de-facturacion-electronica-sunat-Peru/` | API REST multiempresa (empresas, usuarios, inventario, tickets y emisión SUNAT en beta). El panel de plataforma irá en el frontend Vue (spec 006, A-35) | Laravel 12, PHP 8.2+, Greenter 5.1, Sanctum, Pest, PostgreSQL | [README](https://github.com/facturacion-peru/Api-de-facturacion-electronica-sunat-Peru#readme) |
-| `frontend-api-facturacion-electronica-sunat/` | App de todos los usuarios de empresa, incluido su administrador (A-08), y del administrador de la plataforma en `/plataforma` (A-35). Futuro APK con Capacitor | Vue 3 + TS 5.9, Vite 8, Pinia, Tailwind 4, `openapi-fetch` | [README](https://github.com/facturacion-peru/frontend-api-facturacion-electronica-sunat#readme) |
+| `frontend-api-facturacion-electronica-sunat/` | App de todos los usuarios de empresa, incluido su administrador (A-08), y del administrador de la plataforma en `/plataforma` (A-35). También es la app Android (Capacitor 8, `android/`, spec 013) | Vue 3 + TS 5.9, Vite 8, Pinia, Tailwind 4, `openapi-fetch` | [README](https://github.com/facturacion-peru/frontend-api-facturacion-electronica-sunat#readme) |
 
 Hay tres repositorios git independientes ([sdd-docs](https://github.com/facturacion-peru/sdd-docs), [API](https://github.com/facturacion-peru/Api-de-facturacion-electronica-sunat-Peru) y [frontend](https://github.com/facturacion-peru/frontend-api-facturacion-electronica-sunat)): la **raíz** (solo `README.md`, `docs/`, `AGENTS.md` y `CLAUDE.md`; ignora las dos carpetas de proyecto y `respaldos/`), la **API** (fork de `yorchavez9/Api-de-facturacion-electronica-sunat-Peru`, remoto `upstream`) y el **frontend** (desde la tarea T002 de la spec 001). Son **públicos** (A-46): nada secreto entra en ellos. Cómo clonarlos juntos: [README](README.md).
 
@@ -86,11 +86,30 @@ Primer arranque local: `php artisan migrate:fresh --seed` (crea las cuentas de p
 - `sr-only` sobre un `<table>` no la oculta bien (ignora el ancho y el `caption` puede verse): ponerlo en un `div` que la envuelva.
 - En un grid de una columna con texto truncado, usar `grid-cols-1` (`minmax(0,1fr)`): la columna implícita crece con el texto y desborda a 360 px.
 - `trustPolicyExclude` en `pnpm-workspace.yaml` admite solo versiones exactas revisadas y aprobadas por el usuario (hoy `semver@6.3.1`, falso positivo). Ante un `ERR_PNPM_TRUST_DOWNGRADE` nuevo: revisar, preguntar y documentar; nunca desactivar `trustPolicy`.
+- **App Android (spec 013):**
+  - Todo lo que depende del teléfono va en `src/core/device/` (web y nativo). Ninguna feature importa plugins de Capacitor directamente.
+  - El WebView de Android **no** actualiza `navigator.onLine`. Para saber si hay conexión, usar `device().onConnectionChange` (`@capacitor/network`).
+  - En la app no hay `window.print()`: se comparte el PDF de la API, y el ticket de 80 mm sale de `GET /tickets/{ticket}/pdf`.
+  - Compilar exige `JAVA_HOME` con JDK 21 (`~/Android/jdk-21…`); Gradle ya no arranca con el 17. En el emulador, la PC es `10.0.2.2`.
+  - Con `php artisan serve` de un solo proceso, las llamadas simultáneas de la app esperan segundos: usar `PHP_CLI_SERVER_WORKERS=4`.
+  - La clave de firma (`~/Android/keys/`, copia en `respaldos/android-firma/`) y `android/keystore.properties` nunca van al repositorio. Si se pierde la clave, la app instalada ya no se puede actualizar.
+  - Subir `version` en `package.json` en cada entrega: de ahí sale `versionCode`.
 - El código heredado de `legacy/` no se ejecuta: antes de reincorporar algo, leer `docs/investigacion/001-evaluacion-api-existente.md`.
 
 ## Bitácora
 
 Entradas breves y fechadas de decisiones o cambios relevantes (la más reciente arriba).
+
+- **2026-10-06** — Spec 013 (app Android, A-61 a A-67) implementada en la rama `013-app-android` de API y frontend.
+  - **App:** el mismo frontend con Capacitor 8, nombre e identificador provisionales («Facturación SUNAT», `io.github.facturacion_peru.app`).
+  - **Teléfono, en `core/device`:** sesión en Keystore, «Compartir» para PDF/XML/CDR, botón «Atrás», estado de red y versión instalada.
+  - **API:** PDF de 80 mm del ticket y versión mínima de la app (`X-App-Version` → 426, `APP_ANDROID_MIN_VERSION`).
+  - **Seguridad del APK:** sin copias de seguridad, HTTP solo en la variante *debug* y APK firmado con la clave fuera del repositorio.
+  - **Pruebas:** 258 de frontend y 655 de API en SQLite (666 en PostgreSQL), todas en verde.
+  - **Emulador** (Android 15, 360 dp): recorrido completo con boleta aceptada en SUNAT beta.
+  - **Correcciones en el camino:** el plan (`navigator.onLine` no funciona en el WebView → `@capacitor/network`) y el login, que mostraba «Tu sesión terminó» al abrir «/» sin sesión (venía de la 001).
+  - **Teléfono real** (Poco X3 NFC por depuración inalámbrica): CE-002 ~2,0 s, aceptado con ese margen.
+  - **Pendiente:** CE-001 en el teléfono real, nombre e identificador definitivos (A-61), la entrega cuando exista el servidor de la 009, y el merge.
 
 - **2026-10-06** — Spec 012 v1.5 (A-60) implementada en la rama `012-recordar-comprobante` del frontend (desde `main`): «Vender» recuerda el último comprobante y serie por empresa y usuario en `sunat.sale-preference.<empresa>.<usuario>`, aparte de la venta en curso (no la borran cobrar, vaciar ni cerrar sesión; cliente y medio de pago sí vuelven al inicio). Solo se guarda con elecciones del usuario y ventas cobradas, nunca con la corrección automática (serie inactiva o SUNAT sin responder). El botón dice comprobante y serie («Emitir boleta · B001»). 225 pruebas; CE-004 verificado con dos boletas en SUNAT beta. Integrada en `main` del frontend.
 

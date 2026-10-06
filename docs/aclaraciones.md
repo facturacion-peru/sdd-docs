@@ -75,6 +75,13 @@ Registro único de preguntas abiertas y decisiones. Las specs las citan por su i
 | [A-58](#a-58) | Persistencia de la venta en curso | 012 | Resuelta |
 | [A-59](#a-59) | Vaciar el carrito | 012 | Resuelta |
 | [A-60](#a-60) | Recordar comprobante y serie | 012 | Resuelta |
+| [A-61](#a-61) | Distribución e identidad de la app Android | 013 | Resuelta |
+| [A-62](#a-62) | Servidor al que se conecta la app | 013 | Resuelta |
+| [A-63](#a-63) | Imprimir y descargar en la app | 013 | Resuelta |
+| [A-64](#a-64) | Dónde guarda la sesión la app | 013 | Resuelta |
+| [A-65](#a-65) | Panel de la plataforma en la app | 013 | Resuelta |
+| [A-66](#a-66) | Uso sin conexión | 013 | Resuelta |
+| [A-67](#a-67) | Actualizaciones de la app | 013 | Resuelta |
 
 ---
 
@@ -690,6 +697,92 @@ Pedido del usuario: quien emite casi siempre boletas debe cambiar comprobante y 
 **Recomendación:** (1) solo comprobante y serie: el cliente es de cada venta y un medio de pago distinto de efectivo pasa inadvertido con facilidad; (2) también tras cerrar sesión, guardado por usuario y empresa (no es dato sensible); (3) sí, porque una boleta o factura emitida por error va a SUNAT y solo se corrige con una nota de crédito.
 
 > **Decisión (2026-10-06):** Aceptada la recomendación en los tres puntos.
+
+## 013 · Aplicación Android
+
+### A-61
+
+**¿Cómo se distribuye la app y con qué identidad?** · Bloquea: 013 · **Resuelta**
+
+- **A.** APK firmado que se instala directamente (enlace de descarga o archivo enviado a cada empresa del piloto). Sin cuenta de Google Play; el usuario debe permitir «instalar apps de origen desconocido».
+- **B.** Google Play, en prueba cerrada para el piloto y luego pública. Exige cuenta de desarrollador (pago único de 25 USD), política de privacidad publicada, ficha de la tienda y la revisión de Google; la política de privacidad depende de A-24 ⚖️.
+- **C.** A para el piloto y B cuando se pase a producción.
+
+También hay que fijar el **nombre** visible de la app y su **identificador** (por ejemplo `pe.tudominio.facturacion`), que en Google Play no se puede cambiar nunca; conviene que sea un dominio propio.
+
+**Recomendación:** C. El APK directo permite empezar ya con 5 empresas sin trámites; Play se prepara junto con la revisión legal de A-24. Identificador basado en el dominio del SaaS, decidido antes de la primera entrega aunque se use solo el APK.
+
+> **Decisión (2026-10-06):** C. APK firmado de instalación directa para el piloto; Google Play al pasar a producción, junto con A-24 ⚖️. El nombre visible y el identificador (basado en el dominio del SaaS) se fijan antes de la primera entrega a una empresa.
+
+### A-62
+
+**¿A qué servidor se conecta la app?** · Bloquea: 013 · **Resuelta**
+
+Android bloquea por defecto las conexiones sin HTTPS, y el servidor de la 009 aún no existe (despliegue en espera).
+
+- **A.** Esperar al servidor de la 009 (API con HTTPS en su dominio) para cualquier prueba en el celular.
+- **B.** Desarrollar ya con una versión «de desarrollo» que se conecta a la API de la computadora por la red local (sin HTTPS, permitido solo en esa versión), y entregar a las empresas solo versiones contra la API con HTTPS de la 009.
+- **C.** Un túnel temporal con HTTPS hacia la computadora de desarrollo para probar en celulares fuera de la red local.
+
+**Recomendación:** B. Permite construir y probar toda la app ahora; la entrega a las empresas (CE-001 con usuarios reales) espera al servidor de la 009. C solo si hace falta probar fuera de casa.
+
+> **Decisión (2026-10-06):** B. Versión de desarrollo contra la API de la computadora por la red local; a las empresas solo se entregan versiones contra la API con HTTPS de la 009.
+
+### A-63
+
+**¿Cómo se imprime y descarga en la app?** · Bloquea: 013 · **Resuelta**
+
+Dentro de una app, la impresión del navegador y las descargas de archivos no funcionan como en la web.
+
+- **A.** Al imprimir o descargar, la app genera el PDF (o XML, CDR) y abre el menú «Compartir» / «Abrir con» de Android: se elige el servicio de impresión del sistema, la app de la impresora térmica (muchas aceptan PDF), WhatsApp o guardar en archivos.
+- **B.** Impresión Bluetooth directa a la térmica (ESC/POS), sin pasar por otras apps.
+
+**Recomendación:** A en esta spec: funciona con casi cualquier impresora y app y no requiere permisos de Bluetooth. B queda para una spec propia (está fuera del MVP en la visión) cuando se sepa qué impresoras usan las empresas.
+
+> **Decisión (2026-10-06):** A. Menú «Compartir» / «Abrir con» de Android con el PDF o archivo. La impresión Bluetooth directa queda para una spec propia.
+
+### A-64
+
+**¿Dónde guarda la app la sesión?** · Bloquea: 013 · **Resuelta**
+
+En la web el token va en el almacenamiento del navegador. La constitución (principio VII) prevé el almacenamiento seguro del dispositivo para el APK.
+
+- **A.** Almacenamiento protegido de Android (cifrado con el almacén de claves del sistema), excluido de las copias de seguridad.
+- **B.** El mismo almacenamiento web que hoy, dentro de la app.
+
+**Recomendación:** A. Es lo que prevé la constitución y el módulo de la sesión ya está aislado para cambiarlo sin tocar el resto. La venta en curso y las preferencias (no sensibles) siguen en el almacenamiento de la app.
+
+> **Decisión (2026-10-06):** A. Almacenamiento protegido de Android, excluido de las copias de seguridad.
+
+### A-65
+
+**¿El panel de la plataforma va en la app?** · Bloquea: 013 · **Resuelta**
+
+**Recomendación:** no. La app es para usuarios de empresa; si entra el administrador de la plataforma, se le indica que use la web (A-35 ya preveía excluirlo del APK). Menos código en la app y menos superficie de riesgo en un teléfono.
+
+> **Decisión (2026-10-06):** No. El administrador de la plataforma usa la web.
+
+### A-66
+
+**¿La app permite vender sin conexión?** · Bloquea: 013 · **Resuelta**
+
+**Recomendación:** no en esta spec. Los correlativos, el stock y el envío a SUNAT se deciden en el servidor (principio II); vender sin conexión exige reglas de numeración y conflictos propias de otra spec. Sin conexión se avisa claramente y la venta en curso se conserva (spec 012).
+
+> **Decisión (2026-10-06):** No en esta spec; aviso claro y la venta en curso se conserva.
+
+### A-67
+
+**¿Cómo se mantiene la app compatible con la API?** · Bloquea: 013 · **Resuelta**
+
+La app lleva la interfaz dentro: un cambio en la API puede romper versiones viejas instaladas.
+
+- **A.** Cada versión de la app informa su número; la API publica la versión mínima aceptada y la app pide actualizar si está por debajo. Cada cambio de interfaz es un APK nuevo.
+- **B.** La app carga la interfaz desde el servidor web en cada apertura (siempre al día), y el APK es solo un contenedor.
+- **C.** Sin control: se avisa a las empresas a mano cuando haya versión nueva.
+
+**Recomendación:** A. Es el modelo habitual y el que acepta Google Play (B depende siempre de la red para abrir y Play puede rechazarla como «sitio web empaquetado»). Requiere un cambio pequeño en la API (la versión mínima), que irá en el plan.
+
+> **Decisión (2026-10-06):** A. Versión mínima publicada por la API; la app pide actualizar si está por debajo.
 
 ## Pendientes menores
 
