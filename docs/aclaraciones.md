@@ -82,6 +82,13 @@ Registro único de preguntas abiertas y decisiones. Las specs las citan por su i
 | [A-65](#a-65) | Panel de la plataforma en la app | 013 | Resuelta |
 | [A-66](#a-66) | Uso sin conexión | 013 | Resuelta |
 | [A-67](#a-67) | Actualizaciones de la app | 013 | Resuelta |
+| [A-68](#a-68) | Qué datos se exportan e importan | 014 | Resuelta |
+| [A-69](#a-69) | Formato de los archivos | 014 | Resuelta |
+| [A-70](#a-70) | Registros que ya existen al importar | 014 | Resuelta |
+| [A-71](#a-71) | Filas con errores al importar | 014 | Resuelta |
+| [A-72](#a-72) | Stock inicial al importar productos | 014 | Resuelta |
+| [A-73](#a-73) | Quién exporta e importa, y límites | 014 | Resuelta |
+| [A-74](#a-74) | Contenido de la exportación de ventas | 014 | Resuelta |
 
 ---
 
@@ -783,6 +790,100 @@ La app lleva la interfaz dentro: un cambio en la API puede romper versiones viej
 **Recomendación:** A. Es el modelo habitual y el que acepta Google Play (B depende siempre de la red para abrir y Play puede rechazarla como «sitio web empaquetado»). Requiere un cambio pequeño en la API (la versión mínima), que irá en el plan.
 
 > **Decisión (2026-10-06):** A. Versión mínima publicada por la API; la app pide actualizar si está por debajo.
+
+## 014 · Exportar e importar datos
+
+Evaluación previa: [`investigacion/002-exportar-importar-datos.md`](investigacion/002-exportar-importar-datos.md). Retoma A-26 (importación masiva con spec propia).
+
+### A-68
+
+**¿Qué datos se exportan y cuáles se importan?** · Bloquea: 014 · **Resuelta**
+
+- **A.** Exportar productos (con stock), clientes y ventas (tickets y comprobantes). Importar solo productos y clientes.
+- **B.** Lo mismo que A, y además importar ventas de otro sistema como historial: ventas «históricas» que no descuentan stock ni se envían a SUNAT. Es un tipo de dato nuevo y aparecería en reportes y en el panel de inicio.
+- **C.** Solo productos, exportar e importar (lo mínimo de A-26). Clientes y ventas, más adelante.
+
+**Recomendación:** A. Para empezar a vender, quien migra necesita el catálogo, el stock y los clientes. Importar ventas choca con el principio II: los comprobantes deben firmarse y enviarse desde aquí, con correlativos de las series de la 004. Además, los tickets mueven el stock.
+
+> **Decisión (2026-10-07):** A. Exportar productos con stock, clientes y ventas (tickets y comprobantes); importar solo productos y clientes.
+
+### A-69
+
+**¿En qué formato?** · Bloquea: 014 · **Resuelta**
+
+- **A.** Solo CSV. Es lo más simple, pero Excel lo abre mal si no se cuida la codificación y el separador.
+- **B.** Solo Excel (XLSX). Es lo que usan las tiendas y no tiene problemas de tildes ni de separadores.
+- **C.** Exportar en XLSX y CSV; importar desde XLSX o CSV con la plantilla descargable.
+
+**Recomendación:** C. Se exporta en XLSX por defecto y en CSV para quien lo lleve a otro sistema. La plantilla de importación trae columnas, ejemplos y valores admitidos.
+
+> **Decisión (2026-10-07):** C. Exportar en XLSX (por defecto) y CSV; importar desde XLSX o CSV con la plantilla descargable.
+
+### A-70
+
+**Al importar, ¿qué pasa con un producto o cliente que ya existe?** · Bloquea: 014 · **Resuelta**
+
+El producto se reconoce por su código y el cliente por su tipo y número de documento (los dos son únicos por empresa).
+
+- **A.** Solo se crean registros nuevos; los que ya existen se marcan como error.
+- **B.** Siempre se actualizan con los datos del archivo.
+- **C.** Al importar, el usuario elige entre «solo crear» y «crear y actualizar». La vista previa muestra cuáles se crean y cuáles se actualizan, campo por campo.
+
+**Recomendación:** C, con «solo crear» por defecto. Sirve tanto para la carga inicial como para actualizar precios en bloque, y nada se pisa sin verlo antes. Cada cambio queda auditado como si fuera manual. El stock nunca se modifica al actualizar un producto: se cambia con entradas y ajustes, como hoy.
+
+> **Decisión (2026-10-07):** C. El usuario elige «solo crear» (por defecto) o «crear y actualizar», con vista previa de los cambios; cada cambio se audita y el stock nunca se modifica al actualizar.
+
+### A-71
+
+**¿Qué pasa si algunas filas tienen errores?** · Bloquea: 014 · **Resuelta**
+
+- **A.** Todo o nada: si una fila tiene un error, no se importa ninguna. La vista previa indica cada error por fila y columna para corregir el archivo.
+- **B.** Se importan las filas válidas y se informan las que fallaron.
+
+**Recomendación:** A. Así no quedan importaciones a medias: con B, al corregir y volver a subir el archivo se duplicarían o pisarían filas. La vista previa evita sorpresas porque nada se aplica hasta confirmar.
+
+> **Decisión (2026-10-07):** A. Todo o nada, con vista previa de los errores por fila y columna; nada se aplica hasta confirmar.
+
+### A-72
+
+**¿La importación de productos puede cargar el stock inicial?** · Bloquea: 014 · **Resuelta**
+
+- **A.** No. Los productos entran sin stock y se registran entradas por cada uno, como hoy.
+- **B.** Sí, con columnas opcionales (cantidad, costo, lote y vencimiento) que generan una entrada de mercadería normal (A-28), solo para productos **nuevos**.
+
+**Recomendación:** B. Con cientos de productos, cargar el stock a mano anula la ventaja de importar. Al ser una entrada normal, el kárdex, los lotes FEFO/FIFO y la auditoría siguen funcionando igual. Para un producto que ya existe, la columna de stock se ignora y se avisa de ello.
+
+> **Decisión (2026-10-07):** B. Columnas opcionales de stock inicial (cantidad, costo, lote y vencimiento) que generan una entrada normal, solo para productos nuevos; en productos existentes se ignoran con aviso.
+
+### A-73
+
+**¿Quién puede exportar e importar, y con qué límites?** · Bloquea: 014 · **Resuelta**
+
+- **A.** Solo el administrador de empresa, para todo.
+- **B.** El administrador, para todo; el vendedor solo exporta sus propias ventas (lo que ya ve, A-30).
+
+Límites propuestos:
+- importaciones de hasta 2 000 filas y 5 MB por archivo;
+- exportaciones de ventas por rango de fechas de hasta 12 meses;
+- cada exportación e importación queda en la auditoría.
+
+**Recomendación:** A. La exportación saca el costo (A-27) y datos personales de clientes (A-24 ⚖️). Mientras no esté la revisión legal, conviene que solo lo haga el responsable de la empresa. Los límites pueden subirse si alguna empresa lo necesita.
+
+> **Decisión (2026-10-07):** A. Solo el administrador de empresa. Límites: 2 000 filas y 5 MB por importación, exportación de ventas de hasta 12 meses; todo queda en la auditoría.
+
+### A-74
+
+**¿Qué trae la exportación de ventas?** · Bloquea: 014 · **Resuelta**
+
+- **A.** Una fila por ticket o comprobante (fecha, tipo, número, cliente, vendedor, medio de pago, bases, IGV, total y estado).
+- **B.** Una fila por línea vendida (producto, cantidad, precio, descuento e importe), con los datos del documento repetidos.
+- **C.** Las dos, en dos hojas del mismo XLSX (en CSV, dos archivos), con filtros de fechas, tipo (ticket, boleta, factura o nota) y estado.
+
+En todos los casos se incluyen los anulados, los rechazados y las notas de crédito, con su estado, y los importes de las notas van en negativo.
+
+**Recomendación:** C. La hoja de documentos sirve para cuadrar caja y la de líneas, para ver qué se vende. Los formatos oficiales de SUNAT (PLE / registro de ventas) quedan fuera ⚖️: requieren al contador y van en otra spec.
+
+> **Decisión (2026-10-07):** C. Dos hojas (documentos y líneas; en CSV, dos archivos) con filtros de fechas, tipo y estado; incluye anulados, rechazados y notas de crédito con importes en negativo. El PLE de SUNAT queda fuera ⚖️.
 
 ## Pendientes menores
 
