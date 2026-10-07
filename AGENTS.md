@@ -109,7 +109,8 @@ Entradas breves y fechadas de decisiones o cambios relevantes (la más reciente 
   - **Emulador** (Android 15, 360 dp): recorrido completo con boleta aceptada en SUNAT beta.
   - **Correcciones en el camino:** el plan (`navigator.onLine` no funciona en el WebView → `@capacitor/network`) y el login, que mostraba «Tu sesión terminó» al abrir «/» sin sesión (venía de la 001).
   - **Teléfono real** (Poco X3 NFC por depuración inalámbrica): CE-002 ~2,0 s, aceptado con ese margen.
-  - **Pendiente:** CE-001 en el teléfono real, nombre e identificador definitivos (A-61), la entrega cuando exista el servidor de la 009, y el merge.
+  - **Integrada en `main`** de API y frontend (2026-10-07). Suites en verde sobre `main`: 258 pruebas de frontend y 655 de API en SQLite (666 en PostgreSQL).
+  - **Pendiente:** CE-001 en el teléfono real, nombre e identificador definitivos (A-61) y la entrega cuando exista el servidor de la 009.
 
 - **2026-10-06** — Spec 012 v1.5 (A-60) implementada en la rama `012-recordar-comprobante` del frontend (desde `main`): «Vender» recuerda el último comprobante y serie por empresa y usuario en `sunat.sale-preference.<empresa>.<usuario>`, aparte de la venta en curso (no la borran cobrar, vaciar ni cerrar sesión; cliente y medio de pago sí vuelven al inicio). Solo se guarda con elecciones del usuario y ventas cobradas, nunca con la corrección automática (serie inactiva o SUNAT sin responder). El botón dice comprobante y serie («Emitir boleta · B001»). 225 pruebas; CE-004 verificado con dos boletas en SUNAT beta. Integrada en `main` del frontend.
 
