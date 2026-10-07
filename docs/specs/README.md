@@ -19,7 +19,7 @@ Una carpeta por capacidad, numerada. Cada una avanza por el ciclo SDD de la [con
 | 011 | [Panel de inicio](011-panel-inicio/spec.md) | **Integrada en `main`** · [plan](011-panel-inicio/plan.md) · [tareas](011-panel-inicio/tasks.md) | 003, 005, 007, 010 | — |
 | 012 | [Vender: carrito persistente y dos columnas](012-vender-mejorado/spec.md) | **Integrada en `main`** (v1.5) · [plan](012-vender-mejorado/plan.md) · [tareas](012-vender-mejorado/tasks.md) | 003, 005, 010 | — |
 | 013 | [Aplicación Android](013-app-android/spec.md) | **Integrada en `main`** (sin impresora física probada) · [plan](013-app-android/plan.md) · [tareas](013-app-android/tasks.md) · [verificación](013-app-android/verificacion.md) | 001–007, 010–012 (009 para el piloto) | — |
-| 014 | [Exportar e importar datos](014-exportar-importar/spec.md) | **Lista** (v1.0.1) · [plan](014-exportar-importar/plan.md) · [tareas](014-exportar-importar/tasks.md) · [evaluación](../investigacion/002-exportar-importar-datos.md) | 001–003, 005, 007 | — |
+| 014 | [Exportar e importar datos](014-exportar-importar/spec.md) | **Implementada** en la rama `014-exportar-importar` (falta el merge, T039 🔒) · [plan](014-exportar-importar/plan.md) · [tareas](014-exportar-importar/tasks.md) · [verificación](014-exportar-importar/verificacion.md) · [evaluación](../investigacion/002-exportar-importar-datos.md) | 001–003, 005, 007 | — |
 
 Orden de trabajo: **001 → 002 → 003 → 004 → 005**. 003 y 004 son independientes entre sí; 004 puede adelantarse si se prioriza SUNAT.
 

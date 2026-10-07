@@ -94,11 +94,27 @@ Primer arranque local: `php artisan migrate:fresh --seed` (crea las cuentas de p
   - Con `php artisan serve` de un solo proceso, las llamadas simultáneas de la app esperan segundos: usar `PHP_CLI_SERVER_WORKERS=4`.
   - La clave de firma (`~/Android/keys/`, copia en `respaldos/android-firma/`) y `android/keystore.properties` nunca van al repositorio. Si se pierde la clave, la app instalada ya no se puede actualizar.
   - Subir `version` en `package.json` en cada entrega: de ahí sale `versionCode`.
+- **Exportar e importar (spec 014):**
+  - Al escribir con OpenSpout, los textos van como `Cell\StringCell` y nunca con `Cell::fromValue`: un texto que empieza con `=` se convertiría en una fórmula real.
+  - Al leer, OpenSpout devuelve como `FormulaCell` sin valor calculado cualquier texto que empieza con `=`; `Spreadsheet::cellToString` usa entonces el texto.
+  - OpenSpout no escribe filas de celdas solo vacías, aunque tengan formato.
+  - `audit_logs.auditable_id` es entero: un modelo con UUID (como `ImportPreview`) no puede ser el `auditable`.
+  - En las importaciones, no validar `unique` fila por fila dentro de la transacción (en PostgreSQL costaba 17 s con 2 000 filas): usar una consulta para todas y dejar el índice único como red (409).
+- `Eloquent\Collection::map()` sobre una colección **vacía** sigue siendo de Eloquent: su `intersect()` falla con textos. Usar `->toBase()` antes.
+- El generador de OpenAPI tipa todo parámetro de ruta como número; para `{kind}` o un UUID, el frontend usa un *cast* comentado.
 - El código heredado de `legacy/` no se ejecuta: antes de reincorporar algo, leer `docs/investigacion/001-evaluacion-api-existente.md`.
 
 ## Bitácora
 
 Entradas breves y fechadas de decisiones o cambios relevantes (la más reciente arriba).
+
+- **2026-10-07** — Spec 014 (exportar e importar datos, A-68 a A-74) implementada en la rama `014-exportar-importar` de API y frontend.
+  - **Exportar** (administrador): productos con stock y lotes, clientes y ventas (documentos y líneas, notas en negativo, `suma_como_venta` de A-54) en XLSX o CSV (ZIP si hay varias hojas).
+  - **Importar:** productos (con stock inicial como entrada normal) y clientes, con vista previa, «Solo crear» o «Crear y actualizar», todo o nada y 409/410.
+  - **Base compartida:** reglas de validación en `app/Validation`, `SalesCounting` y filtros de lista como *scopes*. Dependencia OpenSpout 4.32 (`ext-zip`, `ext-xmlreader`).
+  - **Pruebas:** 757 de API en SQLite y 770 en PostgreSQL (con concurrencia y mutación) y 281 de frontend.
+  - **CE-001:** 500 productos en 5,3 s. Pantallas a 360 px y en el emulador revisadas ([verificación](docs/specs/014-exportar-importar/verificacion.md)).
+  - **Pendiente:** el merge (T039 🔒).
 
 - **2026-10-06** — Spec 013 (app Android, A-61 a A-67) implementada en la rama `013-app-android` de API y frontend.
   - **App:** el mismo frontend con Capacitor 8, nombre e identificador provisionales («Facturación SUNAT», `io.github.facturacion_peru.app`).
