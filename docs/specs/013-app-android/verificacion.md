@@ -90,3 +90,17 @@ Promedio: **~2,0 s**, menos de los 3 s que pide CE-002. Unos 0,9 s son el arranq
 El Poco X3 NFC es de **gama media de 2020**, no de gama baja. Para cerrar CE-001 y CE-002 tal como están escritos, falta repetir en un equipo de 2–3 GB de RAM. Si no se consigue uno, se puede dar por aceptado con este margen (1 s por debajo del límite).
 
 > **Decisión (2026-10-06, del usuario):** CE-002 se acepta con esta medición en gama media, por el margen de ~1 s.
+
+### CE-001 en el teléfono real (2026-10-06, probado por el usuario)
+
+| Comprobación | Resultado |
+|---|---|
+| Entrar | Sí, con la cuenta de administrador de la empresa demo |
+| Ticket | T-000012 y T-000013 |
+| Boleta en SUNAT beta | B001-00000013 y B100-00000304, aceptadas |
+| «Imprimir» | Genera y comparte el PDF de 80 mm del ticket (`GET /tickets/13/pdf`) y del comprobante (`/sales-documents/27/pdf`). No se probó con una impresora física porque no había una al alcance |
+| Botón «Atrás» | Correcto |
+| Modo avión | Aparece el aviso «Sin conexión» |
+| Cerrar sesión | Borra el token del Keystore |
+
+**Queda fuera de esta verificación:** imprimir en una térmica real. Las térmicas suelen imprimir desde su propia app o desde el servicio de impresión de Android, recibiendo el PDF por «Compartir». La impresión Bluetooth directa sigue siendo una spec aparte (A-63).

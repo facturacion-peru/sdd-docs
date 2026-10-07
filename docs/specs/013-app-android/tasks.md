@@ -1,6 +1,6 @@
 # Tareas 013: Aplicación Android
 
-**Estado:** Aprobadas (2026-10-06) · **Fecha:** 2026-10-06 · **Plan:** [plan.md](./plan.md)
+**Estado:** Completadas (2026-10-07) · **Fecha:** 2026-10-06 · **Plan:** [plan.md](./plan.md)
 
 > Cada tarea es pequeña, deja el proyecto funcionando y tiene su verificación.
 > `[P]` = puede hacerse en paralelo con la anterior.
@@ -43,7 +43,7 @@
 
 ## Fase 6 · Verificación en un teléfono real
 
-- [ ] **T022** *(parcial: comportamiento verificado en el emulador, ver `verificacion.md`; falta el teléfono real)* CE-001 en un Android de gama baja: instalar, entrar, ticket y boleta (SUNAT beta), compartir el PDF de 80 mm, descargas, «Atrás», sin conexión, cuenta de plataforma, cerrar sesión, 426 con un mínimo alto. Más teclado, muesca y modo oscuro — Verificación: `verificacion.md` con capturas
+- [x] **T022** *(emulador y teléfono real: Poco X3 NFC con tickets, boletas aceptadas por SUNAT beta, PDF compartido, «Atrás», modo avión y cerrar sesión; sin impresora física)* CE-001 en un Android de gama baja: instalar, entrar, ticket y boleta (SUNAT beta), compartir el PDF de 80 mm, descargas, «Atrás», sin conexión, cuenta de plataforma, cerrar sesión, 426 con un mínimo alto. Más teclado, muesca y modo oscuro — Verificación: `verificacion.md` con capturas
 - [x] **T023** *(CE-003 verificado en el emulador y en el manifiesto; CE-002 ~2,0 s en un Poco X3 NFC, gama media, aceptado por el usuario con ese margen)* CE-002 (apertura en menos de 3 s con sesión) y CE-003 (sin token en el almacenamiento web ni en una copia del teléfono) — Verificación: mediciones y comprobaciones en `verificacion.md`
 
 ## Cierre
