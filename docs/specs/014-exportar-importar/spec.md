@@ -1,6 +1,6 @@
 # Spec 014: Exportar e importar datos
 
-**Estado:** Implementada (2026-10-07; falta el merge) · **Versión:** 1.0.1 · **Fecha:** 2026-10-07
+**Estado:** Integrada en `main` (2026-10-07) · **Versión:** 1.0.1 · **Fecha:** 2026-10-07
 **Depende de:** 001, 002, 003, 005, 007 · **Aclaraciones:** A-68 a A-74 (retoma A-26)
 **Evaluación previa:** [`investigacion/002-exportar-importar-datos.md`](../../investigacion/002-exportar-importar-datos.md)
 

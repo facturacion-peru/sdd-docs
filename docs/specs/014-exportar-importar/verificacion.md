@@ -69,6 +69,6 @@ LibreOffice abre las tres exportaciones XLSX con todas sus hojas. Los importes l
 - **Eloquent:** `map()` sobre una colección vacía de modelos sigue siendo una colección de Eloquent, y su `intersect()` falla con textos. Hay que usar `toBase()`.
 - **OpenAPI:** el generador tipa los parámetros de ruta como números. El frontend pasa `kind` y el UUID con un *cast* comentado.
 
-## Pendiente
+## Integración (T039)
 
-- **🔒 T039:** el merge a `main` de los dos repositorios.
+Merge a `main` de los dos repositorios el 2026-10-07. Sobre `main`: API 757 (SQLite) y 770 (PostgreSQL), Pint, y frontend 281 pruebas, tipos, lint y build.

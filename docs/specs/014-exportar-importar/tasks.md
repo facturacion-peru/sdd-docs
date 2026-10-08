@@ -1,6 +1,6 @@
 # Tareas 014: Exportar e importar datos
 
-**Estado:** Implementadas salvo el merge (2026-10-07) · **Fecha:** 2026-10-07 · **Plan:** [plan.md](./plan.md)
+**Estado:** Completadas (2026-10-07) · **Fecha:** 2026-10-07 · **Plan:** [plan.md](./plan.md)
 
 > Cada tarea es pequeña, deja el proyecto funcionando y tiene su verificación.
 > `[P]` = puede hacerse en paralelo con la anterior. 🔒 = requiere confirmación explícita del usuario.
@@ -123,4 +123,4 @@
   - estado en `docs/specs/README.md`.
 
   Verificación: revisada
-- [ ] **T039** 🔒 Merge local de `014-exportar-importar` a `main` en ambos repositorios y commit de la raíz — Verificación: suites en verde sobre `main`
+- [x] **T039** 🔒 Merge local de `014-exportar-importar` a `main` en ambos repositorios y commit de la raíz — Verificación: suites en verde sobre `main` Hecho (2026-10-07): merge `--no-ff` en los dos repositorios; sobre `main`, API 757 (SQLite) y 770 (PostgreSQL), Pint, y frontend 281 pruebas, tipos, lint y build. Subido a GitHub.

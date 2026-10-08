@@ -114,7 +114,7 @@ Entradas breves y fechadas de decisiones o cambios relevantes (la más reciente 
   - **Base compartida:** reglas de validación en `app/Validation`, `SalesCounting` y filtros de lista como *scopes*. Dependencia OpenSpout 4.32 (`ext-zip`, `ext-xmlreader`).
   - **Pruebas:** 757 de API en SQLite y 770 en PostgreSQL (con concurrencia y mutación) y 281 de frontend.
   - **CE-001:** 500 productos en 5,3 s. Pantallas a 360 px y en el emulador revisadas ([verificación](docs/specs/014-exportar-importar/verificacion.md)).
-  - **Pendiente:** el merge (T039 🔒).
+  - **Integrada en `main`** de API y frontend y subida a GitHub (2026-10-07), con las suites en verde sobre `main`.
 
 - **2026-10-06** — Spec 013 (app Android, A-61 a A-67) implementada en la rama `013-app-android` de API y frontend.
   - **App:** el mismo frontend con Capacitor 8, nombre e identificador provisionales («Facturación SUNAT», `io.github.facturacion_peru.app`).
