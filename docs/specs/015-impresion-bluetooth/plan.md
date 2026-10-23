@@ -1,6 +1,6 @@
 # Plan 015: Impresión Bluetooth en la app Android
 
-**Estado:** Borrador para aprobación · **Fecha:** 2026-10-23 · **Spec:** [spec.md](./spec.md) (versión aprobada: 1.0)
+**Estado:** Aprobado (2026-10-23) · **Fecha:** 2026-10-23 · **Spec:** [spec.md](./spec.md) (versión aprobada: 1.0)
 
 ## Resumen técnico
 
