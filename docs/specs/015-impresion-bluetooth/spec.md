@@ -1,6 +1,6 @@
 # Spec 015: Impresión Bluetooth en la app Android
 
-**Estado:** Borrador para aprobación · **Versión:** 0.2 · **Fecha:** 2026-10-23
+**Estado:** Aprobada (2026-10-23) · **Versión:** 1.0 · **Fecha:** 2026-10-23
 **Depende de:** 003, 005, 007, 013 · **Aclaraciones:** A-75 a A-78 (retoma A-63, opción B)
 **Evaluación previa:** [`investigacion/003-impresion-bluetooth.md`](../../investigacion/003-impresion-bluetooth.md)
 
@@ -61,13 +61,14 @@ Como vendedor, quiero saber por qué no imprimió y tener otra salida para no de
 
 **Escenarios de aceptación**
 
-1. **Dado** la impresora apagada, fuera de alcance o sin papel, **cuando** pulso «Imprimir», **entonces** en pocos segundos veo un aviso claro con «Reintentar» y «Compartir PDF».
+1. **Dado** la impresora apagada, fuera de alcance o con el Bluetooth del teléfono apagado, **cuando** pulso «Imprimir», **entonces** en pocos segundos veo un aviso claro con «Reintentar» y «Compartir PDF».
 2. **Dado** que no hay impresora elegida, **cuando** pulso «Imprimir», **entonces** se abre «Compartir» con el PDF, como hasta ahora (spec 013).
 3. **Dado** que falla la impresión, **cuando** reviso la venta, **entonces** sigue registrada igual: imprimir nunca cambia la venta, el stock ni el comprobante.
 
 ## Casos límite
 
 - **Bluetooth apagado:** se avisa y se ofrece encenderlo, o ir a los ajustes.
+- **Sin papel o tapa abierta:** la mayoría de estas impresoras no lo informa por Bluetooth, así que la app no puede saberlo. La impresión no sale y se repite con «Imprimir» tras poner papel.
 - **Impresora desemparejada:** si se desempareja en Android después de elegirla, la app avisa al imprimir y pide elegir otra.
 - **Textos largos:** nombres de producto, razón social o dirección más largos que la línea pasan a la línea siguiente sin cortar palabras ni importes. Los importes quedan alineados a la derecha.
 - **Caracteres sin equivalente** en la impresora (por ejemplo, emojis en un nombre): se reemplazan por uno parecido o se omiten, sin cortar la impresión.
@@ -117,3 +118,4 @@ Como vendedor, quiero saber por qué no imprimió y tener otra salida para no de
 | 2026-10-23 | A-76 | 58 y 80 mm, elegidos al configurar la impresora |
 | 2026-10-23 | A-77 | Ticket, boleta, factura y nota de crédito como el PDF de 80 mm, con QR; sin logo; una copia |
 | 2026-10-23 | A-78 | Emparejar en Android y elegir en la app; por teléfono; «Imprimir al cobrar» opcional y apagado; «Reintentar» y «Compartir PDF» si falla |
+| 2026-10-23 | Aprobada (v1.0) | Al redactar el plan: «sin papel» pasa de HU-4 a los casos límite, porque estas impresoras no lo informan por Bluetooth |
