@@ -89,6 +89,10 @@ Registro único de preguntas abiertas y decisiones. Las specs las citan por su i
 | [A-72](#a-72) | Stock inicial al importar productos | 014 | Resuelta |
 | [A-73](#a-73) | Quién exporta e importa, y límites | 014 | Resuelta |
 | [A-74](#a-74) | Contenido de la exportación de ventas | 014 | Resuelta |
+| [A-75](#a-75) | Qué impresoras y qué conexión | 015 | Resuelta |
+| [A-76](#a-76) | Ancho de papel | 015 | Resuelta |
+| [A-77](#a-77) | Qué se imprime por Bluetooth | 015 | Resuelta |
+| [A-78](#a-78) | Cómo se elige la impresora y cuándo imprime | 015 | Resuelta |
 
 ---
 
@@ -884,6 +888,73 @@ En todos los casos se incluyen los anulados, los rechazados y las notas de créd
 **Recomendación:** C. La hoja de documentos sirve para cuadrar caja y la de líneas, para ver qué se vende. Los formatos oficiales de SUNAT (PLE / registro de ventas) quedan fuera ⚖️: requieren al contador y van en otra spec.
 
 > **Decisión (2026-10-07):** C. Dos hojas (documentos y líneas; en CSV, dos archivos) con filtros de fechas, tipo y estado; incluye anulados, rechazados y notas de crédito con importes en negativo. El PLE de SUNAT queda fuera ⚖️.
+
+## 015 · Impresión Bluetooth
+
+Evaluación previa: [`investigacion/003-impresion-bluetooth.md`](investigacion/003-impresion-bluetooth.md). Retoma A-63, opción B (impresión Bluetooth directa con spec propia).
+
+### A-75
+
+**¿Qué impresoras y qué tipo de Bluetooth se admiten?** · Bloquea: 015 · **Resuelta**
+
+- **A.** Impresoras térmicas ESC/POS con **Bluetooth clásico** («puerto serie», SPP). Es el que usa la gran mayoría de los modelos baratos de 58 y 80 mm.
+- **B.** Solo **Bluetooth de baja energía** (BLE). Lo traen algunos modelos nuevos, y cada fabricante usa sus propios canales.
+- **C.** Las dos.
+
+También hace falta saber **qué modelos usan o usarían las empresas del piloto**, para comprar al menos uno de referencia y verificar con él.
+
+**Recomendación:** A, verificada con una impresora de referencia de 58 mm (y una de 80 mm si es posible). BLE puede sumarse después, si aparece una impresora que solo lo tenga.
+
+> **Decisión (2026-10-23):** A. Impresoras térmicas ESC/POS con Bluetooth clásico (SPP), verificadas con una impresora de referencia de 58 mm (y una de 80 mm si es posible). BLE puede sumarse después. **Pendiente:** el modelo de referencia, que se elige con lo que usen las empresas del piloto antes de la verificación.
+
+### A-76
+
+**¿Qué anchos de papel se admiten?** · Bloquea: 015 · **Resuelta**
+
+- **A.** Solo 80 mm, como el PDF actual.
+- **B.** 58 mm y 80 mm, elegidos al configurar la impresora.
+
+**Recomendación:** B. Las de 58 mm son las más comunes en bodegas, y la constitución ya prevé un formato angosto (principio II).
+
+> **Decisión (2026-10-23):** B. 58 mm y 80 mm, elegidos al configurar la impresora.
+
+### A-77
+
+**¿Qué se imprime por Bluetooth y con qué contenido?** · Bloquea: 015 · **Resuelta**
+
+1. **Documentos:**
+   - solo el ticket interno;
+   - o también boletas, facturas y notas de crédito, con su QR y su resumen, como en el PDF de 80 mm.
+2. **Logo de la empresa:** impreso como imagen, o solo el nombre en letras grandes.
+3. **Copias:** una sola, o un número configurable (por ejemplo, una para el cliente y otra para el negocio).
+
+**Recomendación:**
+1. Todos: ticket, boleta, factura y nota de crédito, con el mismo contenido que el PDF de 80 mm. El QR va con el comando de la impresora, y como imagen si no lo admite.
+2. Sin logo en esta spec: alarga la impresión y su calidad depende del modelo. El encabezado lleva nombre comercial, RUC y dirección.
+3. Una copia, y se pulsa «Imprimir» otra vez si hace falta.
+
+> **Decisión (2026-10-23):** Aceptada la recomendación: ticket, boleta, factura y nota de crédito con el mismo contenido que el PDF de 80 mm (QR con el comando de la impresora, o como imagen si no lo admite); sin logo en esta spec; una copia.
+
+### A-78
+
+**¿Cómo se elige la impresora y cuándo imprime?** · Bloquea: 015 · **Resuelta**
+
+1. **Elegir la impresora:**
+   - la impresora se empareja desde los ajustes de Android y en la app se elige entre las emparejadas;
+   - o la app busca impresoras cercanas y las empareja ella misma, lo que pide más permisos, como la búsqueda de equipos y la ubicación en Android antiguos.
+2. **Dónde se guarda:** solo en ese teléfono, o para toda la empresa.
+3. **Cuándo imprime:**
+   - solo al pulsar «Imprimir»;
+   - o también automáticamente al cobrar, como opción que se activa en ese teléfono.
+4. **Si falla:** reintentar, o «Compartir PDF» como hoy (A-63).
+
+**Recomendación:**
+1. Emparejar desde Android y elegir en la app: menos permisos y es lo habitual en las apps de punto de venta. Se añade una «Hoja de prueba» para comprobar ancho y tildes.
+2. Solo en ese teléfono: cada caja tiene su impresora, y no es un dato de la empresa.
+3. «Imprimir» va directo a la impresora elegida. La impresión automática al cobrar existe como opción, apagada por defecto.
+4. Si falla, el aviso dice el motivo (apagada, fuera de alcance, sin permiso) y ofrece «Reintentar» y «Compartir PDF». Sin impresora configurada, «Imprimir» sigue abriendo «Compartir» como en la 013.
+
+> **Decisión (2026-10-23):** Aceptada la recomendación: se empareja en Android y se elige en la app (con «Hoja de prueba»); la elección vive solo en ese teléfono; «Imprimir» va directo a la impresora y «Imprimir al cobrar» es opcional y viene apagado; si falla, aviso con el motivo, «Reintentar» y «Compartir PDF»; sin impresora elegida, «Compartir» como en la 013.
 
 ## Pendientes menores
 
