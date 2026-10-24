@@ -100,6 +100,14 @@ Primer arranque local: `php artisan migrate:fresh --seed` (crea las cuentas de p
   - OpenSpout no escribe filas de celdas solo vacías, aunque tengan formato.
   - `audit_logs.auditable_id` es entero: un modelo con UUID (como `ImportPreview`) no puede ser el `auditable`.
   - En las importaciones, no validar `unique` fila por fila dentro de la transacción (en PostgreSQL costaba 17 s con 2 000 filas): usar una consulta para todas y dejar el índice único como red (409).
+- **Impresión Bluetooth (spec 015):**
+  - Los bytes ESC/POS los arma la API (`app/Printing`), no la app. Si cambia una plantilla `pdf/ticket.blade.php` o `pdf/sales-document.blade.php`, hay que cambiar también `TicketPrint` o `DocumentPrint`: `PrintParityTest` falla si una palabra del PDF no aparece en la impresión.
+  - Para ver qué saldría impreso sin impresora: `Tests\Support\EscposText::decode($bytes)`. Solo entiende los comandos de `EscposBuilder` y falla con cualquier otro.
+  - `EscposBuilder::sanitize` quita los caracteres de control de todo texto: un nombre de producto no puede colar comandos a la impresora. No escribir texto directo en los bytes.
+  - `BLUETOOTH_CONNECT` solo existe desde Android 12. El plugin responde «concedido» en versiones anteriores; si no, Capacitor lo daría por negado.
+  - El emulador tiene Bluetooth virtual pero sin equipos: sirve para el permiso, el Bluetooth apagado y `not_paired` (guardando a mano una dirección en `sunat.printer`), no para `connect_failed` ni para imprimir.
+  - Para automatizar el emulador o el teléfono, usar el protocolo de DevTools del WebView *debug* (`adb forward tcp:9222 localabstract:webview_devtools_remote_<pid>`). `adb shell input tap` falla cuando el teclado mueve los campos.
+  - `pnpm android:release` exige una URL HTTPS de la API. Sin servidor, `VITE_API_BASE_URL=https://api.invalid` sirve solo para comprobar que compila.
 - `Eloquent\Collection::map()` sobre una colección **vacía** sigue siendo de Eloquent: su `intersect()` falla con textos. Usar `->toBase()` antes.
 - El generador de OpenAPI tipa todo parámetro de ruta como número; para `{kind}` o un UUID, el frontend usa un *cast* comentado.
 - El código heredado de `legacy/` no se ejecuta: antes de reincorporar algo, leer `docs/investigacion/001-evaluacion-api-existente.md`.
@@ -107,6 +115,12 @@ Primer arranque local: `php artisan migrate:fresh --seed` (crea las cuentas de p
 ## Bitácora
 
 Entradas breves y fechadas de decisiones o cambios relevantes (la más reciente arriba).
+
+- **2026-10-23** — Spec 015 (impresión Bluetooth en la app Android, A-75 a A-78) implementada en la rama `015-impresion-bluetooth` de API y frontend.
+  - **API:** `GET tickets/{id}/print`, `sales-documents/{id}/print` y `printing/test-page`. Devuelven bytes ESC/POS de 58 u 80 mm con el contenido del PDF de 80 mm (QR nativo o como imagen) y no escriben nada. Sin dependencias nuevas.
+  - **App:** plugin propio en Java (SPP, solo `BLUETOOTH_CONNECT`, tiempo límite de 8 s), `device().printer` y la pantalla «Impresora» (`/impresora`, solo nativa). La elección es del teléfono (`sunat.printer`), con «Imprimir al cobrar» opcional y apagado. Los «Imprimir» de siempre van directo a la impresora y, si falla, ofrecen «Reintentar» y «Compartir PDF». Versión 0.2.0.
+  - **Pruebas:** 825 de API en SQLite y 838 en PostgreSQL, y 347 de frontend. El emulador cubrió el permiso, el Bluetooth apagado y `not_paired` ([verificación](docs/specs/015-impresion-bluetooth/verificacion.md)).
+  - **Pendiente:** la impresora de referencia (A-75; CE-001 a CE-003), la prueba en el teléfono real con un equipo cualquiera (CE-004) y el merge.
 
 - **2026-10-07** — Spec 014 (exportar e importar datos, A-68 a A-74) implementada en la rama `014-exportar-importar` de API y frontend.
   - **Exportar** (administrador): productos con stock y lotes, clientes y ventas (documentos y líneas, notas en negativo, `suma_como_venta` de A-54) en XLSX o CSV (ZIP si hay varias hojas).

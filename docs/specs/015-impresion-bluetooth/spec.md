@@ -1,6 +1,6 @@
 # Spec 015: Impresión Bluetooth en la app Android
 
-**Estado:** Aprobada (2026-10-23) · **Versión:** 1.0 · **Fecha:** 2026-10-23
+**Estado:** Implementada, falta verificar con impresora (2026-10-23) · **Versión:** 1.0 · **Fecha:** 2026-10-23
 **Depende de:** 003, 005, 007, 013 · **Aclaraciones:** A-75 a A-78 (retoma A-63, opción B)
 **Evaluación previa:** [`investigacion/003-impresion-bluetooth.md`](../../investigacion/003-impresion-bluetooth.md)
 
