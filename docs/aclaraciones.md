@@ -93,6 +93,12 @@ Registro único de preguntas abiertas y decisiones. Las specs las citan por su i
 | [A-76](#a-76) | Ancho de papel | 015 | Resuelta |
 | [A-77](#a-77) | Qué se imprime por Bluetooth | 015 | Resuelta |
 | [A-78](#a-78) | Cómo se elige la impresora y cuándo imprime | 015 | Resuelta |
+| [A-79](#a-79) | Dónde se guardan las fotos y quién puede verlas | 016 | Abierta |
+| [A-80](#a-80) | Formatos y tamaño de la foto | 016 | Abierta |
+| [A-81](#a-81) | Tamaños guardados, miniatura y datos ocultos | 016 | Abierta |
+| [A-82](#a-82) | Qué pasa con la foto al cambiarla, quitarla o desactivar el producto | 016 | Abierta |
+| [A-83](#a-83) | Fotos en exportar e importar (014) | 016 | Abierta |
+| [A-84](#a-84) | Almacenamiento en desarrollo y en pruebas | 016 | Abierta |
 
 ---
 
@@ -955,6 +961,88 @@ También hace falta saber **qué modelos usan o usarían las empresas del piloto
 4. Si falla, el aviso dice el motivo (apagada, fuera de alcance, sin permiso) y ofrece «Reintentar» y «Compartir PDF». Sin impresora configurada, «Imprimir» sigue abriendo «Compartir» como en la 013.
 
 > **Decisión (2026-10-23):** Aceptada la recomendación: se empareja en Android y se elige en la app (con «Hoja de prueba»); la elección vive solo en ese teléfono; «Imprimir» va directo a la impresora y «Imprimir al cobrar» es opcional y viene apagado; si falla, aviso con el motivo, «Reintentar» y «Compartir PDF»; sin impresora elegida, «Compartir» como en la 013.
+
+## 016 · Imagen del producto
+
+Pedido del usuario: foto opcional en cada producto, guardada en un almacenamiento compatible con S3. Lo que ya hay en la API:
+
+- **Dependencia:** `league/flysystem-aws-s3-v3` 3.35 y `aws/aws-sdk-php` 3.398 ya están instaladas (entraron con la spec 009, para las copias), sin avisos de seguridad.
+- **Disco `s3`:** existe en `config/filesystems.php`, pero hoy es el destino de las **copias de seguridad cifradas** (`BACKUP_DISK=s3`).
+- **`.env.example`:** no tiene variables `AWS_*`.
+- **Logo de la empresa:** se guarda en el disco local `public` (y entra en las copias).
+
+### A-79
+
+**¿Dónde se guardan las fotos y quién puede verlas?** · Bloquea: 016 · **Abierta**
+
+1. **Lugar:**
+   - **A.** El mismo bucket que las copias de seguridad (spec 009).
+   - **B.** Un bucket **aparte**, en el mismo proveedor que las copias (Backblaze B2, Cloudflare R2 o AWS S3, A-45).
+2. **Acceso:**
+   - **A.** Bucket **privado**: la API entrega direcciones firmadas que vencen (por ejemplo, en una hora). Nadie ve una foto sin pasar por la API.
+   - **B.** Bucket **público** con direcciones imposibles de adivinar. Es más simple y el navegador las guarda en caché, pero quien tenga una dirección la puede compartir.
+3. **Logo de la empresa:** ¿pasa también a S3 en esta spec («todas las imágenes»), o se queda como está?
+
+**Recomendación:**
+1. B, bucket aparte. Mezclar fotos con copias cifradas complica los permisos y la retención (las copias se borran a los 30 días; las fotos, nunca).
+2. A, privado con direcciones firmadas: sigue el principio VIII sin excepciones. Las direcciones se firman con vencimientos redondeados para que el celular pueda reusar las fotos ya descargadas.
+3. Solo los productos en esta spec. El logo funciona y entra en las copias; moverlo puede ir en otra spec.
+
+### A-80
+
+**¿Qué formatos y tamaño se aceptan?** · Bloquea: 016 · **Abierta**
+
+- **Formatos:** JPEG, PNG y WebP; ¿también HEIC (fotos de iPhone)?
+- **Tamaño máximo del archivo subido:** por ejemplo 5 MB o 10 MB.
+
+**Recomendación:** JPEG, PNG y WebP, hasta **5 MB**. HEIC queda fuera: Android entrega JPEG, y HEIC necesitaría una librería más en el servidor.
+
+### A-81
+
+**¿Se guarda la foto tal cual o se procesa?** · Bloquea: 016 · **Abierta**
+
+- **A.** Tal cual, como se subió.
+- **B.** Procesada en el servidor:
+  - una versión **grande** (por ejemplo, 800 px de lado) y una **miniatura** (por ejemplo, 200 px) para las listas;
+  - girada según su orientación y **sin datos ocultos** (ubicación GPS, modelo del teléfono);
+  - en un formato liviano (WebP).
+
+**Recomendación:** B. Una foto de celular pesa 3 a 5 MB: sin miniaturas, «Vender» descargaría decenas de MB por página (CE-002). Quitar la ubicación protege a quien toma la foto en su casa o su tienda. Se puede hacer con la extensión GD, que la API ya exige, sin dependencias nuevas.
+
+### A-82
+
+**¿Qué pasa con la foto al cambiarla, quitarla o desactivar el producto?** · Bloquea: 016 · **Abierta**
+
+- **Cambiar o quitar:** ¿se borra la foto anterior del almacenamiento enseguida, o se conserva un tiempo?
+- **Desactivar el producto:** ¿se conserva la foto?
+- **Copias:** ¿las fotos entran en las copias de seguridad de la 009, o basta con el almacenamiento (que ya guarda varias réplicas)?
+
+**Recomendación:**
+- Al cambiar o quitar, se **borra enseguida**, con una limpieza diaria que quita las fotos huérfanas si un borrado falla.
+- Al desactivar, la foto **se conserva** (el producto no se borra, spec 002).
+- Las fotos **no entran** en las copias cifradas. Se activa el **versionado** del bucket con 30 días de retención, para recuperar una foto borrada por error.
+
+### A-83
+
+**¿Las fotos entran en exportar e importar (spec 014)?** · Bloquea: 016 · **Abierta**
+
+- **A.** No en esta spec.
+- **B.** La exportación agrega una columna con la dirección de la foto.
+- **C.** También importar fotos (por ejemplo, un ZIP con las imágenes).
+
+**Recomendación:** A. Una dirección firmada vence (A-79) y no sirve en un Excel. Importar fotos en lote es un trabajo aparte, que puede ir en otra spec si hace falta.
+
+### A-84
+
+**¿Qué almacenamiento se usa en desarrollo y en pruebas?** · Bloquea: 016 · **Abierta**
+
+- **A.** Un S3 de verdad también en desarrollo (un bucket de pruebas).
+- **B.** MinIO (un S3 local en Docker) en desarrollo.
+- **C.** En desarrollo, el disco local de siempre, elegido con una variable; en producción, S3.
+
+En las pruebas automáticas se usa un almacenamiento simulado (`Storage::fake`), sin red.
+
+**Recomendación:** C para el día a día, sin servicios extra. Antes de cerrar la spec se verifica una vez contra un S3 real, o contra MinIO, para comprobar las direcciones firmadas y los permisos. Las pruebas automáticas usan el almacenamiento simulado.
 
 ## Pendientes menores
 
