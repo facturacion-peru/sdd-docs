@@ -1,13 +1,13 @@
-# Spec 016: Imagen del producto
+# Spec 016: Imagen del producto y logo en S3
 
-**Estado:** Borrador · **Versión:** 0.1 · **Fecha:** 2026-10-29
-**Depende de:** 002, 009, 012, 013 · **Aclaraciones:** A-79 a A-85 (abiertas)
+**Estado:** Borrador · **Versión:** 0.2 · **Fecha:** 2026-10-29
+**Depende de:** 001, 002, 005, 009, 012, 013 · **Aclaraciones:** A-79 a A-85 (resueltas)
 
 > Qué y por qué. Sin frameworks, tablas, endpoints ni componentes: eso va en `plan.md`.
 
 ## Objetivo
 
-Que cada producto pueda tener **una foto opcional**, para que quien vende lo reconozca de un vistazo en el catálogo de «Vender» y en la lista de productos, sobre todo en el celular. Las imágenes se guardan fuera del servidor, en un almacenamiento de objetos compatible con S3, como pidió el usuario.
+Que cada producto pueda tener **una foto opcional**, para que quien vende lo reconozca de un vistazo en el catálogo de «Vender» y en la lista de productos, sobre todo en el celular. Las imágenes, y también el logo de la empresa, se guardan fuera del servidor, en S3, como pidió el usuario (A-79).
 
 ## Historias de usuario
 
@@ -59,28 +59,43 @@ Como administrador que usa la app Android, quiero tomar la foto del producto con
 5. **Dado** que estoy eligiendo la foto, **cuando** pulso «Atrás» en Android, **entonces** se cierra el selector y no la pantalla.
 6. **Dado** una foto de la galería en un formato no admitido (A-80), **cuando** la elijo, **entonces** veo el mensaje de formato enseguida, sin esperar a la red.
 
+### HU-4 · El logo de la empresa también en S3 (P2)
+
+Como administrador de empresa, quiero que mi logo se guarde en el mismo almacenamiento que las fotos, sin notar ningún cambio al usarlo.
+
+**Por qué esta prioridad:** el usuario pidió todas las imágenes en S3 (A-79). Para quien usa la app no cambia nada, pero deja de depender del disco del servidor.
+**Prueba independiente:** subo un logo, aparece en «Mi empresa» y en el PDF de una boleta, igual que antes.
+
+**Escenarios de aceptación**
+
+1. **Dado** que subo o cambio el logo, **cuando** se guarda, **entonces** se ve en «Mi empresa» y en los PDF, como hoy, y el anterior deja de guardarse.
+2. **Dado** una empresa que ya tenía logo antes de esta spec, **cuando** se instala la nueva versión, **entonces** su logo pasa a S3 y se sigue viendo, sin que la empresa haga nada.
+3. **Dado** que genero varios PDF seguidos, **cuando** llevan logo, **entonces** no tardan más que hoy de forma notoria.
+4. **Dado** que el almacenamiento no responde, **cuando** genero un PDF, **entonces** el PDF sale igual, sin logo, y no se pierde la descarga.
+
 ## Casos límite
 
 - **Almacenamiento caído al subir:** se avisa y el producto conserva su foto anterior (o ninguna). Guardar los demás datos del producto no depende de la foto.
 - **Almacenamiento caído al mostrar:** se ve el marcador; vender, buscar y cobrar siguen funcionando.
-- **Otra empresa:** una empresa nunca puede ver, adivinar ni listar las fotos de otra (principio VIII).
+- **Otra empresa:** una empresa no puede descubrir ni listar las fotos de otra. Las fotos son públicas para quien tenga su dirección, y esa dirección no se puede adivinar ni deducir del RUC, el producto o la empresa (A-79). El usuario acepta ese costo para fotos de catálogo.
 - **Producto desactivado:** conserva su foto (spec 002: se desactiva, no se borra).
 - **Foto enorme del celular** (por ejemplo 12 MP): se acepta si está dentro del límite y se guarda en un tamaño adecuado para la pantalla (A-81).
 - **Subidas simultáneas** de dos administradores al mismo producto: queda una sola foto, la última, y no quedan imágenes huérfanas guardadas.
-- **Ventas pasadas:** tickets, comprobantes, PDF e impresión térmica no llevan la foto del producto.
+- **Ventas pasadas:** tickets, comprobantes, PDF e impresión térmica no llevan la foto del producto. La impresión térmica sigue sin logo (A-77).
 - **Exportar e importar (spec 014):** según A-83.
 - **Sin conexión en la app:** se guardan los datos del producto y se avisa que la foto necesita conexión.
 - **Pantallas angostas y modo oscuro:** a 360 px, la miniatura y el marcador no desbordan la tarjeta del catálogo y se ven bien en los dos temas.
 - **Lector de pantalla:** la foto se anuncia con el nombre del producto, y el marcador no se lee.
-- **Foto pesada en el celular** (4 a 8 MB): según A-85.
+- **Foto pesada en el celular** (4 a 8 MB): la app la reduce antes de subirla (A-85); el servidor la valida y la procesa igual.
+- **Copias de seguridad en el mismo bucket:** las copias de la spec 009 van en otra carpeta del mismo bucket. La app no puede leerlas ni borrarlas, y lo público son solo las imágenes (A-79).
 
 ## Requisitos funcionales
 
 - **RF-001:** Un producto PUEDE tener como máximo una foto; es opcional.
 - **RF-002:** Solo el administrador de empresa DEBE poder poner, cambiar o quitar la foto; cualquier usuario de la empresa la ve.
 - **RF-003:** El sistema DEBE aceptar solo los formatos y el tamaño de A-80 y rechazar lo demás con un mensaje claro.
-- **RF-004:** Las fotos DEBEN guardarse en un almacenamiento de objetos compatible con S3, separado de las copias de seguridad de la spec 009 (A-79).
-- **RF-005:** Una empresa NO DEBE poder acceder a las fotos de otra (A-79).
+- **RF-004:** Las fotos y el logo DEBEN guardarse en S3, en la carpeta de imágenes del bucket, separada de la carpeta de las copias de seguridad de la spec 009 (A-79).
+- **RF-005:** Una empresa NO DEBE poder descubrir ni listar las fotos de otra. Las direcciones DEBEN ser imposibles de adivinar y no llevar RUC, ids ni nombres (A-79).
 - **RF-006:** Al cambiar o quitar una foto, la anterior DEBE dejar de guardarse (A-82).
 - **RF-007:** Las pantallas con listas DEBEN usar una versión reducida de la foto, para que el celular no descargue imágenes grandes (A-81).
 - **RF-008:** El sistema DEBE eliminar los datos ocultos de las fotos (ubicación, modelo del teléfono) y respetar su orientación (A-81).
@@ -89,16 +104,20 @@ Como administrador que usa la app Android, quiero tomar la foto del producto con
 - **RF-011:** En la app Android, la cámara y la galería DEBEN pasar por el módulo del dispositivo (principio VII).
 - **RF-012:** La app DEBE comprobar el formato y el tamaño antes de subir, con el mismo límite de A-80. La API sigue siendo la que decide.
 - **RF-013:** Las listas DEBEN cargar las fotos solo cuando se acercan a la pantalla y reservar su espacio, para que nada se mueva.
+- **RF-014:** El logo de la empresa DEBE guardarse en S3 como las fotos, y los logos existentes DEBEN pasarse a S3 al instalar la versión. Los PDF DEBEN seguir mostrándolo sin volverse notoriamente más lentos, y salir sin logo si el almacenamiento no responde.
+- **RF-015:** La subida DEBE pasar por la API, que valida el contenido real del archivo y lo procesa (A-81, A-85). Nadie sube directo al almacenamiento.
+- **RF-016 (operación):** El acceso público DEBE limitarse a leer la carpeta de imágenes, sin listar el bucket. La clave de la app DEBE poder escribir solo en esa carpeta, las copias DEBEN usar otra clave o permiso, y el bucket DEBE tener versionado (A-79, A-82). Lo configura el responsable en AWS, y se comprueba en la verificación.
 
 ## Entidades clave
 
-- **Foto del producto:** la imagen de un producto de una empresa, con su versión para listas y su versión grande. Se guarda fuera del servidor; el producto solo sabe si tiene foto y dónde está.
+- **Foto del producto:** la imagen de un producto de una empresa, con su versión para listas y su versión grande. Se guarda en S3; el producto solo sabe si tiene foto y dónde está.
+- **Logo de la empresa:** la imagen que va en «Mi empresa» y en los PDF. Pasa del disco del servidor a S3.
 
 ## Criterios de éxito
 
 - **CE-001:** Subir una foto de 5 MB desde el celular con datos móviles tarda **menos de 10 segundos** hasta verla en la ficha.
 - **CE-002:** En «Vender» con 25 productos con foto, el celular descarga **menos de 1 MB** de imágenes para la primera página.
-- **CE-003:** Una prueba automática confirma que ninguna empresa obtiene la foto de otra, ni con su dirección exacta.
+- **CE-003:** Una prueba automática confirma que ninguna empresa puede descubrir ni listar las fotos de otra: las respuestas de una empresa nunca traen direcciones de otra, y las direcciones no llevan RUC, ids ni nombres. En la verificación manual, listar el bucket sin credenciales falla.
 - **CE-004:** Una foto vertical del celular se ve derecha y sin datos de ubicación.
 
 ## Fuera de alcance
@@ -108,7 +127,10 @@ Como administrador que usa la app Android, quiero tomar la foto del producto con
 - Fotos en tickets, comprobantes, PDF o impresión térmica.
 - Fotos en el carrito de «Vender», en las alertas de stock y en los movimientos de inventario.
 - Buscar productos por foto o leer códigos de barras con la cámara.
-- Mover el logo de la empresa a S3, salvo que A-79 lo incluya.
+- Direcciones firmadas o fotos privadas (A-79: son públicas con dirección imposible de adivinar).
+- Subir directo del celular a S3 (A-85).
+- Fotos en exportar e importar (A-83).
+- Logo en la impresión térmica (A-77).
 
 ## Clarificaciones
 
@@ -116,3 +138,8 @@ Como administrador que usa la app Android, quiero tomar la foto del producto con
 |---|---|---|
 | 2026-10-29 | Spec creada a pedido del usuario (foto opcional del producto guardada en S3) | — |
 | 2026-10-29 | Sección de frontend aportada por la sesión del frontend | Escenarios HU-1 6–8, HU-2 4, HU-3 5–6, casos límite, RF-012 y RF-013, y A-85 |
+| 2026-10-29 | A-79 | Mismo bucket, con carpeta de imágenes (`AWS_ROOT`) y carpeta de copias separadas. Imágenes públicas con dirección imposible de adivinar, sin URLs firmadas. El logo también pasa a S3 (HU-4, RF-014). Clave de la app limitada a la carpeta de imágenes y versionado (RF-016) |
+| 2026-10-29 | A-80 a A-83 | Recomendaciones aceptadas: JPEG, PNG y WebP hasta 5 MB; 800 y 200 px en WebP, girada y sin datos ocultos; borrado al cambiar o quitar, con limpieza de huérfanas; sin fotos en exportar e importar |
+| 2026-10-29 | A-84 | Pruebas automáticas con almacenamiento simulado; el bucket de pruebas del usuario solo para la verificación manual |
+| 2026-10-29 | A-85 | La app reduce la foto a unos 1 600 px en JPEG y la sube por la API (RF-015) |
+| 2026-10-29 | v0.2 | Decisiones transmitidas por la sesión del frontend como del usuario; falta que el usuario apruebe la spec |

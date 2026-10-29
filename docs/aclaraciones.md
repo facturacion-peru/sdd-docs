@@ -93,13 +93,13 @@ Registro único de preguntas abiertas y decisiones. Las specs las citan por su i
 | [A-76](#a-76) | Ancho de papel | 015 | Resuelta |
 | [A-77](#a-77) | Qué se imprime por Bluetooth | 015 | Resuelta |
 | [A-78](#a-78) | Cómo se elige la impresora y cuándo imprime | 015 | Resuelta |
-| [A-79](#a-79) | Dónde se guardan las fotos y quién puede verlas | 016 | Abierta |
-| [A-80](#a-80) | Formatos y tamaño de la foto | 016 | Abierta |
-| [A-81](#a-81) | Tamaños guardados, miniatura y datos ocultos | 016 | Abierta |
-| [A-82](#a-82) | Qué pasa con la foto al cambiarla, quitarla o desactivar el producto | 016 | Abierta |
-| [A-83](#a-83) | Fotos en exportar e importar (014) | 016 | Abierta |
-| [A-84](#a-84) | Almacenamiento en desarrollo y en pruebas | 016 | Abierta |
-| [A-85](#a-85) | Reducir la foto en el celular antes de subirla | 016 | Abierta |
+| [A-79](#a-79) | Dónde se guardan las fotos y quién puede verlas | 016 | Resuelta |
+| [A-80](#a-80) | Formatos y tamaño de la foto | 016 | Resuelta |
+| [A-81](#a-81) | Tamaños guardados, miniatura y datos ocultos | 016 | Resuelta |
+| [A-82](#a-82) | Qué pasa con la foto al cambiarla, quitarla o desactivar el producto | 016 | Resuelta |
+| [A-83](#a-83) | Fotos en exportar e importar (014) | 016 | Resuelta |
+| [A-84](#a-84) | Almacenamiento en desarrollo y en pruebas | 016 | Resuelta |
+| [A-85](#a-85) | Reducir la foto en el celular antes de subirla | 016 | Resuelta |
 
 ---
 
@@ -974,7 +974,7 @@ Pedido del usuario: foto opcional en cada producto, guardada en un almacenamient
 
 ### A-79
 
-**¿Dónde se guardan las fotos y quién puede verlas?** · Bloquea: 016 · **Abierta**
+**¿Dónde se guardan las fotos y quién puede verlas?** · Bloquea: 016 · **Resuelta**
 
 1. **Lugar:**
    - **A.** El mismo bucket que las copias de seguridad (spec 009).
@@ -989,18 +989,32 @@ Pedido del usuario: foto opcional en cada producto, guardada en un almacenamient
 2. A, privado con direcciones firmadas: sigue el principio VIII sin excepciones. Las direcciones se firman con vencimientos redondeados para que el celular pueda reusar las fotos ya descargadas.
 3. Solo los productos en esta spec. El logo funciona y entra en las copias; moverlo puede ir en otra spec.
 
+> **Decisión (2026-10-29):** En lugar de la recomendación:
+> - **Bucket:** un solo bucket (`AWS_BUCKET`). Las imágenes van en la carpeta `AWS_ROOT` y las copias de la spec 009 en otra carpeta, `AWS_BACKUP_ROOT` (en el `.env` local aún se llama `AWS_BACKUP_BUCKET`; se renombra porque es una carpeta, no un bucket).
+> - **Acceso:** imágenes **públicas** de solo lectura, controladas con una política de AWS que configura el usuario. Sin URLs firmadas: la API devuelve direcciones públicas fijas.
+> - **Logo:** también pasa a S3.
+> - **Condiciones aceptadas:**
+>   1. Direcciones imposibles de adivinar (`AWS_ROOT/<uuid>.webp`, sin RUC, id ni nombre). La política solo da lectura pública sobre `AWS_ROOT/*` y nunca permite listar el bucket.
+>   2. RF-005 y CE-003 pasan a «una empresa no puede descubrir ni listar las fotos de otra». Quien tiene la dirección ve la foto; el usuario acepta ese costo para fotos de catálogo.
+>   3. La clave de la app escribe solo en `AWS_ROOT/*` y las copias usan otra clave o permiso. El bucket tiene versionado. Lo configura el usuario en AWS y se comprueba en la verificación.
+>   4. El logo sale en los PDF: la API lo lee de S3 con caché, para no hacerlos más lentos. La impresión térmica sigue sin logo (A-77).
+>
+> Decisión transmitida por la sesión del frontend como tomada por el usuario.
+
 ### A-80
 
-**¿Qué formatos y tamaño se aceptan?** · Bloquea: 016 · **Abierta**
+**¿Qué formatos y tamaño se aceptan?** · Bloquea: 016 · **Resuelta**
 
 - **Formatos:** JPEG, PNG y WebP; ¿también HEIC (fotos de iPhone)?
 - **Tamaño máximo del archivo subido:** por ejemplo 5 MB o 10 MB.
 
 **Recomendación:** JPEG, PNG y WebP, hasta **5 MB**. HEIC queda fuera: Android entrega JPEG, y HEIC necesitaría una librería más en el servidor.
 
+> **Decisión (2026-10-29):** Aceptada la recomendación: JPEG, PNG y WebP, hasta 5 MB. HEIC queda fuera.
+
 ### A-81
 
-**¿Se guarda la foto tal cual o se procesa?** · Bloquea: 016 · **Abierta**
+**¿Se guarda la foto tal cual o se procesa?** · Bloquea: 016 · **Resuelta**
 
 - **A.** Tal cual, como se subió.
 - **B.** Procesada en el servidor:
@@ -1010,9 +1024,11 @@ Pedido del usuario: foto opcional en cada producto, guardada en un almacenamient
 
 **Recomendación:** B. Una foto de celular pesa 3 a 5 MB: sin miniaturas, «Vender» descargaría decenas de MB por página (CE-002). Quitar la ubicación protege a quien toma la foto en su casa o su tienda. Se puede hacer con la extensión GD, que la API ya exige, sin dependencias nuevas.
 
+> **Decisión (2026-10-29):** Aceptada la recomendación (B): en el servidor, con GD, versión de 800 px y miniatura de 200 px en WebP, girada según su orientación y sin datos ocultos.
+
 ### A-82
 
-**¿Qué pasa con la foto al cambiarla, quitarla o desactivar el producto?** · Bloquea: 016 · **Abierta**
+**¿Qué pasa con la foto al cambiarla, quitarla o desactivar el producto?** · Bloquea: 016 · **Resuelta**
 
 - **Cambiar o quitar:** ¿se borra la foto anterior del almacenamiento enseguida, o se conserva un tiempo?
 - **Desactivar el producto:** ¿se conserva la foto?
@@ -1023,9 +1039,11 @@ Pedido del usuario: foto opcional en cada producto, guardada en un almacenamient
 - Al desactivar, la foto **se conserva** (el producto no se borra, spec 002).
 - Las fotos **no entran** en las copias cifradas. Se activa el **versionado** del bucket con 30 días de retención, para recuperar una foto borrada por error.
 
+> **Decisión (2026-10-29):** Aceptada la recomendación: se borra al cambiar o quitar, con limpieza diaria de huérfanas; se conserva al desactivar el producto; las fotos no entran en las copias cifradas y el bucket tiene versionado.
+
 ### A-83
 
-**¿Las fotos entran en exportar e importar (spec 014)?** · Bloquea: 016 · **Abierta**
+**¿Las fotos entran en exportar e importar (spec 014)?** · Bloquea: 016 · **Resuelta**
 
 - **A.** No en esta spec.
 - **B.** La exportación agrega una columna con la dirección de la foto.
@@ -1033,9 +1051,11 @@ Pedido del usuario: foto opcional en cada producto, guardada en un almacenamient
 
 **Recomendación:** A. Una dirección firmada vence (A-79) y no sirve en un Excel. Importar fotos en lote es un trabajo aparte, que puede ir en otra spec si hace falta.
 
+> **Decisión (2026-10-29):** Aceptada la recomendación (A): sin fotos en exportar e importar en esta spec.
+
 ### A-84
 
-**¿Qué almacenamiento se usa en desarrollo y en pruebas?** · Bloquea: 016 · **Abierta**
+**¿Qué almacenamiento se usa en desarrollo y en pruebas?** · Bloquea: 016 · **Resuelta**
 
 - **A.** Un S3 de verdad también en desarrollo (un bucket de pruebas).
 - **B.** MinIO (un S3 local en Docker) en desarrollo.
@@ -1045,9 +1065,11 @@ En las pruebas automáticas se usa un almacenamiento simulado (`Storage::fake`),
 
 **Recomendación:** C para el día a día, sin servicios extra. Antes de cerrar la spec se verifica una vez contra un S3 real, o contra MinIO, para comprobar las direcciones firmadas y los permisos. Las pruebas automáticas usan el almacenamiento simulado.
 
+> **Decisión (2026-10-29):** Las pruebas automáticas usan el almacenamiento simulado (`Storage::fake`), sin red ni credenciales. El usuario ya configuró en su `.env` local un bucket de pruebas, que se usa solo en la verificación manual antes de cerrar.
+
 ### A-85
 
-**¿Se reduce la foto en el celular antes de subirla?** · Bloquea: 016 · **Abierta**
+**¿Se reduce la foto en el celular antes de subirla?** · Bloquea: 016 · **Resuelta**
 
 Una foto de 12 MP pesa entre 4 y 8 MB. Con datos móviles, subirla en menos de 10 s (CE-001) es justo.
 
@@ -1055,6 +1077,12 @@ Una foto de 12 MP pesa entre 4 y 8 MB. Con datos móviles, subirla en menos de 1
 - **B.** La app la reduce antes de subirla, a unos 1 600 px en JPEG (300 a 600 KB). Así también se quitan la ubicación y los datos ocultos desde el origen. El servidor la procesa igual (A-81).
 
 **Recomendación:** B. Hace realista CE-001 y gasta menos datos. En contra: suma código en la app, y la orientación hay que probarla, porque algunos navegadores ya la aplican solos.
+
+> **Decisión (2026-10-29):** B. La app reduce la foto a unos 1 600 px en JPEG y la sube **por la API**, que valida el contenido real, la procesa (A-81) y la guarda en S3. Se descartó subir directo a S3 con una dirección prefirmada:
+> - casi no se ahorra nada con unos 500 KB;
+> - S3 no revisa el contenido en una carpeta pública;
+> - A-81 debe seguir en el servidor;
+> - así se evitan CORS y archivos huérfanos.
 
 ## Pendientes menores
 
