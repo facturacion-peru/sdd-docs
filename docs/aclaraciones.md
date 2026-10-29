@@ -1011,6 +1011,11 @@ Pedido del usuario: foto opcional en cada producto, guardada en un almacenamient
 **Recomendación:** JPEG, PNG y WebP, hasta **5 MB**. HEIC queda fuera: Android entrega JPEG, y HEIC necesitaría una librería más en el servidor.
 
 > **Decisión (2026-10-29):** Aceptada la recomendación: JPEG, PNG y WebP, hasta 5 MB. HEIC queda fuera.
+>
+> **Corrección (2026-10-29):** Como la app reduce las fotos (A-85), los límites quedan así:
+> - **Original en la app (web y Android):** hasta **10 MB**. Cubre las fotos normales del celular (3 a 6 MB) y evita agotar la memoria de un celular de gama baja al reducir una foto de máxima resolución.
+> - **Lo que llega a la API:** hasta **2 MB**, porque ya llega reducido (unos 300 a 600 KB).
+> - **Logo:** hasta **1 MB**, como hoy, y no se reduce.
 
 ### A-81
 

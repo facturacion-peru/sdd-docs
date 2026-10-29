@@ -1,6 +1,6 @@
 # Spec 016: Imagen del producto y logo en S3
 
-**Estado:** Borrador · **Versión:** 0.3 · **Fecha:** 2026-10-29
+**Estado:** Borrador · **Versión:** 0.4 · **Fecha:** 2026-10-29
 **Depende de:** 001, 002, 005, 009, 012, 013 · **Aclaraciones:** A-79 a A-85 (resueltas)
 
 > Qué y por qué. Sin frameworks, tablas, endpoints ni componentes: eso va en `plan.md`.
@@ -87,7 +87,8 @@ Como administrador de empresa, quiero que mi logo se guarde en el mismo almacena
 - **Sin conexión en la app:** se guardan los datos del producto y se avisa que la foto necesita conexión.
 - **Pantallas angostas y modo oscuro:** a 360 px, la miniatura y el marcador no desbordan la tarjeta del catálogo y se ven bien en los dos temas.
 - **Lector de pantalla:** la foto se anuncia con el nombre del producto, y el marcador no se lee.
-- **Foto pesada** (4 a 8 MB, del celular o de la computadora): la app, en la web y en Android, la reduce antes de subirla (A-85); el servidor la valida y la procesa igual.
+- **Foto pesada** (3 a 10 MB, del celular o de la computadora): la app, en la web y en Android, la reduce antes de subirla (A-85); el servidor la valida y la procesa igual.
+- **Foto de más de 10 MB** (modo de máxima resolución): la app la rechaza antes de abrirla, porque reducirla podría agotar la memoria de un celular de gama baja, y sugiere tomarla en modo normal.
 - **Copias de seguridad en el mismo bucket:** las copias de la spec 009 van en otra carpeta del mismo bucket. La app no puede leerlas ni borrarlas, y lo público son solo las imágenes (A-79).
 
 ## Requisitos funcionales
@@ -103,7 +104,7 @@ Como administrador de empresa, quiero que mi logo se guarde en el mismo almacena
 - **RF-009:** Poner, cambiar o quitar la foto DEBE quedar en la auditoría de la empresa (principio VIII).
 - **RF-010:** Si el almacenamiento falla, vender y gestionar productos DEBE seguir funcionando; solo la foto queda pendiente o sin mostrarse.
 - **RF-011:** En la app Android, la cámara y la galería DEBEN pasar por el módulo del dispositivo (principio VII).
-- **RF-012:** La app (web y Android) DEBE comprobar el formato antes de subir y reducir la foto (A-85). El límite de 5 MB de A-80 se aplica al archivo que llega a la API. La app acepta originales más grandes que pueda reducir, hasta unos 20 MB, y rechaza enseguida los que no pueda leer. La API sigue siendo la que decide.
+- **RF-012:** La app (web y Android) DEBE comprobar el formato antes de subir y reducir la foto (A-85). La app acepta originales de hasta 10 MB (A-80) y rechaza enseguida, con un mensaje, los que pesen más (por ejemplo, una foto en el modo de máxima resolución del celular) o no pueda leer. A la API la foto ya llega reducida, y la API acepta hasta 2 MB. La API sigue siendo la que decide.
 - **RF-013:** Las listas DEBEN cargar las fotos solo cuando se acercan a la pantalla y reservar su espacio, para que nada se mueva.
 - **RF-014:** El logo de la empresa DEBE guardarse en S3 como las fotos, y los logos existentes DEBEN pasarse a S3 al instalar la versión. Los PDF DEBEN seguir mostrándolo sin volverse notoriamente más lentos, y salir sin logo si el almacenamiento no responde.
 - **RF-015:** La subida DEBE pasar por la API, que valida el contenido real del archivo y lo procesa (A-81, A-85). Nadie sube directo al almacenamiento.
@@ -116,7 +117,7 @@ Como administrador de empresa, quiero que mi logo se guarde en el mismo almacena
 
 ## Criterios de éxito
 
-- **CE-001:** Subir una foto de 5 MB o más, tomada con el celular, con datos móviles, tarda **menos de 10 segundos** hasta verla en la ficha.
+- **CE-001:** Subir una foto normal tomada con el celular (3 a 6 MB), con datos móviles, tarda **menos de 10 segundos** hasta verla en la ficha.
 - **CE-002:** En «Vender» con 25 productos con foto, el celular descarga **menos de 1 MB** de imágenes para la primera página.
 - **CE-003:** Una prueba automática confirma que ninguna empresa puede descubrir ni listar las fotos de otra: las respuestas de una empresa nunca traen direcciones de otra, y las direcciones no llevan RUC, ids ni nombres. En la verificación manual, listar el bucket sin credenciales falla.
 - **CE-004:** Una foto vertical del celular se ve derecha y sin datos de ubicación.
@@ -140,8 +141,9 @@ Como administrador de empresa, quiero que mi logo se guarde en el mismo almacena
 | 2026-10-29 | Spec creada a pedido del usuario (foto opcional del producto guardada en S3) | — |
 | 2026-10-29 | Sección de frontend aportada por la sesión del frontend | Escenarios HU-1 6–8, HU-2 4, HU-3 5–6, casos límite, RF-012 y RF-013, y A-85 |
 | 2026-10-29 | A-79 | Mismo bucket, con carpeta de imágenes (`AWS_ROOT`) y carpeta de copias separadas. Imágenes públicas con dirección imposible de adivinar, sin URLs firmadas. El logo también pasa a S3 (HU-4, RF-014). Clave de la app limitada a la carpeta de imágenes y versionado (RF-016) |
-| 2026-10-29 | A-80 a A-83 | Recomendaciones aceptadas: JPEG, PNG y WebP hasta 5 MB; 800 y 200 px en WebP, girada y sin datos ocultos; borrado al cambiar o quitar, con limpieza de huérfanas; sin fotos en exportar e importar |
+| 2026-10-29 | A-80 a A-83 | Recomendaciones aceptadas: JPEG, PNG y WebP (tamaños corregidos en la v0.4); 800 y 200 px en WebP, girada y sin datos ocultos; borrado al cambiar o quitar, con limpieza de huérfanas; sin fotos en exportar e importar |
 | 2026-10-29 | A-84 | Pruebas automáticas con almacenamiento simulado; el bucket de pruebas del usuario solo para la verificación manual |
 | 2026-10-29 | A-85 | La app reduce la foto a unos 1 600 px en JPEG y la sube por la API (RF-015) |
 | 2026-10-29 | v0.2 | Decisiones transmitidas por la sesión del frontend como del usuario; falta que el usuario apruebe la spec |
 | 2026-10-29 | v0.3 | Revisión del frontend: RF-012 (se reducen originales de hasta unos 20 MB y el límite de 5 MB es para lo que llega a la API), reducción también en la web, logo transparente sin reducir (HU-4 esc. 5) y CE-001 |
+| 2026-10-29 | v0.4 | A-80 corregida por el usuario: original hasta 10 MB en la app, hasta 2 MB en la API (ya reducida) y el logo hasta 1 MB, como hoy. CE-001 con una foto normal del celular |
