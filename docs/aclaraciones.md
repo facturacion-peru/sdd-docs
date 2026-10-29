@@ -99,6 +99,7 @@ Registro único de preguntas abiertas y decisiones. Las specs las citan por su i
 | [A-82](#a-82) | Qué pasa con la foto al cambiarla, quitarla o desactivar el producto | 016 | Abierta |
 | [A-83](#a-83) | Fotos en exportar e importar (014) | 016 | Abierta |
 | [A-84](#a-84) | Almacenamiento en desarrollo y en pruebas | 016 | Abierta |
+| [A-85](#a-85) | Reducir la foto en el celular antes de subirla | 016 | Abierta |
 
 ---
 
@@ -1043,6 +1044,17 @@ Pedido del usuario: foto opcional en cada producto, guardada en un almacenamient
 En las pruebas automáticas se usa un almacenamiento simulado (`Storage::fake`), sin red.
 
 **Recomendación:** C para el día a día, sin servicios extra. Antes de cerrar la spec se verifica una vez contra un S3 real, o contra MinIO, para comprobar las direcciones firmadas y los permisos. Las pruebas automáticas usan el almacenamiento simulado.
+
+### A-85
+
+**¿Se reduce la foto en el celular antes de subirla?** · Bloquea: 016 · **Abierta**
+
+Una foto de 12 MP pesa entre 4 y 8 MB. Con datos móviles, subirla en menos de 10 s (CE-001) es justo.
+
+- **A.** Se sube el original y el servidor la procesa (A-81).
+- **B.** La app la reduce antes de subirla, a unos 1 600 px en JPEG (300 a 600 KB). Así también se quitan la ubicación y los datos ocultos desde el origen. El servidor la procesa igual (A-81).
+
+**Recomendación:** B. Hace realista CE-001 y gasta menos datos. En contra: suma código en la app, y la orientación hay que probarla, porque algunos navegadores ya la aplican solos.
 
 ## Pendientes menores
 

@@ -1,7 +1,7 @@
 # Spec 016: Imagen del producto
 
 **Estado:** Borrador · **Versión:** 0.1 · **Fecha:** 2026-10-29
-**Depende de:** 002, 009, 012, 013 · **Aclaraciones:** A-79 a A-84 (abiertas)
+**Depende de:** 002, 009, 012, 013 · **Aclaraciones:** A-79 a A-85 (abiertas)
 
 > Qué y por qué. Sin frameworks, tablas, endpoints ni componentes: eso va en `plan.md`.
 
@@ -25,6 +25,9 @@ Como administrador de empresa, quiero subir una foto al crear o editar un produc
 3. **Dado** un producto con foto, **cuando** pulso «Quitar foto» y confirmo, **entonces** el producto queda sin foto y la imagen deja de guardarse.
 4. **Dado** un archivo que no es una imagen admitida o es demasiado grande, **cuando** lo subo, **entonces** veo un mensaje claro con el formato y el tamaño permitidos, y el producto no cambia.
 5. **Dado** que soy vendedor, **cuando** veo un producto, **entonces** veo su foto pero no puedo cambiarla ni quitarla (spec 002, RF-020).
+6. **Dado** que elegí una imagen, **cuando** aún no guardé, **entonces** veo una vista previa y puedo descartarla sin que el producto cambie.
+7. **Dado** que creo un producto con foto, **cuando** el producto se guarda pero la foto falla, **entonces** el producto queda creado, veo «La foto no se pudo subir» y puedo reintentar desde su ficha.
+8. **Dado** una subida lenta, **cuando** está en curso, **entonces** veo el avance, no puedo enviarla dos veces y puedo cancelarla.
 
 ### HU-2 · Ver las fotos al vender y en el catálogo (P1)
 
@@ -35,9 +38,10 @@ Como vendedor, quiero ver la foto de cada producto en «Vender» y en la lista d
 
 **Escenarios de aceptación**
 
-1. **Dado** productos con y sin foto, **cuando** abro «Vender» o «Productos», **entonces** cada producto con foto la muestra en miniatura y los demás muestran un marcador neutro, con el mismo tamaño para no mover la lista.
+1. **Dado** productos con y sin foto, **cuando** abro el catálogo de «Vender» o la lista de «Productos», **entonces** cada producto con foto la muestra en miniatura y los demás muestran un marcador neutro, con el mismo tamaño para no mover la lista. El carrito, las alertas y los movimientos no muestran fotos.
 2. **Dado** que las fotos tardan o no cargan (conexión lenta o almacenamiento caído), **cuando** busco y cobro, **entonces** puedo seguir vendiendo; la foto que falla muestra el marcador.
 3. **Dado** un producto, **cuando** abro su ficha, **entonces** veo la foto en tamaño grande.
+4. **Dado** una venta en curso guardada (spec 012), **cuando** vuelvo a «Vender» horas después, **entonces** las fotos se ven o aparece el marcador, nunca una imagen rota.
 
 ### HU-3 · Tomar la foto con el celular (P2)
 
@@ -52,6 +56,8 @@ Como administrador que usa la app Android, quiero tomar la foto del producto con
 2. **Dado** una foto tomada con el celular en vertical, **cuando** se guarda, **entonces** se ve derecha en todas las pantallas.
 3. **Dado** una foto con la ubicación GPS u otros datos del teléfono, **cuando** se guarda, **entonces** esos datos se eliminan (A-81).
 4. **Dado** que niego el permiso de cámara, **cuando** quiero tomar la foto, **entonces** veo cómo darlo y puedo elegir de la galería igualmente.
+5. **Dado** que estoy eligiendo la foto, **cuando** pulso «Atrás» en Android, **entonces** se cierra el selector y no la pantalla.
+6. **Dado** una foto de la galería en un formato no admitido (A-80), **cuando** la elijo, **entonces** veo el mensaje de formato enseguida, sin esperar a la red.
 
 ## Casos límite
 
@@ -63,6 +69,10 @@ Como administrador que usa la app Android, quiero tomar la foto del producto con
 - **Subidas simultáneas** de dos administradores al mismo producto: queda una sola foto, la última, y no quedan imágenes huérfanas guardadas.
 - **Ventas pasadas:** tickets, comprobantes, PDF e impresión térmica no llevan la foto del producto.
 - **Exportar e importar (spec 014):** según A-83.
+- **Sin conexión en la app:** se guardan los datos del producto y se avisa que la foto necesita conexión.
+- **Pantallas angostas y modo oscuro:** a 360 px, la miniatura y el marcador no desbordan la tarjeta del catálogo y se ven bien en los dos temas.
+- **Lector de pantalla:** la foto se anuncia con el nombre del producto, y el marcador no se lee.
+- **Foto pesada en el celular** (4 a 8 MB): según A-85.
 
 ## Requisitos funcionales
 
@@ -77,6 +87,8 @@ Como administrador que usa la app Android, quiero tomar la foto del producto con
 - **RF-009:** Poner, cambiar o quitar la foto DEBE quedar en la auditoría de la empresa (principio VIII).
 - **RF-010:** Si el almacenamiento falla, vender y gestionar productos DEBE seguir funcionando; solo la foto queda pendiente o sin mostrarse.
 - **RF-011:** En la app Android, la cámara y la galería DEBEN pasar por el módulo del dispositivo (principio VII).
+- **RF-012:** La app DEBE comprobar el formato y el tamaño antes de subir, con el mismo límite de A-80. La API sigue siendo la que decide.
+- **RF-013:** Las listas DEBEN cargar las fotos solo cuando se acercan a la pantalla y reservar su espacio, para que nada se mueva.
 
 ## Entidades clave
 
@@ -94,6 +106,7 @@ Como administrador que usa la app Android, quiero tomar la foto del producto con
 - Varias fotos por producto o galerías.
 - Editar la foto en la app (recortar, filtros), más allá de lo que haga el propio teléfono.
 - Fotos en tickets, comprobantes, PDF o impresión térmica.
+- Fotos en el carrito de «Vender», en las alertas de stock y en los movimientos de inventario.
 - Buscar productos por foto o leer códigos de barras con la cámara.
 - Mover el logo de la empresa a S3, salvo que A-79 lo incluya.
 
@@ -102,3 +115,4 @@ Como administrador que usa la app Android, quiero tomar la foto del producto con
 | Fecha | Aclaración | Decisión |
 |---|---|---|
 | 2026-10-29 | Spec creada a pedido del usuario (foto opcional del producto guardada en S3) | — |
+| 2026-10-29 | Sección de frontend aportada por la sesión del frontend | Escenarios HU-1 6–8, HU-2 4, HU-3 5–6, casos límite, RF-012 y RF-013, y A-85 |
