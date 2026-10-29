@@ -140,13 +140,100 @@ Medida esperada: unos 50 a 100 KB la grande y 10 a 15 KB la miniatura. Para CE-0
 
 ## Frontend
 
-> **Pendiente de la sesión del frontend**, antes de la aprobación. Acuerdos ya tomados entre las sesiones:
-> - **Tipos:** `image: { url, thumb_url } | null` en `features/inventory/types.ts`.
-> - **Subida:** `POST` y `DELETE /products/{product}/image` aparte del formulario. La app reduce la foto antes (unos 1 600 px en JPEG, original de hasta 10 MB y unos 50 MP), y el logo no se reduce.
-> - **Pantallas:** `ProductThumb` en `shared/ui`, con marcador, `loading="lazy"` y tamaño fijo.
-> - **Android:** `device().pickImage` en `core/device`, permiso `CAMERA` en el manifiesto y subir `version`. Se evaluará si basta el selector del WebView o hace falta `@capacitor/camera`, que el usuario aprobaría.
-> - **Venta en curso:** guarda solo ids, nunca direcciones.
-> - **Bucket:** sin CORS.
+> Lo escribe la sesión del frontend. Rama `016-imagen-producto` del frontend, desde `main`. **Sin dependencias nuevas**, salvo que la prueba de Android (T-F1, más abajo) obligue a usar `@capacitor/camera`, que el usuario tendría que aprobar.
+
+### Tipos y contrato
+
+- **`features/inventory/types.ts`:** `ProductImage = { url: string; thumb_url: string }` y `Product.image: ProductImage | null`. Se tipa a mano, porque OpenAPI no documenta las respuestas.
+- **`features/sales/api.ts`:** `CatalogProduct = SellableProduct & { image: ProductImage | null }`, solo para el catálogo. `SellableProduct` no cambia.
+- **Cuerpos de las subidas:** salen de `pnpm api:types` después de que la API corrija el generador. Hasta entonces no se tipa nada a mano.
+
+### `core/api/upload.ts` (nuevo)
+
+`fetch` no informa el avance de una subida, y HU-1 (esc. 8) lo pide. Por eso se agrega `uploadForm(path, form, { onProgress, signal })`:
+
+- **Cómo:** usa `XMLHttpRequest`, con las mismas cabeceras que `authMiddleware` (token, `Accept` y `X-App-Version`).
+- **Mismas reacciones que el cliente:** con 401 llama a `clearToken`, y con 426 avisa en `updateRequired`.
+- **Errores:** devuelve `ApiError`, el mismo que `unwrap`, así que `useApiForm` y `fieldError('image')` funcionan igual.
+- **Cancelar:** el `AbortSignal` corta la subida y no muestra error.
+- **Para no duplicar:** la parte común de las cabeceras se separa en una función que usan el *middleware* y `upload.ts`.
+
+### Reducir antes de subir (`shared/images/prepare.ts`, A-85 y RF-012)
+
+`prepareProductPhoto(file): Promise<File>`, en este orden:
+
+1. **Formato:** se leen los primeros bytes (*magic bytes*), sin confiar en la extensión. Solo pasan JPEG, PNG o WebP. HEIC y lo demás se rechazan con «Formato no admitido. Usa una foto JPG, PNG o WebP» (HU-3, esc. 6).
+2. **Peso:** más de 10 MB se rechaza sin abrir el archivo, con un mensaje que sugiere tomar la foto en modo normal (A-80).
+3. **Dimensiones:** se leen en la cabecera (SOF de JPEG, IHDR de PNG, VP8/VP8L/VP8X de WebP). Más de 50 MP se rechaza con el mismo mensaje del paso 2. Así no se decodifica algo que pueda agotar la memoria, aunque pese menos de 10 MB.
+4. **Decodificar:** `createImageBitmap(file, { imageOrientation: 'from-image' })`, que gira según el EXIF.
+5. **Reducir y codificar:**
+   - se dibuja en un canvas de 1600 px como máximo de lado, sin agrandar;
+   - fondo blanco para los PNG con transparencia (es una foto de catálogo, no un logo);
+   - `toBlob('image/jpeg', 0.85)`;
+   - si pasa de 2 MB, se intenta otra vez con calidad 0.7; si sigue pasando, se rechaza.
+6. **Resultado:** un `File` JPEG sin EXIF ni GPS, porque el canvas no los copia. Pesa unos 300 a 600 KB.
+7. **Si falla la decodificación:** «No se pudo leer la imagen».
+
+**El logo no pasa por aquí** (HU-4, esc. 5): solo se valida el formato (PNG o JPEG) y 1 MB, antes de enviarlo como hoy.
+
+### `core/device`: elegir la foto (RF-011)
+
+Se agrega a `Device`:
+
+```ts
+/** Abre la cámara o la galería; null si el usuario cancela. */
+pickImage(source: 'camera' | 'gallery'): Promise<File | null>
+```
+
+- **`web.ts`:** crea un `<input type="file" accept="image/jpeg,image/png,image/webp">` temporal. Con `camera`, le pone `capture="environment"`; en la computadora el navegador lo ignora y abre el selector de archivos.
+- **`native.ts`:** en principio, lo mismo. El WebView de Capacitor (`BridgeWebChromeClient`) atiende `<input type="file">`: con `capture` abre la cámara, y sin `capture` abre el selector de fotos del sistema.
+- **T-F1, prueba en el emulador antes de escribir pantallas.** Se comprueba:
+  - que «Tomar foto» abre la cámara y «Elegir de la galería» abre el selector de fotos de Android 13+, sin permiso de almacenamiento;
+  - si hace falta `android.permission.CAMERA`. Android no lo pide para la cámara del sistema cuando la app **no** lo declara en el manifiesto, y en ese caso no hay permiso que negar (HU-3, esc. 4). Si Capacitor lo exige, se declara y se detecta la negativa;
+  - qué pasa con «Atrás» dentro de la cámara y del selector.
+- **Si la prueba falla** (no se puede elegir el origen, o no se detecta el permiso negado): se usa `@capacitor/camera` 8.x en `native.ts`, siempre detrás de `pickImage`. Se instala con pnpm, respeta `minimumReleaseAge`, se revisa y se pide la aprobación del usuario. El resultado de T-F1 queda en `verificacion.md`.
+- **Ninguna feature** importa plugins ni crea el `<input>` por su cuenta.
+
+### `shared/ui`
+
+| Componente | Papel |
+|---|---|
+| `ProductThumb.vue` | Props `image`, `name` y `size` (`sm` de 48 px para la lista, `md` de 64 px para el catálogo, `lg` para la ficha). Caja de tamaño fijo con `aspect-square`, así el espacio queda reservado y nada se mueve (RF-013). `<img loading="lazy" decoding="async" :alt="name">` con `object-cover`. Sin foto, o si falla `@error`, muestra un marcador: un ícono sobre `bg-subtle`, con `aria-hidden` (lector de pantalla). `sm` y `md` usan `thumb_url`; `lg` usa `url` |
+| `ImagePicker.vue` | Vista previa (`URL.createObjectURL`, liberada al cambiar o desmontar), «Agregar foto», «Cambiar foto» y «Quitar foto». En la app, «Agregar foto» abre un `BaseDialog` con «Tomar foto» y «Elegir de la galería» (HU-3, esc. 1); `useDismissable` cierra el diálogo con «Atrás» (esc. 5). En la web abre directo el selector. Emite el `File` ya preparado, o el mensaje de error de `prepareProductPhoto`. No sube nada |
+
+Los colores salen solo del tema y el ícono usa `text-ink-muted`. Lo comprueba `theme.spec.ts`.
+
+### Pantallas
+
+| Dónde | Cambio |
+|---|---|
+| `inventory/api.ts` | `uploadImage(id, file, opts)` con `uploadForm` y `removeImage(id)` con `apiClient.DELETE`. Las dos devuelven el `Product` |
+| `ProductFormView.vue` | Sección «Foto» con `ImagePicker`, solo para el administrador. **Al crear:** primero se guarda el producto y después se sube la foto. Si la subida falla, se va a la ficha con el aviso «El producto se guardó, pero la foto no se pudo subir» y «Reintentar» (HU-1, esc. 7). **Al editar:** la foto se sube o se quita aparte de «Guardar», con su propio botón, su avance y «Cancelar». Mientras sube, el botón queda deshabilitado (esc. 8). Sin conexión (`onConnectionChange`): se guardan los datos y se avisa que la foto necesita conexión |
+| `ProductDetailView.vue` | `ProductThumb` `lg`. El administrador ve «Cambiar foto» y «Quitar foto»; quitarla pide confirmación con `BaseDialog` (HU-1, esc. 3). El vendedor solo ve la foto (esc. 5). Los errores 422 y 503 se muestran con el mensaje de la API |
+| `ProductsView.vue` | `ProductThumb` `sm` en cada fila o tarjeta, en un grid `grid-cols-1` para que el nombre truncado no desborde a 360 px |
+| `ProductCatalog.vue` («Vender») | `ProductThumb` `md` a la izquierda del nombre, en las tarjetas y en el esqueleto de carga, con el mismo alto. El carrito no muestra fotos |
+| `sale-draft.ts` | `add()` copia solo los campos de `SellableProduct`, sin `image`. Hoy guarda en `localStorage` el objeto completo que llega del catálogo (A-60). Así la venta en curso no guarda direcciones, aunque ahora sean fijas: una foto cambiada borra la anterior |
+| `CompanyView.vue` | El logo usa `uploadForm` (con avance) y la validación previa de 1 MB y formato. `logo_url` sigue llegando igual |
+| `package.json` | `version` 0.3.0 (sale el `versionCode` de Android) |
+
+### Pruebas del frontend (Vitest)
+
+| Requisito / escenario | Prueba |
+|---|---|
+| RF-012, A-80 | `prepare.spec.ts`: rechaza HEIC por los *magic bytes* aunque se llame `.jpg`, más de 10 MB sin decodificar y más de 50 MP por la cabecera. Un JPEG de 4000×3000 sale en 1600×1200, como `image/jpeg` y en menos de 2 MB (canvas simulado). Las cabeceras de JPEG, PNG y WebP se leen bien |
+| HU-1 esc. 6–8 | `ImagePicker.spec.ts`: vista previa y descartar sin emitir. `ProductFormView.spec.ts`: crear con foto que falla → producto creado y aviso; doble envío bloqueado; «Cancelar» aborta sin mostrar error |
+| HU-1 esc. 3, 5 | `ProductDetailView.spec.ts`: «Quitar foto» pide confirmación y llama a `DELETE`; el vendedor no ve los botones |
+| HU-2, RF-013 | `ProductThumb.spec.ts`: sin foto o con `@error` → marcador con `aria-hidden`; `alt` igual al nombre; `loading="lazy"`; misma caja con foto y sin ella |
+| HU-2 esc. 4 | `sale-draft.spec.ts`: lo que se guarda en `localStorage` no trae `image` |
+| HU-3 esc. 1, 5 | `ImagePicker.spec.ts` con `device().isNative`: el diálogo ofrece las dos opciones y «Atrás» (`dismissTop`) lo cierra |
+| `upload.ts` | Cabeceras, avance, 422 → `ApiError` con errores de campo, 401 → `clearToken`, 426 → `updateRequired`, y abortar sin error |
+| Tema | `theme.spec.ts` sigue en verde con los componentes nuevos |
+
+**Verificación manual del frontend** (además de los pasos 1 a 4 de la API):
+- 360 px y modo oscuro en «Vender», «Productos» y la ficha;
+- lector de pantalla (TalkBack) en el catálogo;
+- en el emulador y en el teléfono real: cámara, galería, «Atrás» y modo avión con el formulario abierto;
+- **CE-002** con las herramientas del WebView (`chrome://inspect`).
 
 ## Estrategia de pruebas
 
