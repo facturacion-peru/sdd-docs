@@ -1,6 +1,6 @@
 # Tareas 015: Impresión Bluetooth en la app Android
 
-**Estado:** En curso: falta T031 (teléfono real), T033 (impresora) y T036 (merge) · **Aprobadas:** 2026-10-23 · **Fecha:** 2026-10-23 · **Plan:** [plan.md](./plan.md)
+**Estado:** En curso: falta T033 (impresora) y T036 (merge) · **Aprobadas:** 2026-10-23 · **Fecha:** 2026-10-23 · **Plan:** [plan.md](./plan.md)
 
 > Cada tarea es pequeña, deja el proyecto funcionando y tiene su verificación.
 > `[P]` = puede hacerse en paralelo con la anterior. 🔒 = requiere confirmación explícita del usuario. 🖨️ = necesita la impresora física (A-75): queda pendiente hasta tenerla.
@@ -73,7 +73,7 @@
 ## Cierre
 
 - [x] **T030** Emulador Android a 360 dp: permiso (conceder y negar), «Bluetooth no disponible», lista vacía con acceso a ajustes, diálogo de fallo y «Compartir PDF»; en la web no aparece «Impresora» y todo se imprime como antes — Verificación: capturas revisadas y anotadas en `verificacion.md` Hecho: ver [verificación](verificacion.md). Corrigió que con el Bluetooth apagado se ofreciera buscar equipos.
-- [ ] **T031** Teléfono real (Poco X3) con un equipo Bluetooth cualquiera emparejado: lista, elección, CE-004 (`connect_failed` en menos de 10 s, cronometrado) y la venta intacta; con el Bluetooth apagado, `bluetooth_off`. Lo hace el usuario o con depuración inalámbrica — Verificación: tiempos anotados en `verificacion.md`
+- [x] **T031** Teléfono real (Poco X3) con un equipo Bluetooth cualquiera emparejado: lista, elección, CE-004 (`connect_failed` en menos de 10 s, cronometrado) y la venta intacta; con el Bluetooth apagado, `bluetooth_off`. Lo hace el usuario o con depuración inalámbrica — Verificación: tiempos anotados en `verificacion.md` Hecho (2026-10-29, lo probó el usuario): aviso en unos 8 s y la venta intacta. Corrigió que el aviso de fallo pasara a la venta siguiente en «Venta registrada».
 - [x] **T032** Revisión a ojo del ticket, una boleta, una factura y una nota en 58 y 80 mm con `EscposText` (texto decodificado guardado en `verificacion.md`) — Verificación: revisado Hecho: ticket, boleta, factura y nota en [verificación](verificacion.md).
 - [ ] **T033** 🖨️ Con la impresora de referencia: hoja de prueba (tabla PC850 y QR nativo/imagen), CE-001 (menos de 5 s), CE-002 (QR leído con el celular igual al del PDF) y CE-003 (tildes y anchos en 58 y 80 mm) — Verificación: resultados anotados. Hasta entonces la spec queda «Implementada, falta verificar con impresora»
 - [x] **T034** Comprobaciones del principio VI en verde (API SQLite y PostgreSQL, Pint; frontend completo) — Verificación: códigos de salida 0 y cifras anotadas Hecho: API 825 (SQLite) y 838 (PostgreSQL), Pint; frontend 347 pruebas, tipos, lint y build.

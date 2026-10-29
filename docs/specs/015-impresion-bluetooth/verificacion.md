@@ -1,8 +1,8 @@
 # Verificación 015: Impresión Bluetooth en la app Android
 
-**Fecha:** 2026-10-23 · **Ramas:** `015-impresion-bluetooth` (API y frontend) · **Estado:** implementada, **falta verificar con impresora** (A-75)
+**Fecha:** 2026-10-23 · **Ramas:** `015-impresion-bluetooth` (API y frontend) · **Estado:** implementada, **falta verificar con impresora** (A-75). CE-004 verificado en el teléfono real
 
-Sin impresora física todavía. Se verificó todo lo que no la necesita: los bytes en pruebas automáticas, la app en el emulador y el texto impreso a ojo. Quedan pendientes CE-001 a CE-003, que solo se pueden comprobar en papel, y CE-004 en el teléfono real (T031).
+Sin impresora física todavía. Se verificó todo lo que no la necesita: los bytes en pruebas automáticas, la app en el emulador y el texto impreso a ojo. Quedan pendientes CE-001 a CE-003, que solo se pueden comprobar en papel. CE-004 se verificó en el teléfono real (T031).
 
 ## Pruebas automáticas
 
@@ -11,7 +11,7 @@ Sin impresora física todavía. Se verificó todo lo que no la necesita: los byt
 | API · SQLite | 825 pruebas (13 omitidas: solo PostgreSQL o `pcntl`) |
 | API · PostgreSQL | 838 pruebas |
 | API · Pint | Limpio |
-| Frontend | 347 pruebas, tipos, lint y build |
+| Frontend | 348 pruebas, tipos, lint y build |
 | APK para empresas | Compila firmado (0.2.0, `versionCode` 200) |
 
 Lo que cubren las nuevas:
@@ -53,13 +53,17 @@ Emulador Android 15 (`gama-baja`, 360 dp, Bluetooth virtual sin equipos), varian
 
 El emulador no puede probar `connect_failed`, `write_failed` ni una impresión real: no tiene equipos emparejados.
 
-## Teléfono real (T031) — pendiente
+## Teléfono real (T031)
 
-En el Poco X3 NFC, con cualquier equipo Bluetooth emparejado (audífonos o parlante) elegido como impresora:
+2026-10-29, Poco X3 NFC (Android 12, MIUI) con la variante de desarrollo 0.2.0 contra la API local. Lo probó el usuario. Como impresora se eligió un equipo Bluetooth cualquiera ya emparejado, apagado al imprimir.
 
-- **CE-004:** «Imprimir» debe mostrar `connect_failed` en menos de 10 s. El plugin corta la conexión a los 8 s.
-- **Venta intacta:** la venta debe quedar igual tras el fallo.
-- **Bluetooth apagado:** debe aparecer `bluetooth_off`.
+| Comprobación | Resultado |
+|---|---|
+| Elegir el equipo en «Impresora», con el permiso «Dispositivos cercanos» | Correcto |
+| **CE-004:** «Imprimir» con el equipo apagado | El aviso «No se imprimió» salió en **unos 8 s** (el plugin corta a los 8 s), menos que los 10 s pedidos |
+| La venta tras el fallo | Quedó registrada sin cambios |
+
+**Hallazgo corregido:** después de un fallo, el aviso seguía en «Venta registrada» en la venta siguiente. El diálogo no se desmonta entre ventas en «Vender». Ahora el aviso se limpia al cambiar de venta, y una prueba lo cubre (`print-bluetooth.spec.ts`; frontend: 348 pruebas).
 
 ## Texto impreso (T032)
 
