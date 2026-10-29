@@ -1078,7 +1078,7 @@ Una foto de 12 MP pesa entre 4 y 8 MB. Con datos móviles, subirla en menos de 1
 
 **Recomendación:** B. Hace realista CE-001 y gasta menos datos. En contra: suma código en la app, y la orientación hay que probarla, porque algunos navegadores ya la aplican solos.
 
-> **Decisión (2026-10-29):** B. La app reduce la foto a unos 1 600 px en JPEG y la sube **por la API**, que valida el contenido real, la procesa (A-81) y la guarda en S3. Se descartó subir directo a S3 con una dirección prefirmada:
+> **Decisión (2026-10-29):** B. La app (web y Android) reduce la foto a unos 1 600 px en JPEG y la sube **por la API**, que valida el contenido real, la procesa (A-81) y la guarda en S3. Se descartó subir directo a S3 con una dirección prefirmada:
 > - casi no se ahorra nada con unos 500 KB;
 > - S3 no revisa el contenido en una carpeta pública;
 > - A-81 debe seguir en el servidor;

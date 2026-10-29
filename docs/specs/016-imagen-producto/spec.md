@@ -1,6 +1,6 @@
 # Spec 016: Imagen del producto y logo en S3
 
-**Estado:** Borrador · **Versión:** 0.2 · **Fecha:** 2026-10-29
+**Estado:** Borrador · **Versión:** 0.3 · **Fecha:** 2026-10-29
 **Depende de:** 001, 002, 005, 009, 012, 013 · **Aclaraciones:** A-79 a A-85 (resueltas)
 
 > Qué y por qué. Sin frameworks, tablas, endpoints ni componentes: eso va en `plan.md`.
@@ -23,7 +23,7 @@ Como administrador de empresa, quiero subir una foto al crear o editar un produc
 1. **Dado** un producto sin foto, **cuando** subo una imagen válida (A-80), **entonces** el producto la muestra en su ficha y en la lista.
 2. **Dado** un producto con foto, **cuando** subo otra, **entonces** se ve la nueva y la anterior deja de guardarse (A-82).
 3. **Dado** un producto con foto, **cuando** pulso «Quitar foto» y confirmo, **entonces** el producto queda sin foto y la imagen deja de guardarse.
-4. **Dado** un archivo que no es una imagen admitida o es demasiado grande, **cuando** lo subo, **entonces** veo un mensaje claro con el formato y el tamaño permitidos, y el producto no cambia.
+4. **Dado** un archivo que no es una imagen admitida, o que no se puede reducir o sigue siendo demasiado grande después de reducirlo (A-85), **cuando** lo subo, **entonces** veo un mensaje claro con el formato y el tamaño permitidos, y el producto no cambia.
 5. **Dado** que soy vendedor, **cuando** veo un producto, **entonces** veo su foto pero no puedo cambiarla ni quitarla (spec 002, RF-020).
 6. **Dado** que elegí una imagen, **cuando** aún no guardé, **entonces** veo una vista previa y puedo descartarla sin que el producto cambie.
 7. **Dado** que creo un producto con foto, **cuando** el producto se guarda pero la foto falla, **entonces** el producto queda creado, veo «La foto no se pudo subir» y puedo reintentar desde su ficha.
@@ -72,6 +72,7 @@ Como administrador de empresa, quiero que mi logo se guarde en el mismo almacena
 2. **Dado** una empresa que ya tenía logo antes de esta spec, **cuando** se instala la nueva versión, **entonces** su logo pasa a S3 y se sigue viendo, sin que la empresa haga nada.
 3. **Dado** que genero varios PDF seguidos, **cuando** llevan logo, **entonces** no tardan más que hoy de forma notoria.
 4. **Dado** que el almacenamiento no responde, **cuando** genero un PDF, **entonces** el PDF sale igual, sin logo, y no se pierde la descarga.
+5. **Dado** un logo con fondo transparente, **cuando** se guarda, **entonces** se sigue viendo transparente en «Mi empresa» y en los PDF. El logo no pasa por la reducción de las fotos: solo se valida.
 
 ## Casos límite
 
@@ -86,7 +87,7 @@ Como administrador de empresa, quiero que mi logo se guarde en el mismo almacena
 - **Sin conexión en la app:** se guardan los datos del producto y se avisa que la foto necesita conexión.
 - **Pantallas angostas y modo oscuro:** a 360 px, la miniatura y el marcador no desbordan la tarjeta del catálogo y se ven bien en los dos temas.
 - **Lector de pantalla:** la foto se anuncia con el nombre del producto, y el marcador no se lee.
-- **Foto pesada en el celular** (4 a 8 MB): la app la reduce antes de subirla (A-85); el servidor la valida y la procesa igual.
+- **Foto pesada** (4 a 8 MB, del celular o de la computadora): la app, en la web y en Android, la reduce antes de subirla (A-85); el servidor la valida y la procesa igual.
 - **Copias de seguridad en el mismo bucket:** las copias de la spec 009 van en otra carpeta del mismo bucket. La app no puede leerlas ni borrarlas, y lo público son solo las imágenes (A-79).
 
 ## Requisitos funcionales
@@ -102,7 +103,7 @@ Como administrador de empresa, quiero que mi logo se guarde en el mismo almacena
 - **RF-009:** Poner, cambiar o quitar la foto DEBE quedar en la auditoría de la empresa (principio VIII).
 - **RF-010:** Si el almacenamiento falla, vender y gestionar productos DEBE seguir funcionando; solo la foto queda pendiente o sin mostrarse.
 - **RF-011:** En la app Android, la cámara y la galería DEBEN pasar por el módulo del dispositivo (principio VII).
-- **RF-012:** La app DEBE comprobar el formato y el tamaño antes de subir, con el mismo límite de A-80. La API sigue siendo la que decide.
+- **RF-012:** La app (web y Android) DEBE comprobar el formato antes de subir y reducir la foto (A-85). El límite de 5 MB de A-80 se aplica al archivo que llega a la API. La app acepta originales más grandes que pueda reducir, hasta unos 20 MB, y rechaza enseguida los que no pueda leer. La API sigue siendo la que decide.
 - **RF-013:** Las listas DEBEN cargar las fotos solo cuando se acercan a la pantalla y reservar su espacio, para que nada se mueva.
 - **RF-014:** El logo de la empresa DEBE guardarse en S3 como las fotos, y los logos existentes DEBEN pasarse a S3 al instalar la versión. Los PDF DEBEN seguir mostrándolo sin volverse notoriamente más lentos, y salir sin logo si el almacenamiento no responde.
 - **RF-015:** La subida DEBE pasar por la API, que valida el contenido real del archivo y lo procesa (A-81, A-85). Nadie sube directo al almacenamiento.
@@ -115,7 +116,7 @@ Como administrador de empresa, quiero que mi logo se guarde en el mismo almacena
 
 ## Criterios de éxito
 
-- **CE-001:** Subir una foto de 5 MB desde el celular con datos móviles tarda **menos de 10 segundos** hasta verla en la ficha.
+- **CE-001:** Subir una foto de 5 MB o más, tomada con el celular, con datos móviles, tarda **menos de 10 segundos** hasta verla en la ficha.
 - **CE-002:** En «Vender» con 25 productos con foto, el celular descarga **menos de 1 MB** de imágenes para la primera página.
 - **CE-003:** Una prueba automática confirma que ninguna empresa puede descubrir ni listar las fotos de otra: las respuestas de una empresa nunca traen direcciones de otra, y las direcciones no llevan RUC, ids ni nombres. En la verificación manual, listar el bucket sin credenciales falla.
 - **CE-004:** Una foto vertical del celular se ve derecha y sin datos de ubicación.
@@ -143,3 +144,4 @@ Como administrador de empresa, quiero que mi logo se guarde en el mismo almacena
 | 2026-10-29 | A-84 | Pruebas automáticas con almacenamiento simulado; el bucket de pruebas del usuario solo para la verificación manual |
 | 2026-10-29 | A-85 | La app reduce la foto a unos 1 600 px en JPEG y la sube por la API (RF-015) |
 | 2026-10-29 | v0.2 | Decisiones transmitidas por la sesión del frontend como del usuario; falta que el usuario apruebe la spec |
+| 2026-10-29 | v0.3 | Revisión del frontend: RF-012 (se reducen originales de hasta unos 20 MB y el límite de 5 MB es para lo que llega a la API), reducción también en la web, logo transparente sin reducir (HU-4 esc. 5) y CE-001 |
