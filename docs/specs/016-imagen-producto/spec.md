@@ -1,6 +1,6 @@
 # Spec 016: Imagen del producto y logo en S3
 
-**Estado:** Borrador · **Versión:** 0.4 · **Fecha:** 2026-10-29
+**Estado:** Aprobada (2026-10-29) · **Versión:** 1.0 · **Fecha:** 2026-10-29
 **Depende de:** 001, 002, 005, 009, 012, 013 · **Aclaraciones:** A-79 a A-85 (resueltas)
 
 > Qué y por qué. Sin frameworks, tablas, endpoints ni componentes: eso va en `plan.md`.
@@ -147,3 +147,4 @@ Como administrador de empresa, quiero que mi logo se guarde en el mismo almacena
 | 2026-10-29 | v0.2 | Decisiones transmitidas por la sesión del frontend como del usuario; falta que el usuario apruebe la spec |
 | 2026-10-29 | v0.3 | Revisión del frontend: RF-012 (se reducen originales de hasta unos 20 MB y el límite de 5 MB es para lo que llega a la API), reducción también en la web, logo transparente sin reducir (HU-4 esc. 5) y CE-001 |
 | 2026-10-29 | v0.4 | A-80 corregida por el usuario: original hasta 10 MB en la app, hasta 2 MB en la API (ya reducida) y el logo hasta 1 MB, como hoy. CE-001 con una foto normal del celular |
+| 2026-10-29 | Aprobada (v1.0) | El usuario aprueba la v0.4 sin cambios |
