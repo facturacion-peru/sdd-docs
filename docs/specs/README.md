@@ -21,7 +21,7 @@ Una carpeta por capacidad, numerada. Cada una avanza por el ciclo SDD de la [con
 | 013 | [Aplicación Android](013-app-android/spec.md) | **Integrada en `main`** (sin impresora física probada) · [plan](013-app-android/plan.md) · [tareas](013-app-android/tasks.md) · [verificación](013-app-android/verificacion.md) | 001–007, 010–012 (009 para el piloto) | — |
 | 014 | [Exportar e importar datos](014-exportar-importar/spec.md) | **Integrada en `main`** · [plan](014-exportar-importar/plan.md) · [tareas](014-exportar-importar/tasks.md) · [verificación](014-exportar-importar/verificacion.md) · [evaluación](../investigacion/002-exportar-importar-datos.md) | 001–003, 005, 007 | — |
 | 015 | [Impresión Bluetooth en la app Android](015-impresion-bluetooth/spec.md) | **Integrada, falta verificar con impresora** (v1.0, en `main`) · [plan](015-impresion-bluetooth/plan.md) · [tareas](015-impresion-bluetooth/tasks.md) · [verificación](015-impresion-bluetooth/verificacion.md) · [evaluación](../investigacion/003-impresion-bluetooth.md) | 003, 005, 007, 013 | Impresora de referencia (A-75) |
-| 016 | [Imagen del producto y logo en S3](016-imagen-producto/spec.md) | **Aprobada** (v1.0) · [plan](016-imagen-producto/plan.md) (en aprobación) | 001, 002, 005, 009, 012, 013 | — |
+| 016 | [Imagen del producto y logo en S3](016-imagen-producto/spec.md) | **Aprobada** (v1.0) · [plan](016-imagen-producto/plan.md) · [tareas](016-imagen-producto/tasks.md) (en aprobación) | 001, 002, 005, 009, 012, 013 | — |
 
 Orden de trabajo: **001 → 002 → 003 → 004 → 005**. 003 y 004 son independientes entre sí; 004 puede adelantarse si se prioriza SUNAT.
 

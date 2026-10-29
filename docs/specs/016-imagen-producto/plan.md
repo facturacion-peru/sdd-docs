@@ -1,6 +1,6 @@
 # Plan 016: Imagen del producto y logo en S3
 
-**Estado:** Borrador para aprobación · **Fecha:** 2026-10-29 · **Spec:** [spec.md](./spec.md) (versión aprobada: 1.0)
+**Estado:** Aprobado (2026-10-29) · **Fecha:** 2026-10-29 · **Spec:** [spec.md](./spec.md) (versión aprobada: 1.0)
 
 > Reparto: la **API**, la configuración y la operación los escribe la sesión de backend (este documento). La sección **Frontend** la completa la sesión del frontend antes de la aprobación.
 
