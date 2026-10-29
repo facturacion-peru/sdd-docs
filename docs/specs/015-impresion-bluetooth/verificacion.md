@@ -1,6 +1,6 @@
 # Verificación 015: Impresión Bluetooth en la app Android
 
-**Fecha:** 2026-10-23 · **Ramas:** `015-impresion-bluetooth` (API y frontend) · **Estado:** implementada, **falta verificar con impresora** (A-75). CE-004 verificado en el teléfono real
+**Fecha:** 2026-10-23 · **Ramas:** `015-impresion-bluetooth` (API y frontend), integradas en `main` el 2026-10-29 · **Estado:** implementada, **falta verificar con impresora** (A-75). CE-004 verificado en el teléfono real
 
 Sin impresora física todavía. Se verificó todo lo que no la necesita: los bytes en pruebas automáticas, la app en el emulador y el texto impreso a ojo. Quedan pendientes CE-001 a CE-003, que solo se pueden comprobar en papel. CE-004 se verificó en el teléfono real (T031).
 

@@ -1,6 +1,6 @@
 # Tareas 015: Impresión Bluetooth en la app Android
 
-**Estado:** En curso: falta T033 (impresora) y T036 (merge) · **Aprobadas:** 2026-10-23 · **Fecha:** 2026-10-23 · **Plan:** [plan.md](./plan.md)
+**Estado:** Integrada; falta T033 (impresora) · **Aprobadas:** 2026-10-23 · **Fecha:** 2026-10-23 · **Plan:** [plan.md](./plan.md)
 
 > Cada tarea es pequeña, deja el proyecto funcionando y tiene su verificación.
 > `[P]` = puede hacerse en paralelo con la anterior. 🔒 = requiere confirmación explícita del usuario. 🖨️ = necesita la impresora física (A-75): queda pendiente hasta tenerla.
@@ -84,4 +84,4 @@
   - estado en `docs/specs/README.md`.
 
   Verificación: revisada
-- [ ] **T036** 🔒 Merge local de `015-impresion-bluetooth` a `main` en ambos repositorios y commit de la raíz — Verificación: suites en verde sobre `main`
+- [x] **T036** 🔒 Merge local de `015-impresion-bluetooth` a `main` en ambos repositorios y commit de la raíz — Verificación: suites en verde sobre `main` Hecho (2026-10-29): merge `--no-ff` en los dos repositorios; sobre `main`, API 825 (SQLite) y 838 (PostgreSQL), Pint, y frontend 348 pruebas, tipos, lint y build. Subido a GitHub.

@@ -119,9 +119,10 @@ Entradas breves y fechadas de decisiones o cambios relevantes (la más reciente 
 - **2026-10-23** — Spec 015 (impresión Bluetooth en la app Android, A-75 a A-78) implementada en la rama `015-impresion-bluetooth` de API y frontend.
   - **API:** `GET tickets/{id}/print`, `sales-documents/{id}/print` y `printing/test-page`. Devuelven bytes ESC/POS de 58 u 80 mm con el contenido del PDF de 80 mm (QR nativo o como imagen) y no escriben nada. Sin dependencias nuevas.
   - **App:** plugin propio en Java (SPP, solo `BLUETOOTH_CONNECT`, tiempo límite de 8 s), `device().printer` y la pantalla «Impresora» (`/impresora`, solo nativa). La elección es del teléfono (`sunat.printer`), con «Imprimir al cobrar» opcional y apagado. Los «Imprimir» de siempre van directo a la impresora y, si falla, ofrecen «Reintentar» y «Compartir PDF». Versión 0.2.0.
-  - **Pruebas:** 825 de API en SQLite y 838 en PostgreSQL, y 347 de frontend. El emulador cubrió el permiso, el Bluetooth apagado y `not_paired` ([verificación](docs/specs/015-impresion-bluetooth/verificacion.md)).
+  - **Pruebas:** 825 de API en SQLite y 838 en PostgreSQL, y 348 de frontend. El emulador cubrió el permiso, el Bluetooth apagado y `not_paired` ([verificación](docs/specs/015-impresion-bluetooth/verificacion.md)).
   - **Teléfono real** (2026-10-29, Poco X3, probado por el usuario): CE-004 en unos 8 s y la venta intacta. Corrigió que el aviso de fallo pasara a la venta siguiente.
-  - **Pendiente:** la impresora de referencia (A-75; CE-001 a CE-003) y el merge.
+  - **Integrada en `main`** de API y frontend y subida a GitHub (2026-10-29). Suites en verde sobre `main`: 825 de API en SQLite (838 en PostgreSQL) y 348 de frontend.
+  - **Pendiente:** la impresora de referencia (A-75; CE-001 a CE-003).
 
 - **2026-10-07** — Spec 014 (exportar e importar datos, A-68 a A-74) implementada en la rama `014-exportar-importar` de API y frontend.
   - **Exportar** (administrador): productos con stock y lotes, clientes y ventas (documentos y líneas, notas en negativo, `suma_como_venta` de A-54) en XLSX o CSV (ZIP si hay varias hojas).
