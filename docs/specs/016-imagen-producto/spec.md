@@ -1,6 +1,6 @@
 # Spec 016: Imagen del producto y logo en S3
 
-**Estado:** Aprobada (2026-10-29) · **Versión:** 1.0 · **Fecha:** 2026-10-29
+**Estado:** Lista (2026-10-29) · **Versión:** 1.0 · **Fecha:** 2026-10-29
 **Depende de:** 001, 002, 005, 009, 012, 013 · **Aclaraciones:** A-79 a A-85 (resueltas)
 
 > Qué y por qué. Sin frameworks, tablas, endpoints ni componentes: eso va en `plan.md`.

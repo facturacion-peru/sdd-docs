@@ -1,6 +1,6 @@
 # Tareas 016: Imagen del producto y logo en S3
 
-**Estado:** Borrador para aprobación · **Fecha:** 2026-10-29 · **Plan:** [plan.md](./plan.md)
+**Estado:** Aprobadas (2026-10-29) · **Fecha:** 2026-10-29 · **Plan:** [plan.md](./plan.md)
 
 > Cada tarea es pequeña, deja el proyecto funcionando y tiene su verificación.
 > `[P]` = puede hacerse en paralelo con la anterior. 🔒 = requiere confirmación explícita del usuario. ☁️ = necesita la configuración de AWS del usuario.
