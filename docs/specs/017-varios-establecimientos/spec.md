@@ -1,6 +1,6 @@
 # Spec 017: Varios establecimientos
 
-**Estado:** Aprobada (2026-10-29) · **Versión:** 1.1 · **Fecha:** 2026-10-29
+**Estado:** Lista (2026-10-29) · **Versión:** 1.1 · **Fecha:** 2026-10-29
 **Depende de:** 001, 002, 003, 004, 005, 007, 011, 012, 014 · **Aclaraciones:** A-86 a A-91 (resueltas)
 
 > Qué y por qué. Sin frameworks, tablas, endpoints ni componentes: eso va en `plan.md`.

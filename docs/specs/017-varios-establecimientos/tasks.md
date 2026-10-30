@@ -1,6 +1,6 @@
 # Tareas 017: Varios establecimientos
 
-**Estado:** Borrador · **Fecha:** 2026-10-29 · **Plan:** [plan.md](./plan.md)
+**Estado:** Aprobadas (2026-10-29) · **Fecha:** 2026-10-29 · **Plan:** [plan.md](./plan.md)
 
 > Cada tarea es pequeña, deja el proyecto funcionando y tiene su verificación.
 > `[P]` = puede hacerse en paralelo con la anterior. 🔒 = requiere confirmación explícita del usuario.
