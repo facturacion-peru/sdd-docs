@@ -21,8 +21,8 @@
 
 ## Fase 2 · API: proceso de imágenes
 
-- [ ] **T004** `tests/Support/TestImages`: genera JPEG (con EXIF de orientación y GPS armados a mano), PNG con alfa, WebP, GIF y archivos falsos, con sus pruebas — Verificación: en verde
-- [ ] **T005** Pruebas de `ImageProcessor` (deben fallar):
+- [x] **T004** `tests/Support/TestImages`: genera JPEG (con EXIF de orientación y GPS armados a mano), PNG con alfa, WebP, GIF y archivos falsos, con sus pruebas — Verificación: en verde
+- [x] **T005** Pruebas de `ImageProcessor` (deben fallar):
   - orientación 6 y 8 → la salida queda derecha;
   - la salida no trae `Exif` ni GPS;
   - alfa conservado;
@@ -31,13 +31,13 @@
   - contenido falso → excepción.
 
   Verificación: en rojo
-- [ ] **T006** `App\Images\ImageProcessor` — Verificación: T005 en verde
-- [ ] **T007** [P] Pruebas y `App\Images\LogoProcessor`: PNG con transparencia → PNG con alfa, reducción a 800 px de ancho y sin metadatos — Verificación: en verde
+- [x] **T006** `App\Images\ImageProcessor` — Verificación: T005 en verde
+- [x] **T007** [P] Pruebas y `App\Images\LogoProcessor`: PNG con transparencia → PNG con alfa, reducción a 800 px de ancho y sin metadatos — Verificación: en verde
 
 ## Fase 3 · API: fotos de producto (HU-1, HU-2)
 
-- [ ] **T008** Migraciones `products.image_key` e `image_deletions`, y modelo `ImageDeletion` — Verificación: migran en SQLite y PostgreSQL
-- [ ] **T009** Pruebas de las rutas y entradas en `TenantRoutes.php` (deben fallar):
+- [x] **T008** Migraciones `products.image_key` e `image_deletions`, y modelo `ImageDeletion` — Verificación: migran en SQLite y PostgreSQL
+- [x] **T009** Pruebas de las rutas y entradas en `TenantRoutes.php` (deben fallar):
   - subir, cambiar y quitar, con los objetos en el disco simulado;
   - `DELETE` sin foto da 200;
   - 422 por formato, tamaño, dimensiones o contenido;
@@ -46,23 +46,23 @@
   - forma de `image` en `GET`, y direcciones con UUID, sin RUC, id ni nombre.
 
   Verificación: en rojo
-- [ ] **T010** `ProductImageRequest`, `App\Images\ImageStore`, `ProductImageService` (bloqueo, borrado posterior e `image_deletions`), las dos rutas en `ProductController` e `image` en `ProductResource` — Verificación: T009 en verde
-- [ ] **T011** Pruebas de RF-010 con un disco que lanza excepciones (deben fallar): `POST` da 503 y el producto no cambia; `GET` sigue respondiendo; un borrado fallido va a `image_deletions`. Luego el manejo — Verificación: en verde
-- [ ] **T012** [P] Pruebas y comando `images:cleanup` (reintentos, se rinde a los 10 y deja aviso), programado a las 02:45 en `routes/console.php` — Verificación: en verde
-- [ ] **T013** Prueba de subidas simultáneas al mismo producto en `tests/Integration` (PostgreSQL): queda una imagen y ningún objeto huérfano — Verificación: en verde en PostgreSQL
-- [ ] **T014** CE-003: producto de la empresa B con foto en `CrossTenantAccessTest`, con su clave entre los `bMarkers`; forma de `image` en `tests/Feature/Contract` — Verificación: en verde
+- [x] **T010** `ProductImageRequest`, `App\Images\ImageStore`, `ProductImageService` (bloqueo, borrado posterior e `image_deletions`), las dos rutas en `ProductController` e `image` en `ProductResource` — Verificación: T009 en verde
+- [x] **T011** Pruebas de RF-010 con un disco que lanza excepciones (deben fallar): `POST` da 503 y el producto no cambia; `GET` sigue respondiendo; un borrado fallido va a `image_deletions`. Luego el manejo — Verificación: en verde
+- [x] **T012** [P] Pruebas y comando `images:cleanup` (reintentos, se rinde a los 10 y deja aviso), programado a las 02:45 en `routes/console.php` — Verificación: en verde
+- [x] **T013** Prueba de subidas simultáneas al mismo producto en `tests/Integration` (PostgreSQL): queda una imagen y ningún objeto huérfano — Verificación: en verde en PostgreSQL
+- [x] **T014** CE-003: producto de la empresa B con foto en `CrossTenantAccessTest`, con su clave entre los `bMarkers`; forma de `image` en `tests/Feature/Contract` — Verificación: en verde
 
 ## Fase 4 · API: logo en S3 (HU-4)
 
-- [ ] **T015** Pruebas del logo (deben fallar):
+- [x] **T015** Pruebas del logo (deben fallar):
   - la subida guarda PNG con alfa en el disco de imágenes y borra el anterior;
   - `logo_url` usa el disco de imágenes, o `public` si es una ruta antigua;
   - el PDF lleva el logo, lo conserva tras borrarlo del disco (caché) y sale sin logo con 200 si el disco falla.
 
   Verificación: en rojo
-- [ ] **T016** `CompanyLogo` (`url` y `dataUri` con caché), `CompanyService::updateLogo` con `LogoProcessor` e `ImageStore`, validación de 4000×4000 en `UpdateCompanyLogoRequest`, y `DocumentPdf` con `CompanyLogo` — Verificación: T015 en verde, y `PrintParityTest` y las pruebas de PDF en verde
-- [ ] **T017** Pruebas y comando `images:move-logos` (idempotente, sigue si uno falla), y su llamada en `deploy/release.sh` después de `migrate` — Verificación: en verde y `shellcheck deploy/release.sh`
-- [ ] **T018** `php artisan openapi:generate`, suites SQLite y PostgreSQL y Pint — Verificación: códigos de salida 0 y cifras anotadas
+- [x] **T016** `CompanyLogo` (`url` y `dataUri` con caché), `CompanyService::updateLogo` con `LogoProcessor` e `ImageStore`, validación de 4000×4000 en `UpdateCompanyLogoRequest`, y `DocumentPdf` con `CompanyLogo` — Verificación: T015 en verde, y `PrintParityTest` y las pruebas de PDF en verde
+- [x] **T017** Pruebas y comando `images:move-logos` (idempotente, sigue si uno falla), y su llamada en `deploy/release.sh` después de `migrate` — Verificación: en verde y `shellcheck deploy/release.sh`
+- [x] **T018** `php artisan openapi:generate`, suites SQLite y PostgreSQL y Pint — Verificación: códigos de salida 0 y cifras anotadas (2026-10-29: 903 pruebas en SQLite con 14 omitidas y 917 en PostgreSQL; Pint en verde)
 
 ## Fase 5 · Frontend
 
