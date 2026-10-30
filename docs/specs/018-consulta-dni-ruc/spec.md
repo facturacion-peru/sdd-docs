@@ -1,6 +1,6 @@
 # Spec 018: Consulta de DNI y RUC
 
-**Estado:** Aprobada (2026-10-30) · **Versión:** 1.0 · **Fecha:** 2026-10-30
+**Estado:** Lista (2026-10-30) · **Versión:** 1.0 · **Fecha:** 2026-10-30
 **Depende de:** 001, 005, 012, 014, 017 · **Aclaraciones:** A-92 a A-96 (resueltas)
 
 > Qué y por qué. Sin frameworks, tablas, endpoints ni componentes: eso va en `plan.md`.

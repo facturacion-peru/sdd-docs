@@ -1,6 +1,6 @@
 # Tareas 018: Consulta de DNI y RUC
 
-**Estado:** Borrador · **Fecha:** 2026-10-30 · **Plan:** [plan.md](./plan.md)
+**Estado:** Aprobadas (2026-10-30) · **Fecha:** 2026-10-30 · **Plan:** [plan.md](./plan.md)
 
 > Cada tarea es pequeña, deja el proyecto funcionando y tiene su verificación.
 > `[P]` = puede hacerse en paralelo con la anterior. 🔒 = requiere confirmación explícita del usuario. 🔑 = necesita `APISPERU_TOKEN` en el `.env` del usuario.
