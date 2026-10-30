@@ -47,7 +47,58 @@
 
 ## Fase 5 · Frontend
 
-_Pendiente: las redacta la sesión del frontend, según la sección «Frontend» del plan._
+> Las lleva la sesión del frontend, según la sección «Frontend» del plan.
+> - **Dependencias de la API** (por el `pnpm api:types` de las rutas nuevas):
+>   - F004 y F006 necesitan T007;
+>   - F007 necesita T008;
+>   - F008 necesita T010;
+>   - F009 necesita T011;
+>   - F011 necesita el `openapi.json` final de T012.
+> - **En paralelo con la API:** F001–F003 y F005 no dependen de ella. Las respuestas se tipan a mano y las pruebas simulan la API, así que pueden empezar enseguida.
+> - **Verificación completa:** `pnpm type-check && pnpm lint && pnpm test:unit --run && pnpm build-only`.
+
+- [ ] **F001** Rama `018-consulta-dni-ruc` desde `main` en el frontend — Verificación: `git branch --show-current`
+- [ ] **F002** [P] Pruebas y `shared/utils/documents.ts`:
+  - `isDni` (8 dígitos);
+  - `isRuc` (11 dígitos y dígito verificador, con los mismos casos que `App\Rules\Ruc`);
+  - `documentKind(text)`: `dni`, `ruc` o `null` para texto o números de otra largura.
+
+  Verificación: en verde
+- [ ] **F003** [P] Tipos a mano: `Customer` con `verified`, `verified_at`, `ruc_status` y `ruc_condition`, y `LookupResult` en `features/sales/types.ts`. Luego `CustomerVerifiedBadge.vue` y `RucStatusAlert.vue`, con sus pruebas:
+  - «Verificado» con la fecha y «Manual»;
+  - aviso con BAJA o NO HABIDO, sin aviso con ACTIVO y HABIDO ni si no es RUC.
+
+  Verificación: en verde y `theme.spec.ts` en verde
+- [ ] **F004** (después de T007) `pnpm api:types`. `customersApi.lookup(type, number, signal)` y sus pruebas (cuerpo, `AbortSignal`, `data` nulo con `reason`, 422 de formato) — Verificación: `pnpm type-check` y pruebas en verde
+- [ ] **F005** [P] Pruebas y `useDocumentLookup` (con `lookup` simulado):
+  - consulta al completar 8 u 11 dígitos tras 300 ms;
+  - aborta la anterior al seguir escribiendo; una respuesta vieja no pisa a la nueva;
+  - formato inválido → `invalid` sin pedir nada; con `requireRuc`, un DNI da «Para factura se necesita un RUC.»;
+  - sin conexión → `offline`, sin pedir nada.
+
+  Verificación: en verde
+- [ ] **F006** (después de T007) Pruebas y cambios en `CustomerPicker` (HU-1):
+  - un documento encontrado queda elegido solo, con la insignia y el estado del RUC;
+  - cada `reason` muestra su motivo y «Registrar a mano» abre el diálogo con el tipo y el número;
+  - un manual que no se pudo verificar queda elegido, con el motivo debajo;
+  - «Buscando…» y el resultado con `aria-live`;
+  - la venta en curso no cambia si la búsqueda falla;
+  - el texto sigue buscando por nombre.
+
+  Verificación: en verde
+- [ ] **F007** (después de T008) Pruebas y cambios en `CustomersView` (HU-2): insignia y aviso de RUC en cada fila; en un verificado, «Nombre» y «Dirección» deshabilitados con su ayuda; un 422 llega a su campo; un manual se edita como siempre — Verificación: en verde
+- [ ] **F008** (después de T010) `customersApi.refresh(id)` y «Actualizar datos» en `CustomerPicker` y `CustomersView` (HU-3), con pruebas: si funciona, reemplaza el cliente (también el de la venta en curso) y avisa «Datos actualizados.»; un 503 muestra el `message` y no cambia nada — Verificación: en verde
+- [ ] **F009** [P] (después de T011) Pruebas y `LookupUsageView` en `/plataforma/consultas`, con su entrada en el menú del panel: tabla de 14 días con desplazamiento a 360 px y el total de hoy; ruta solo de plataforma (`router.spec.ts`) — Verificación: en verde
+- [ ] **F010** README del frontend: `useDocumentLookup`, `shared/utils/documents`, insignia y aviso del RUC, y la vista de uso de la plataforma — Verificación: revisado
+- [ ] **F011** (después de T012) `pnpm api:types` con el `openapi.json` final. `version` 0.5.0 en `package.json` — Verificación: verificación completa del frontend con código de salida 0 y cifras anotadas, y el APK *debug* compila (JDK 21)
+- [ ] **F012** Verificación manual del frontend (plan):
+  - **CE-001 en el teléfono real con datos móviles:** menos de 3 s desde el último dígito de un RUC nuevo, medido con las herramientas del WebView;
+  - CE-003: el servicio caído o sin token, y una boleta con un cliente registrado a mano;
+  - 360 px y modo oscuro en el selector, la tarjeta con el aviso, «Clientes» y la tabla de la plataforma;
+  - TalkBack anuncia «Buscando…» y el resultado;
+  - modo avión con «Vender» abierto.
+
+  Verificación: resultados en `verificacion.md`
 
 ## Cierre
 
