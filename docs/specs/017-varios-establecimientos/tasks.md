@@ -78,16 +78,16 @@
 
   Verificación: en rojo
 - [x] **T018** `SalesDocumentService`, `CreditNoteService` (`noteSeries` por local) y `SeriesController`/`SeriesService` (`establishment_id` al crear, fijo con comprobantes, `establishment_id` en `SeriesResource`) — Verificación: T017 en verde
-- [ ] **T019** Ticket y comprobante impresos: nombre y dirección del local en `pdf/ticket.blade.php` y `TicketPrint`, y nombre del local (si no es el principal) en `pdf/sales-document.blade.php` y `DocumentPrint` — Verificación: `PrintParityTest` y las pruebas de PDF en verde
-- [ ] **T020** Importación de productos con el local cerrado: el stock inicial va al `establishment_id` de la vista previa (por defecto el principal) — Verificación: pruebas de importación en verde
+- [x] **T019** Ticket y comprobante impresos: nombre y dirección del local en `pdf/ticket.blade.php` y `TicketPrint`, y nombre del local (si no es el principal) en `pdf/sales-document.blade.php` y `DocumentPrint` — Verificación: `PrintParityTest` y las pruebas de PDF en verde
+- [x] **T020** Importación de productos con el local cerrado: el stock inicial va al `establishment_id` de la vista previa (por defecto el principal) — Verificación: pruebas de importación en verde
 
 ## Fase 5 · API: cifras y aislamiento (HU-4, CE-002)
 
-- [ ] **T021** Pruebas y filtros por local (`establishment_id` o los permitidos) en `GET /dashboard`, `GET /tickets` y `GET /sales-documents`; 404 en el detalle de un ticket o comprobante de un local no permitido (también PDF, XML, CDR e impresión) — Verificación: en verde
-- [ ] **T022** [P] Exportaciones con la columna `local` y el filtro; la hoja de productos suma los locales pedidos y la de lotes trae una fila por lote y local — Verificación: pruebas de exportación en verde
-- [ ] **T023** `CrossEstablishmentAccessTest`, generado desde el router como `CrossTenantAccessTest`: un vendedor del local A no ve en ninguna respuesta marcadores de tickets, comprobantes, lotes ni movimientos del local B, y el detalle de B da 404. Mutación: sin `scopeVisibleTo` en tickets, falla — Verificación: en verde y en rojo con la mutación
-- [ ] **T024** [P] `establishments_count` en `PlatformCompanyDetailResource`; `PlatformPrivacyTest` en verde — Verificación: en verde
-- [ ] **T025** Contrato en `tests/Feature/Contract` (`EstablishmentResource`, `establishment` en filas y detalle, sesión, `stock_by_establishment`, `SeriesResource`), `php artisan openapi:generate`, suites SQLite y PostgreSQL y Pint — Verificación: códigos de salida 0 y cifras anotadas
+- [x] **T021** Pruebas y filtros por local (`establishment_id` o los permitidos) en `GET /dashboard`, `GET /tickets` y `GET /sales-documents`; 404 en el detalle de un ticket o comprobante de un local no permitido (también PDF, XML, CDR e impresión) — Verificación: en verde
+- [x] **T022** [P] Exportaciones con la columna `local` y el filtro; la hoja de productos suma los locales pedidos y la de lotes trae una fila por lote y local — Verificación: pruebas de exportación en verde
+- [x] **T023** `CrossEstablishmentAccessTest`, generado desde el router como `CrossTenantAccessTest`: un vendedor del local A no ve en ninguna respuesta marcadores de tickets, comprobantes, lotes ni movimientos del local B, y el detalle de B da 404. Mutación: sin `scopeVisibleTo` en tickets, falla — Verificación: en verde y en rojo con la mutación
+- [x] **T024** [P] `establishments_count` en `PlatformCompanyDetailResource`; `PlatformPrivacyTest` en verde — Verificación: en verde
+- [x] **T025** Contrato en `tests/Feature/Contract` (`EstablishmentResource`, `establishment` en filas y detalle, sesión, `stock_by_establishment`, `SeriesResource`), `php artisan openapi:generate`, suites SQLite y PostgreSQL y Pint — Verificación: códigos de salida 0 y cifras anotadas — **Hecho (2026-10-30):** 1084 pruebas en SQLite (16 omitidas), 1100 en PostgreSQL y Pint, con código de salida 0. Mutaciones comprobadas: sin el bloqueo del producto en `transfer()`, deadlock (T013); sin `visibleTo` en el binding de tickets, cinco casos fallan (T023)
 
 ## Fase 6 · Frontend
 
