@@ -153,12 +153,12 @@
   - al entrar, refresca los locales con `GET /establishments`.
 
   Verificación: en verde
-- [ ] **F010** (después de T021) Pruebas y cambios en `TicketsView`, `SalesDocumentsView`, `TicketView`, `SalesDocumentView` y `TicketReceipt`:
+- [x] **F010** (después de T021) Pruebas y cambios en `TicketsView`, `SalesDocumentsView`, `TicketView`, `SalesDocumentView` y `TicketReceipt`:
   - `EstablishmentFilter` en las listas y el código del local en cada fila (sin columna nueva a 360 px);
   - nombre del local en el detalle, y nombre y dirección en el recibo, si `multi`.
 
   Verificación: en verde y `theme.spec.ts` en verde (`TicketReceipt` sigue en blanco y negro)
-- [ ] **F011** [P] (después de T021) Pruebas y `EstablishmentFilter` en el inicio: las tarjetas, el gráfico, las recientes y los pendientes se recargan con el local — Verificación: en verde
+- [x] **F011** [P] (después de T021) Pruebas y `EstablishmentFilter` en el inicio: las tarjetas, el gráfico, las recientes y los pendientes se recargan con el local — Verificación: en verde
 - [x] **F012** [P] `UbigeoPicker` pasa de `platform/components` a `shared/ui` y recibe la función de búsqueda por prop: la plataforma le pasa `/platform/ubigeos/search` y la empresa, `/ubigeos/search`. Pruebas de la plataforma sin cambios — Verificación: suite completa en verde
 - [x] **F013** (después de T007) Pruebas y cambios en «Mi empresa → Locales»:
   - sección «Locales» en `CompanyView` con «Principal» e «Inactivo» (`BaseBadge`);
@@ -193,14 +193,14 @@
   - «Atrás» cierra el diálogo.
 
   Verificación: en verde
-- [ ] **F018** [P] (después de T020 y T022) Pruebas y cambios en `data-transfer`: `EstablishmentFilter` al exportar productos y ventas, y «Local del stock inicial» (por defecto el principal) en la vista previa de productos — Verificación: en verde
-- [ ] **F019** [P] (después de T024) «Locales: N» en `CompanyDetailView` de la plataforma, con su prueba — Verificación: en verde
-- [ ] **F020** Pruebas de RF-010 juntas, con un solo local activo:
+- [x] **F018** [P] (después de T020 y T022) Pruebas y cambios en `data-transfer`: `EstablishmentFilter` al exportar productos y ventas, y «Local del stock inicial» (por defecto el principal) en la vista previa de productos — Verificación: en verde
+- [x] **F019** [P] (después de T024) «Locales: N» en `CompanyDetailView` de la plataforma, con su prueba — Verificación: en verde
+- [x] **F020** Pruebas de RF-010 juntas, con un solo local activo:
   - «Vender», inicio, listas, ficha, alertas, «Usuarios», invitación, «Series» y exportar no muestran nada de locales;
   - las peticiones no llevan `establishment_id`, salvo las de escritura, que mandan el único local.
 
   Verificación: en verde
-- [ ] **F021** (después de T025) `pnpm api:types` con el `openapi.json` final. `version` 0.4.0 en `package.json` — Verificación: verificación completa del frontend con código de salida 0 y cifras anotadas, y `pnpm android:dev` compila el APK *debug* (JDK 21)
+- [x] **F021** (después de T025) `pnpm api:types` con el `openapi.json` final. `version` 0.4.0 en `package.json` — Verificación: verificación completa del frontend con código de salida 0 y cifras anotadas, y `pnpm android:dev` compila el APK *debug* (JDK 21) — **Hecho (2026-10-30):** `type-check`, `lint`, `test:unit` (506 pruebas en 76 archivos) y `build-only` con código de salida 0. El APK *debug* compila como 0.4.0 (`versionCode` 400), sin `CAMERA`; compilado con `assembleDebug`, no instalado
 - [ ] **F022** Verificación manual del frontend (plan, «Verificación manual del frontend»):
   - con un solo local, en web y en el teléfono, igual que en `main`;
   - con dos locales, en el teléfono real:
@@ -214,7 +214,7 @@
   - TalkBack en el selector.
 
   Verificación: resultados en `verificacion.md`
-- [ ] **F023** README del frontend: `shared/establishments`, `UbigeoPicker` en `shared/ui`, claves de `localStorage` por local, y la fila de `company` con «Locales» — Verificación: revisado
+- [x] **F023** README del frontend: `shared/establishments`, `UbigeoPicker` en `shared/ui`, claves de `localStorage` por local, y la fila de `company` con «Locales» — Verificación: revisado
 
 ## Cierre
 
