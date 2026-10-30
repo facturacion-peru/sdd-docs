@@ -110,7 +110,7 @@ Registro único de preguntas abiertas y decisiones. Las specs las citan por su i
 | [A-93](#a-93) ⚖️ | Reparto del cupo diario y caché común | 018 | Resuelta |
 | [A-94](#a-94) | Cuándo se vuelve a consultar | 018 | Resuelta |
 | [A-95](#a-95) ⚖️ | RUC de baja o no habido en facturas | 018 | Resuelta |
-| [A-96](#a-96) | Tope diario, token y fallas del servicio | 018 | Abierta |
+| [A-96](#a-96) | Token, fallas del servicio y sin topes | 018 | Resuelta |
 
 ---
 
@@ -1197,7 +1197,7 @@ El token es de la plataforma: todas las empresas comparten el cupo.
 
 **Recomendación:** A. En contra: guardar DNI y nombres de forma central entra en la revisión de datos personales (A-24 ⚖️).
 
-> **Decisión (2026-10-30):** A. El tope por empresa se fija en A-96.
+> **Decisión (2026-10-30):** A, con la tabla común. El tope por empresa se descartó en A-96.
 
 ### A-94
 
@@ -1217,7 +1217,7 @@ El token es de la plataforma: todas las empresas comparten el cupo.
 
 ### A-96
 
-**Tope diario, token y fallas del servicio.** · Bloquea: 018 · **Abierta**
+**Tope diario, token y fallas del servicio.** · Bloquea: 018 · **Resuelta**
 
 **Recomendación:**
 - **Token:** uno solo de la plataforma, en `APISPERU_TOKEN` del `.env` del servidor. Nunca en el repositorio ni en las respuestas. Sin token, la consulta queda apagada y todo sigue a mano.
@@ -1225,6 +1225,8 @@ El token es de la plataforma: todas las empresas comparten el cupo.
 - **Si falla** (sin cupo, servicio caído o documento no encontrado), se avisa y se puede seguir con el registro manual. Nunca se bloquea una venta por el servicio.
 - **Quién consulta:** el vendedor y el administrador, al vender y en «Clientes» (como A-34). «Actualizar datos» también lo pueden usar los dos.
 - **Carné de extranjería y otros documentos:** apisperu solo consulta DNI y RUC; los demás siguen a mano.
+
+> **Decisión (2026-10-30):** **Sin topes** en el MVP, ni por empresa ni de la plataforma: si las consultas crecen, el usuario pagará el plan ilimitado de apisperu (solo cambia el token). Se mantiene el resto de la recomendación: token de la plataforma en `APISPERU_TOKEN`, registro manual si el servicio falla o responde que se acabó el cupo, consulta para vendedor y administrador, y los demás documentos a mano. Se cuentan las consultas por día para que la plataforma vea el uso y sepa cuándo conviene pagar.
 
 ## Pendientes menores
 

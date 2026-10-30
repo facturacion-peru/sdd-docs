@@ -1,13 +1,13 @@
 # Spec 018: Consulta de DNI y RUC
 
-**Estado:** En aclaración · **Versión:** 0.1 · **Fecha:** 2026-10-30
-**Depende de:** 001, 005, 012, 014, 017 · **Aclaraciones:** A-92 a A-95 (resueltas), A-96 (abierta)
+**Estado:** Borrador (aclaraciones resueltas, falta aprobación) · **Versión:** 0.2 · **Fecha:** 2026-10-30
+**Depende de:** 001, 005, 012, 014, 017 · **Aclaraciones:** A-92 a A-96 (resueltas)
 
 > Qué y por qué. Sin frameworks, tablas, endpoints ni componentes: eso va en `plan.md`.
 
 ## Objetivo
 
-Que al vender, quien atiende escriba un DNI o un RUC y el cliente aparezca con su nombre (y, si es RUC, con su razón social y dirección) sin tipearlos, usando el servicio gratuito de apisperu.com. Como ese servicio da unas 1000 consultas al día para toda la plataforma, primero se busca en lo ya guardado y solo si no está se consulta. El registro manual sigue disponible, pero un cliente traído del servicio queda **verificado** y prevalece sobre lo escrito a mano (A-92).
+Que al vender, quien atiende escriba un DNI o un RUC y el cliente aparezca con su nombre (y, si es RUC, con su razón social y dirección) sin tipearlos, usando el servicio gratuito de apisperu.com. Como el plan gratuito da unas 1000 consultas al día para toda la plataforma, primero se busca en lo ya guardado y solo si no está se consulta. En el MVP no hay topes por empresa: si el uso crece, se pasará al plan ilimitado (A-96). El registro manual sigue disponible, pero un cliente traído del servicio queda **verificado** y prevalece sobre lo escrito a mano (A-92).
 
 ## Historias de usuario
 
@@ -24,7 +24,7 @@ Como vendedor, quiero escribir el DNI o el RUC del cliente y que sus datos apare
 2. **Dado** un documento que mi empresa no tiene pero que la plataforma ya consultó antes (A-93), **cuando** lo escribo, **entonces** aparece sin gastar una consulta y queda guardado como cliente verificado de mi empresa.
 3. **Dado** un documento que nadie consultó, **cuando** lo escribo, **entonces** se consulta el servicio, aparece con su nombre (o razón social y dirección) y queda guardado como cliente verificado.
 4. **Dado** un RUC, **cuando** aparece, **entonces** veo su estado y condición; si está de baja o no habido veo un aviso claro, pero puedo emitir (A-95 ⚖️).
-5. **Dado** que el servicio no encuentra el documento, no responde o se acabó el cupo del día (A-96), **cuando** busco, **entonces** veo por qué y puedo registrar al cliente a mano, sin perder la venta en curso.
+5. **Dado** que el servicio no encuentra el documento, no responde o dice que se acabó el cupo del día (A-96), **cuando** busco, **entonces** veo por qué y puedo registrar al cliente a mano, sin perder la venta en curso.
 6. **Dado** un número con formato inválido (un DNI que no tiene 8 dígitos o un RUC que no tiene 11 o cuyo dígito verificador no cuadra), **cuando** lo escribo, **entonces** veo el error enseguida y no se gasta una consulta.
 7. **Dado** un carné de extranjería u otro documento, **cuando** registro al cliente, **entonces** lo hago a mano, como hoy (A-96).
 
@@ -56,19 +56,18 @@ Como vendedor o administrador, quiero volver a consultar a un cliente cuando sé
 2. **Dado** que el servicio falla o no hay cupo, **cuando** actualizo, **entonces** el cliente queda como estaba y veo el motivo.
 3. **Dado** un comprobante ya emitido, **cuando** actualizo al cliente, **entonces** el comprobante no cambia (spec 005: guarda los datos del momento de emitir).
 
-### HU-4 · Cuidar el cupo diario (P2)
+### HU-4 · Ver cuánto se usa el servicio (P3)
 
-Como administrador de la plataforma, quiero que ninguna empresa agote sola las consultas del día y saber cuántas se usan, para que el servicio alcance para todas.
+Como administrador de la plataforma, quiero ver cuántas consultas se hacen al día, para saber cuándo conviene pagar el plan ilimitado (A-96).
 
-**Por qué esta prioridad:** el cupo es compartido; sin tope, una empresa podría dejar sin servicio al resto.
-**Prueba independiente:** una empresa que llegó a su tope diario ve «Se acabaron las consultas de hoy» y puede registrar a mano; otra empresa sigue consultando.
+**Por qué esta prioridad:** no cambia el uso diario; solo informa una decisión de costo.
+**Prueba independiente:** después de tres consultas nuevas, el panel de la plataforma muestra 3 consultas hoy.
 
 **Escenarios de aceptación**
 
-1. **Dado** una empresa que llegó a su tope del día (A-96), **cuando** busca un documento que no está guardado, **entonces** ve el aviso y registra a mano; lo que ya está guardado (en su empresa o en la tabla común) sigue apareciendo.
-2. **Dado** que la plataforma llegó a su límite del día, **cuando** cualquier empresa busca, **entonces** pasa lo mismo, y al día siguiente vuelve a funcionar solo.
-3. **Dado** el panel de la plataforma (spec 006), **cuando** lo abro, **entonces** veo las consultas usadas hoy en total y por empresa.
-4. **Dado** que se repite la misma búsqueda (doble toque, reintento), **cuando** el documento se acaba de consultar, **entonces** no se gasta una segunda consulta.
+1. **Dado** el panel de la plataforma (spec 006), **cuando** lo abro, **entonces** veo las consultas al servicio de hoy y de los últimos días, en total.
+2. **Dado** que se repite la misma búsqueda (doble toque, reintento), **cuando** el documento se acaba de consultar, **entonces** no se gasta una segunda consulta.
+3. **Dado** que el servicio responde que se acabó el cupo, **cuando** cualquier empresa busca, **entonces** lo ya guardado sigue apareciendo y lo demás se registra a mano.
 
 ## Casos límite
 
@@ -89,31 +88,32 @@ Como administrador de la plataforma, quiero que ninguna empresa agote sola las c
 - **RF-003:** Consultar un documento de un cliente manual DEBE reemplazar su nombre y dirección por los del servicio y dejarlo verificado, con auditoría.
 - **RF-004:** El registro manual DEBE seguir disponible para todo documento que el servicio no resuelva y para carné de extranjería y otros (A-96).
 - **RF-005:** El sistema DEBE validar el formato (y el dígito verificador del RUC) antes de consultar, sin gastar consultas.
-- **RF-006:** Cada empresa DEBE tener un tope diario de consultas y la plataforma un límite total (A-96); al llegar, la búsqueda solo usa lo guardado.
+- **RF-006:** En el MVP NO DEBE haber topes de consultas por empresa ni de la plataforma (A-96). Si el servicio responde que no hay cupo, la búsqueda usa solo lo guardado y ofrece el registro manual.
 - **RF-007:** Lo que devuelve el servicio DEBE guardarse en una tabla común de la plataforma, reutilizable por todas las empresas (A-93 ⚖️).
 - **RF-008:** «Actualizar datos» DEBE volver a consultar a pedido y actualizar el cliente y la tabla común (A-94).
 - **RF-009:** Un RUC de baja o no habido DEBE mostrarse con un aviso, sin bloquear la emisión (A-95 ⚖️).
 - **RF-010:** Si el servicio falla, vender DEBE seguir funcionando; la falla se avisa y se ofrece el registro manual.
 - **RF-011:** El token DEBE ser secreto de la plataforma (A-96): nunca en el repositorio, en las respuestas ni en la app.
 - **RF-012:** La importación de clientes (spec 014) NO DEBE cambiar el nombre ni la dirección de un cliente verificado.
-- **RF-013:** Cada consulta al servicio DEBE contarse por empresa y día, y el panel de la plataforma DEBE mostrar el uso.
+- **RF-013:** Cada consulta al servicio DEBE contarse por día, y el panel de la plataforma DEBE mostrar el uso.
 
 ## Entidades clave
 
 - **Cliente** (existe): agrega si está verificado y cuándo se consultó.
 - **Documento consultado** (nuevo, de la plataforma): lo que devolvió el servicio para un DNI o RUC (nombre o razón social, dirección, estado y condición del RUC) y cuándo.
-- **Uso del servicio** (nuevo): cuántas consultas hizo cada empresa cada día.
+- **Uso del servicio** (nuevo): cuántas consultas se hicieron cada día (y de qué empresa, para soporte).
 
 ## Criterios de éxito
 
 - **CE-001:** Con un RUC no guardado, desde que se termina de escribir hasta ver la razón social pasan **menos de 3 segundos** con datos móviles.
 - **CE-002:** Una búsqueda de un documento ya guardado (en la empresa o en la tabla común) **no gasta** consultas: lo comprueba una prueba automática.
 - **CE-003:** Con el servicio caído o sin cupo, se emite una boleta con un cliente registrado a mano (prueba automática y verificación manual).
-- **CE-004:** Ninguna empresa puede gastar más de su tope diario, aun con búsquedas simultáneas (prueba concurrente en PostgreSQL).
+- **CE-004:** Dos búsquedas simultáneas del mismo documento nuevo gastan una sola consulta y dejan un solo cliente (prueba concurrente en PostgreSQL).
 
 ## Fuera de alcance
 
-- Otros servicios de consulta o planes de pago de apisperu.
+- Otros servicios de consulta. Pasar al plan de pago de apisperu es solo cambiar el token (A-96).
+- Topes de consultas por empresa (A-96).
 - Consultar carné de extranjería, pasaporte u otros documentos.
 - Actualización automática periódica de los datos (A-94).
 - Validar el RUC contra SUNAT en el momento de emitir (lo hace SUNAT al recibir).
@@ -125,3 +125,4 @@ Como administrador de la plataforma, quiero que ninguna empresa agote sola las c
 |---|---|---|
 | 2026-10-30 | Spec creada a pedido del usuario (búsqueda por DNI o RUC con apisperu.com, primero la base propia) | — |
 | 2026-10-30 | A-92 a A-95 | Verificado no se edita a mano; tabla común de la plataforma con tope por empresa; solo «Actualizar datos» vuelve a consultar; RUC de baja o no habido avisa sin bloquear |
+| 2026-10-30 | A-96 | Sin topes en el MVP (plan ilimitado si el uso crece); token de la plataforma; registro manual si el servicio falla; se cuenta el uso por día |
