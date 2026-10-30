@@ -61,7 +61,7 @@ Solo se escribe desde `DocumentLookupService`. Ninguna ruta la lista.
 3. Con `Cache::lock("document-lookup:{type}:{number}", 10)->block(8)`:
    - **En la tabla común:** si está, se crea o actualiza el cliente de la empresa con esos datos y `verified_at` (`source: platform`, sin gastar consulta).
    - **Si no está:** `ApisPeruClient::find()`. Se registra la fila de uso y, si encuentra el documento, se guarda en la tabla común y en el cliente (`source: service`).
-4. **Resultado:** `{customer: Customer|null, source: company|platform|service|null, reason: not_found|unavailable|quota|disabled|null}`.
+4. **Resultado:** `{customer: Customer|null, source: company|platform|service|null, reason: not_found|unavailable|quota|disabled|null}`. Un cliente manual de la empresa que no se pudo verificar vuelve como `customer` (el manual), con `source: company` y `reason` igual al motivo.
 
 Un cliente manual que pasa a verificado deja `customer.verified` en la auditoría, con el nombre anterior y el nuevo.
 
@@ -78,7 +78,7 @@ El token nunca se registra en el log. Los errores se registran con el número en
 
 ## Clientes
 
-- **`CustomerResource`** agrega `verified` (bool), `verified_at`, `ruc_status` y `ruc_condition`. Los dos últimos salen de `document_lookups` con un `left join` y son nulos si no es RUC o si es manual.
+- **`CustomerResource`** agrega `verified` (bool), `verified_at` (ISO 8601 o nulo), `ruc_status` y `ruc_condition`. Los dos últimos salen de `document_lookups` con un `left join` y son nulos si no es RUC o si es manual. Se guardan **normalizados**: en mayúsculas, sin espacios de más y sin tildes de más (`ACTIVO`, `BAJA DE OFICIO`, `HABIDO`, `NO HABIDO`…), para que la app compare con `ACTIVO` y `HABIDO`.
 - **`PATCH /customers/{customer}`** (administrador): con el cliente verificado, `name` y `address` dan 422 «Cliente verificado: sus datos vienen de SUNAT/RENIEC. Usa “Actualizar datos”.» `document_type` y `document_number` ya no se editan hoy (spec 005).
 - **`POST /customers`** (registro manual): no cambia y crea clientes manuales. El frontend busca antes con `lookup`.
 - **Importación** (spec 014, RF-012): `CustomerImport` no toca `name` ni `address` de un cliente verificado y deja una advertencia en la vista previa: «Cliente verificado: no se cambia su nombre ni dirección».
