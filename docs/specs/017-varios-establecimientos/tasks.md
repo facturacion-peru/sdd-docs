@@ -46,24 +46,24 @@
 
 ## Fase 3 · API: stock por local y traslados (HU-3, A-86)
 
-- [ ] **T009** Pruebas de `InventoryService` por local (deben fallar):
+- [x] **T009** Pruebas de `InventoryService` por local (deben fallar):
   - `registerEntry` crea el lote en el local;
   - `consume` toma FEFO solo del local y `InsufficientStock` informa el disponible del local;
   - `balance` por local y total; `product_balance_after` es el saldo del local;
   - `restock` repone en los lotes del local del original.
 
   Verificación: en rojo
-- [ ] **T010** `InventoryService` con el local en cada firma, `Product::scopeWithStock(?array)` y los llamados existentes (tickets, comprobantes, importación) pasando el principal por ahora — Verificación: T009 y las suites en verde
-- [ ] **T011** Pruebas del traslado (deben fallar):
+- [x] **T010** `InventoryService` con el local en cada firma, `Product::scopeWithStock(?array)` y los llamados existentes (tickets, comprobantes, importación) pasando el principal por ahora — Verificación: T009 y las suites en verde
+- [x] **T011** Pruebas del traslado (deben fallar):
   - FEFO de varios lotes, mismo número, fechas y costo en el destino (crea o suma al lote);
   - sin stock o con destino inactivo, 422 sin cambios; origen inactivo se permite;
   - `reverse` rechaza los movimientos de traslado;
   - `POST /products/{product}/transfers` responde 201 con `stock_by_establishment`, 403 para el vendedor y auditoría `inventory.transfer`.
 
   Verificación: en rojo
-- [ ] **T012** `InventoryService::transfer`, `StockTransfer`, `MovementType` `transfer_out`/`transfer_in`, `StoreTransferRequest` y la ruta — Verificación: T011 en verde
-- [ ] **T013** CE-004 en `tests/Integration` (PostgreSQL, con forks): traslado y venta simultáneos en el origen, y traslados cruzados A→B y B→A al mismo tiempo; stock final correcto y sin deadlock. Mutación: sin el bloqueo del producto, la prueba falla — Verificación: en verde en PostgreSQL y en rojo con la mutación
-- [ ] **T014** [P] Pruebas y cambios en lecturas de inventario: `establishment_id` en productos, catálogo, lotes, movimientos y alertas; `establishment` en cada fila; `stock_by_establishment` en `GET /products/{id}`; alertas por local (un producto puede salir dos veces); entradas con `establishment_id` — Verificación: en verde
+- [x] **T012** `InventoryService::transfer`, `StockTransfer`, `MovementType` `transfer_out`/`transfer_in`, `StoreTransferRequest` y la ruta — Verificación: T011 en verde
+- [x] **T013** CE-004 en `tests/Integration` (PostgreSQL, con forks): traslado y venta simultáneos en el origen, y traslados cruzados A→B y B→A al mismo tiempo; stock final correcto y sin deadlock. Mutación: sin el bloqueo del producto, la prueba falla — Verificación: en verde en PostgreSQL y en rojo con la mutación
+- [x] **T014** [P] Pruebas y cambios en lecturas de inventario: `establishment_id` en productos, catálogo, lotes, movimientos y alertas; `establishment` en cada fila; `stock_by_establishment` en `GET /products/{id}`; alertas por local (un producto puede salir dos veces); entradas con `establishment_id` — Verificación: en verde
 
 ## Fase 4 · API: venta por local (HU-2)
 
