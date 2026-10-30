@@ -86,9 +86,9 @@
   - el texto sigue buscando por nombre.
 
   Verificación: en verde
-- [ ] **F007** (después de T008) Pruebas y cambios en `CustomersView` (HU-2): insignia y aviso de RUC en cada fila; en un verificado, «Nombre» y «Dirección» deshabilitados con su ayuda; un 422 llega a su campo; un manual se edita como siempre — Verificación: en verde
-- [ ] **F008** (después de T010) `customersApi.refresh(id)` y «Actualizar datos» en `CustomerPicker` y `CustomersView` (HU-3), con pruebas: si funciona, reemplaza el cliente (también el de la venta en curso) y avisa «Datos actualizados.»; un 503 muestra el `message` y no cambia nada — Verificación: en verde
-- [ ] **F009** [P] (después de T011) Pruebas y `LookupUsageView` en `/plataforma/consultas`, con su entrada en el menú del panel: tabla de 14 días con desplazamiento a 360 px y el total de hoy; ruta solo de plataforma (`router.spec.ts`) — Verificación: en verde
+- [x] **F007** (después de T008) Pruebas y cambios en `CustomersView` (HU-2): insignia y aviso de RUC en cada fila; en un verificado, «Nombre» y «Dirección» deshabilitados con su ayuda; un 422 llega a su campo; un manual se edita como siempre — Verificación: en verde
+- [x] **F008** (después de T010) `customersApi.refresh(id)` y «Actualizar datos» en `CustomerPicker` y `CustomersView` (HU-3), con pruebas: si funciona, reemplaza el cliente (también el de la venta en curso) y avisa «Datos actualizados.»; un 503 muestra el `message` y no cambia nada — Verificación: en verde
+- [x] **F009** [P] (después de T011) Pruebas y `LookupUsageView` en `/plataforma/consultas`, con su entrada en el menú del panel: tabla de 14 días con desplazamiento a 360 px y el total de hoy; ruta solo de plataforma (`router.spec.ts`) — Verificación: en verde
 - [ ] **F010** README del frontend: `useDocumentLookup`, `shared/utils/documents`, insignia y aviso del RUC, y la vista de uso de la plataforma — Verificación: revisado
 - [ ] **F011** (después de T012) `pnpm api:types` con el `openapi.json` final. `version` 0.5.0 en `package.json` — Verificación: verificación completa del frontend con código de salida 0 y cifras anotadas, y el APK *debug* compila (JDK 21)
 - [ ] **F012** Verificación manual del frontend (plan):
