@@ -26,14 +26,14 @@
 
 ## Fase 2 · API: locales y acceso (HU-1, A-87)
 
-- [ ] **T004** Pruebas de `EstablishmentAccess` (deben fallar):
+- [x] **T004** Pruebas de `EstablishmentAccess` (deben fallar):
   - `allowed`: el administrador ve todos los activos; el vendedor, sus asignados activos;
   - `resolve`: sin id con un solo permitido usa ese; con varios, 422 «Elige el local»; un id no permitido, inactivo o de otra empresa, el mismo 422;
   - `filter`: «Todos» son los permitidos, incluidos los inactivos.
 
   Verificación: en rojo
-- [ ] **T005** `App\Establishments\EstablishmentAccess` y `scopeVisibleTo` en `Ticket`, `SalesDocument`, `ProductLot` e `InventoryMovement` — Verificación: T004 en verde
-- [ ] **T006** Pruebas de las rutas de locales y entradas en `TenantRoutes.php` (deben fallar):
+- [x] **T005** `App\Establishments\EstablishmentAccess` y `scopeVisibleTo` en `Ticket`, `SalesDocument`, `ProductLot` e `InventoryMovement` — Verificación: T004 en verde
+- [x] **T006** Pruebas de las rutas de locales y entradas en `TenantRoutes.php` (deben fallar):
   - `GET /establishments` (los permitidos; `include_inactive` solo para el administrador);
   - `POST` y `PATCH`: 4 dígitos, código repetido, código con comprobantes (`code_locked`), el principal no se desactiva, reactivar;
   - `PUT /users/{user}/establishments`: al menos uno activo, solo vendedores;
@@ -41,8 +41,8 @@
   - auditoría `establishment.*` y `user.establishments_changed`.
 
   Verificación: en rojo
-- [ ] **T007** `EstablishmentController`, sus `FormRequest`, `EstablishmentService`, `EstablishmentResource` (con `code_locked`) y la asignación en `UserController`/`UserService` (`establishment_ids` en `UserResource`) — Verificación: T006 en verde
-- [ ] **T008** [P] Pruebas y cambios de sesión e invitaciones: `establishments` y `company.active_establishments_count` en `login`, aceptar invitación, `/auth/me` y `CompanyResource`; `POST /invitations` con `establishment_ids` (obligatorio para vendedor con varios locales activos; con uno, se asigna ese) y `InvitationResource` — Verificación: en verde
+- [x] **T007** `EstablishmentController`, sus `FormRequest`, `EstablishmentService`, `EstablishmentResource` (con `code_locked`) y la asignación en `UserController`/`UserService` (`establishment_ids` en `UserResource`) — Verificación: T006 en verde
+- [x] **T008** [P] Pruebas y cambios de sesión e invitaciones: `establishments` y `company.active_establishments_count` en `login`, aceptar invitación, `/auth/me` y `CompanyResource`; `POST /invitations` con `establishment_ids` (obligatorio para vendedor con varios locales activos; con uno, se asigna ese) y `InvitationResource` — Verificación: en verde
 
 ## Fase 3 · API: stock por local y traslados (HU-3, A-86)
 
