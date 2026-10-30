@@ -8,14 +8,14 @@
 
 ## Fase 1 · Preparación y datos (API)
 
-- [ ] **T001** Rama `017-varios-establecimientos` desde `main` en la API — Verificación: `git branch --show-current`
-- [ ] **T002** Prueba de la migración en `tests/Integration` (debe fallar): una base con productos, lotes, entradas, ventas con ticket y con boleta, notas con devolución, ajustes y vendedores, sembrada **antes** de migrar. Tras migrar:
+- [x] **T001** Rama `017-varios-establecimientos` desde `main` en la API — Verificación: `git branch --show-current`
+- [x] **T002** Prueba de la migración en `tests/Integration` (debe fallar): una base con productos, lotes, entradas, ventas con ticket y con boleta, notas con devolución, ajustes y vendedores, sembrada **antes** de migrar. Tras migrar:
   - todo queda en el principal de su empresa (dos empresas, para no mezclar);
   - los vendedores quedan asignados al principal;
   - el inicio, el stock, las listas y los saldos de movimientos son idénticos a los de antes (CE-003).
 
   Verificación: en rojo
-- [ ] **T003** Migración:
+- [x] **T003** Migración:
   - `establishments.active`;
   - `establishment_user` e `invitations.establishment_ids`;
   - `stock_transfers`;
