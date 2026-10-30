@@ -144,7 +144,7 @@
 
   Verificación: en rojo
 - [x] **F008** `sale-draft.ts` con el local en la clave, la migración y `clearAll()`, y `AppLayout.logout()` con `clearAll()`. Un 401 sigue sin borrar (principio VII; `AGENTS.md`) — Verificación: F007 y las pruebas de `sale-draft` y `AppLayout` en verde
-- [ ] **F009** (después de T016–T018) Pruebas y cambios en «Vender» (`NewSaleView`, `ProductCatalog`, `SaleCart`, `sales/api.ts`):
+- [x] **F009** (después de T016–T018) Pruebas y cambios en «Vender» (`NewSaleView`, `ProductCatalog`, `SaleCart`, `sales/api.ts`):
   - catálogo, `availability` y cobro con `establishment_id`; el cobro usa el local de la venta guardada;
   - solo las series del local (`SeriesResource.establishment_id`);
   - sin local elegido con `multi`, el selector en lugar del catálogo;
@@ -169,7 +169,7 @@
   - «Desactivar» y «Activar» con confirmación; el principal no lo ofrece.
 
   Verificación: en verde y `router.spec.ts` en verde
-- [ ] **F014** [P] (después de T018) Pruebas y cambios en `SeriesView`: las series se agrupan por local si `multi`, y «Nueva serie» pide el local (por defecto el principal) — Verificación: en verde
+- [x] **F014** [P] (después de T018) Pruebas y cambios en `SeriesView`: las series se agrupan por local si `multi`, y «Nueva serie» pide el local (por defecto el principal) — Verificación: en verde
 - [x] **F015** [P] (después de T007–T008) Pruebas y cambios en `UsersView` e `InviteUserDialog`:
   - los vendedores muestran sus locales y «Locales» abre un diálogo de casillas (al menos uno, solo activos) → `PUT /users/{user}/establishments`;
   - el administrador muestra «Todos los locales», sin acción;
