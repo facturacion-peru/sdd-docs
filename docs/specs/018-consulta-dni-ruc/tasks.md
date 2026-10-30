@@ -57,20 +57,20 @@
 > - **En paralelo con la API:** F001–F003 y F005 no dependen de ella. Las respuestas se tipan a mano y las pruebas simulan la API, así que pueden empezar enseguida.
 > - **Verificación completa:** `pnpm type-check && pnpm lint && pnpm test:unit --run && pnpm build-only`.
 
-- [ ] **F001** Rama `018-consulta-dni-ruc` desde `main` en el frontend — Verificación: `git branch --show-current`
-- [ ] **F002** [P] Pruebas y `shared/utils/documents.ts`:
+- [x] **F001** Rama `018-consulta-dni-ruc` desde `main` en el frontend — Verificación: `git branch --show-current`
+- [x] **F002** [P] Pruebas y `shared/utils/documents.ts`:
   - `isDni` (8 dígitos);
   - `isRuc` (11 dígitos y dígito verificador, con los mismos casos que `App\Rules\Ruc`);
   - `documentKind(text)`: `dni`, `ruc` o `null` para texto o números de otra largura.
 
   Verificación: en verde
-- [ ] **F003** [P] Tipos a mano: `Customer` con `verified`, `verified_at`, `ruc_status` y `ruc_condition`, y `LookupResult` en `features/sales/types.ts`. Luego `CustomerVerifiedBadge.vue` y `RucStatusAlert.vue`, con sus pruebas:
+- [x] **F003** [P] Tipos a mano: `Customer` con `verified`, `verified_at`, `ruc_status` y `ruc_condition`, y `LookupResult` en `features/sales/types.ts`. Luego `CustomerVerifiedBadge.vue` y `RucStatusAlert.vue`, con sus pruebas:
   - «Verificado» con la fecha y «Manual»;
   - aviso con BAJA o NO HABIDO, sin aviso con ACTIVO y HABIDO ni si no es RUC.
 
   Verificación: en verde y `theme.spec.ts` en verde
 - [ ] **F004** (después de T007) `pnpm api:types`. `customersApi.lookup(type, number, signal)` y sus pruebas (cuerpo, `AbortSignal`, `data` nulo con `reason`, 422 de formato) — Verificación: `pnpm type-check` y pruebas en verde
-- [ ] **F005** [P] Pruebas y `useDocumentLookup` (con `lookup` simulado):
+- [x] **F005** [P] Pruebas y `useDocumentLookup` (con `lookup` simulado):
   - consulta al completar 8 u 11 dígitos tras 300 ms;
   - aborta la anterior al seguir escribiendo; una respuesta vieja no pisa a la nueva;
   - formato inválido → `invalid` sin pedir nada; con `requireRuc`, un DNI da «Para factura se necesita un RUC.»;
