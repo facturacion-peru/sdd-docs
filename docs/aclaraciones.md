@@ -106,6 +106,11 @@ Registro único de preguntas abiertas y decisiones. Las specs las citan por su i
 | [A-89](#a-89) ⚖️ | Quién crea los establecimientos y qué se pide | 017 | Resuelta |
 | [A-90](#a-90) | Qué pantallas se separan por establecimiento | 017 | Resuelta |
 | [A-91](#a-91) | Empresas que ya existen | 017 | Resuelta |
+| [A-92](#a-92) | Qué significa que prevalece el cliente verificado | 018 | Resuelta |
+| [A-93](#a-93) ⚖️ | Reparto del cupo diario y caché común | 018 | Resuelta |
+| [A-94](#a-94) | Cuándo se vuelve a consultar | 018 | Resuelta |
+| [A-95](#a-95) ⚖️ | RUC de baja o no habido en facturas | 018 | Resuelta |
+| [A-96](#a-96) | Tope diario, token y fallas del servicio | 018 | Abierta |
 
 ---
 
@@ -1163,6 +1168,63 @@ El precio es el mismo en todos los locales (precios por local, fuera de alcance)
 **Recomendación:** al instalar la versión, todo lo existente (stock, lotes, tickets, comprobantes, series y usuarios) queda en el establecimiento principal. Una empresa con un solo local ve la app igual que hoy: el selector de local y los filtros aparecen solo cuando tiene más de uno activo.
 
 > **Decisión (2026-10-29):** Aceptada la recomendación.
+
+## 018 · Consulta de DNI y RUC
+
+El usuario pidió buscar al cliente por DNI o RUC al vender con el servicio gratuito de [apisperu.com](https://apisperu.com), que da unas 1000 consultas al día. Hoy el vendedor registra al cliente a mano desde «Vender» y el administrador lo edita (A-34).
+
+### A-92
+
+**¿Qué significa que «prevalece» el cliente traído de apisperu?** · Bloquea: 018 · **Resuelta**
+
+- **A.** Un cliente traído de apisperu queda **verificado**: su nombre (y su dirección, si es RUC) no se editan a mano, solo se actualizan consultando de nuevo. Uno manual se puede editar y, si luego se consulta y apisperu lo encuentra, sus datos se reemplazan y pasa a verificado.
+- **B.** Cualquiera edita cualquier cliente, pero una consulta reemplaza lo escrito a mano.
+- **C.** Solo se muestra la marca «verificado» o «manual», sin bloquear nada.
+
+**Recomendación:** A.
+
+> **Decisión (2026-10-30):** A.
+
+### A-93 ⚖️
+
+**¿Cómo se reparten las 1000 consultas diarias entre empresas?** · Bloquea: 018 · **Resuelta**
+
+El token es de la plataforma: todas las empresas comparten el cupo.
+
+- **A.** Lo que devuelve apisperu (datos públicos de RENIEC y SUNAT) se guarda en una **tabla común de la plataforma**: si otra empresa busca el mismo documento, no gasta consulta. Cada empresa tiene además un **tope diario**. Los clientes siguen siendo de cada empresa.
+- **B.** Cada empresa guarda solo sus clientes, con tope diario.
+- **C.** Cada empresa guarda sus clientes, sin tope.
+
+**Recomendación:** A. En contra: guardar DNI y nombres de forma central entra en la revisión de datos personales (A-24 ⚖️).
+
+> **Decisión (2026-10-30):** A. El tope por empresa se fija en A-96.
+
+### A-94
+
+**¿Cuándo se vuelve a consultar un documento ya guardado?** · Bloquea: 018 · **Resuelta**
+
+**Recomendación:** solo cuando alguien pulsa «Actualizar datos» (gasta una consulta). Siempre se usa primero lo guardado.
+
+> **Decisión (2026-10-30):** Aceptada la recomendación.
+
+### A-95 ⚖️
+
+**¿Qué pasa con un RUC «BAJA» o «NO HABIDO» al emitir una factura?** · Bloquea: 018 · **Resuelta**
+
+**Recomendación:** se muestran el estado y la condición del RUC con un aviso claro y se deja emitir: SUNAT es quien acepta o rechaza. Confirmar con un contador antes de producción.
+
+> **Decisión (2026-10-30):** Aceptada la recomendación (⚖️ a confirmar antes de producción).
+
+### A-96
+
+**Tope diario, token y fallas del servicio.** · Bloquea: 018 · **Abierta**
+
+**Recomendación:**
+- **Token:** uno solo de la plataforma, en `APISPERU_TOKEN` del `.env` del servidor. Nunca en el repositorio ni en las respuestas. Sin token, la consulta queda apagada y todo sigue a mano.
+- **Tope:** 100 consultas por empresa al día (`APISPERU_DAILY_LIMIT_PER_COMPANY`), y la plataforma deja de consultar al llegar a 950 en el día, para no pasarse del cupo. Lo que ya está en la tabla común no cuenta.
+- **Si falla** (sin cupo, servicio caído o documento no encontrado), se avisa y se puede seguir con el registro manual. Nunca se bloquea una venta por el servicio.
+- **Quién consulta:** el vendedor y el administrador, al vender y en «Clientes» (como A-34). «Actualizar datos» también lo pueden usar los dos.
+- **Carné de extranjería y otros documentos:** apisperu solo consulta DNI y RUC; los demás siguen a mano.
 
 ## Pendientes menores
 
