@@ -103,7 +103,7 @@
 > - **Verificación completa:** `pnpm type-check && pnpm lint && pnpm test:unit --run && pnpm build-only`.
 
 - [x] **F001** Rama `017-varios-establecimientos` desde `main` en el frontend — Verificación: `git branch --show-current`
-- [ ] **F002** (después de T007–T008) `pnpm api:types`. Luego:
+- [x] **F002** (después de T007–T008) `pnpm api:types`. Luego:
   - `shared/establishments/types.ts`: `Establishment` y `EstablishmentRef`;
   - `establishments` y `company.active_establishments_count` en `core/auth/types.ts`;
   - `shared/establishments/api.ts`: `list(includeInactive)`, `create`, `update` y `assignToUser`, con sus pruebas.
@@ -160,7 +160,7 @@
   Verificación: en verde y `theme.spec.ts` en verde (`TicketReceipt` sigue en blanco y negro)
 - [ ] **F011** [P] (después de T021) Pruebas y `EstablishmentFilter` en el inicio: las tarjetas, el gráfico, las recientes y los pendientes se recargan con el local — Verificación: en verde
 - [x] **F012** [P] `UbigeoPicker` pasa de `platform/components` a `shared/ui` y recibe la función de búsqueda por prop: la plataforma le pasa `/platform/ubigeos/search` y la empresa, `/ubigeos/search`. Pruebas de la plataforma sin cambios — Verificación: suite completa en verde
-- [ ] **F013** (después de T007) Pruebas y cambios en «Mi empresa → Locales»:
+- [x] **F013** (después de T007) Pruebas y cambios en «Mi empresa → Locales»:
   - sección «Locales» en `CompanyView` con «Principal» e «Inactivo» (`BaseBadge`);
   - rutas `/empresa/locales/nuevo` y `/empresa/locales/:id` (solo el administrador) con `EstablishmentFormView`;
   - código de 4 dígitos con `inputmode="numeric"`, deshabilitado con `code_locked`;
@@ -170,7 +170,7 @@
 
   Verificación: en verde y `router.spec.ts` en verde
 - [ ] **F014** [P] (después de T018) Pruebas y cambios en `SeriesView`: las series se agrupan por local si `multi`, y «Nueva serie» pide el local (por defecto el principal) — Verificación: en verde
-- [ ] **F015** [P] (después de T007–T008) Pruebas y cambios en `UsersView` e `InviteUserDialog`:
+- [x] **F015** [P] (después de T007–T008) Pruebas y cambios en `UsersView` e `InviteUserDialog`:
   - los vendedores muestran sus locales y «Locales» abre un diálogo de casillas (al menos uno, solo activos) → `PUT /users/{user}/establishments`;
   - el administrador muestra «Todos los locales», sin acción;
   - al invitar a un vendedor con `multi`, las casillas, por defecto el local actual;
