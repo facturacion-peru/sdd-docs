@@ -126,6 +126,12 @@ Primer arranque local: `php artisan migrate:fresh --seed` (crea las cuentas de p
   - El inventario de `TenantRoutes.php` es también el de `CrossEstablishmentAccessTest`: una ruta nueva con `{ticket}` o `{salesDocument}` debe dar 404 a un vendedor de otro local (los bindings de `AppServiceProvider` aplican `visibleTo`).
   - Revertir la migración tras un traslado no restaura el único `(product_id, lot_number)`: el lote quedó repartido entre locales.
   - Lo impreso solo nombra el local si no es el principal (`Establishment::branchOf`): con un solo local, ticket y comprobante no cambian.
+- **Consulta de DNI y RUC (spec 018):**
+  - apisperu responde «no encontrado» con **HTTP 200** y `success: false` (no 404), y un token inválido con 401. Solo `ApisPeruClient` conoce esa forma; el resto usa `LookupStatus`.
+  - El token (`APISPERU_TOKEN`) nunca se imprime: ni en logs, ni en respuestas, ni en scripts de prueba (`config:show services.apisperu` lo muestra; filtrarlo). Los avisos del log tampoco llevan el número consultado.
+  - `document_lookups` es de la plataforma (sin `company_id` ni scope de empresa) y ninguna ruta la lista: los clientes siguen siendo de cada empresa (A-93 ⚖️).
+  - La búsqueda usa `Cache::lock` por documento: con un caché que no se comparte entre procesos (p. ej. `array` fuera de pruebas), dos búsquedas simultáneas gastarían dos consultas.
+  - La factory de comprobantes numera desde 900000: un contador desde 1 chocaba a veces con un correlativo emitido en la misma serie.
 - `Eloquent\Collection::map()` sobre una colección **vacía** sigue siendo de Eloquent: su `intersect()` falla con textos. Usar `->toBase()` antes.
 - El generador de OpenAPI tipa todo parámetro de ruta como número; para `{kind}` o un UUID, el frontend usa un *cast* comentado.
 - El código heredado de `legacy/` no se ejecuta: antes de reincorporar algo, leer `docs/investigacion/001-evaluacion-api-existente.md`.
@@ -133,6 +139,12 @@ Primer arranque local: `php artisan migrate:fresh --seed` (crea las cuentas de p
 ## Bitácora
 
 Entradas breves y fechadas de decisiones o cambios relevantes (la más reciente arriba).
+
+- **2026-10-30** — Spec 018 (consulta de DNI y RUC con apisperu.com, A-92 a A-96) en implementación en la rama `018-consulta-dni-ruc` de API y frontend.
+  - **API (T001–T012 hechas):** `POST customers/lookup` busca en la empresa, en la tabla común de la plataforma y en apisperu. Lo traído queda verificado y no se edita a mano ni por importación (A-92). «Actualizar datos» vuelve a consultar a pedido (A-94). Un RUC de baja o no habido avisa sin bloquear (A-95 ⚖️). Sin topes de consultas (A-96); la plataforma ve el uso por día. Sin dependencias nuevas.
+  - **Pruebas:** 1134 de API en SQLite y 1151 en PostgreSQL, con búsquedas simultáneas y su mutación.
+  - **Con el token real** (2026-10-30): RUC de SUNAT en 1,16 s y factura F001-00000005 aceptada en beta con ese cliente ([verificación](docs/specs/018-consulta-dni-ruc/verificacion.md)).
+  - **Pendiente:** el frontend (versión 0.5.0), la prueba en el teléfono (CE-001, F012) y el merge (T016).
 
 - **2026-10-30** — Spec 017 (varios establecimientos, A-86 a A-91) implementada en la rama `017-varios-establecimientos` de API y frontend, repartida entre una sesión de backend y otra de frontend.
   - **API (T001–T025 hechas):** locales con alta, edición y desactivación (`/establishments`), vendedores asignados (`establishment_user`) y `EstablishmentAccess`. Stock por local con traslados FEFO (`stock_transfers`) y alertas por local. Tickets, comprobantes y notas del local (el XML lleva su `CodLocal`), series por local, correlativo de tickets por empresa (A-88). El inicio, las listas y las exportaciones se filtran por local; lo existente quedó en el principal. Sin dependencias nuevas.
