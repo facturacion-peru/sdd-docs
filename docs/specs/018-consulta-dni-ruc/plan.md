@@ -23,7 +23,7 @@
 | Dependencias nuevas | Ninguna |
 | Migraciones | `customers.verified_at`; tablas `document_lookups` y `document_lookup_requests` |
 | Variables nuevas | `APISPERU_TOKEN` (vacía en `.env.example` y en los ejemplos de `deploy/`; sin token, la búsqueda solo mira lo guardado) y `APISPERU_BASE_URL` (por defecto `https://dniruc.apisperu.com/api/v1`) |
-| Forma de la respuesta | La documentación oficial no está publicada en texto. Lo que usan otros proyectos: `GET /dni/{n}?token=` con `nombres`, `apellidoPaterno` y `apellidoMaterno`, y `GET /ruc/{n}?token=` con `razonSocial`, `direccion`, `departamento`, `provincia`, `distrito`, `estado` y `condicion` (quizá `ubigeo`). **T002 lo confirma con el token del usuario** antes de escribir el cliente |
+| Forma de la respuesta | Confirmada en T002 ([verificación](verificacion.md)): `GET /dni/{n}?token=` → `nombres`, `apellidoPaterno`, `apellidoMaterno`; `GET /ruc/{n}?token=` → `razonSocial`, `direccion` (con el distrito incluido), `ubigeo`, `estado`, `condicion`. No encontrado: HTTP 200 con `success: false`. Token inválido: 401 |
 
 ## Chequeo de constitución
 
@@ -69,9 +69,9 @@ Un cliente manual que pasa a verificado deja `customer.verified` en la auditorí
 
 **`ApisPeruClient`**: `GET {base}/{dni|ruc}/{number}?token=…`, con `timeout(6)` y sin reintentos.
 - `found`: 200 con datos.
-- `not_found`: 200 o 404 sin datos o con `success: false`.
-- `quota`: 429, o un mensaje de límite (se confirma en T002).
-- `unavailable`: 5xx, tiempo agotado o error de red.
+- `not_found`: 200 con `success: false` (confirmado en T002), o 404.
+- `quota`: 429, o un mensaje con «límite» o «consultas» (no se pudo provocar en T002).
+- `unavailable`: 5xx, tiempo agotado, error de red, o 401/403 (token inválido; se avisa en el log sin el token).
 - `disabled`: sin token, y no se llama al servicio.
 
 El token nunca se registra en el log. Los errores se registran con el número enmascarado.

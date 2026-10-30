@@ -8,8 +8,8 @@
 
 ## Fase 1 · Preparación (API)
 
-- [ ] **T001** Rama `018-consulta-dni-ruc` desde `main` en la API. `APISPERU_TOKEN` y `APISPERU_BASE_URL` en `config/services.php`, `.env.example` y `deploy/env.*.example` (vacías) — Verificación: `git branch --show-current` y suites en verde
-- [ ] **T002** 🔑 Confirmar la forma real de las respuestas: un comando de un solo uso (fuera del repositorio) consulta un DNI y un RUC conocidos y un número inexistente, e imprime los campos y el código HTTP, **nunca el token**. Si cambia lo que supone el plan, se corrige el plan primero — Verificación: forma anotada en `verificacion.md`
+- [x] **T001** Rama `018-consulta-dni-ruc` desde `main` en la API. `APISPERU_TOKEN` y `APISPERU_BASE_URL` en `config/services.php`, `.env.example` y `deploy/env.*.example` (vacías) — Verificación: `git branch --show-current` y suites en verde
+- [x] **T002** 🔑 Confirmar la forma real de las respuestas: un comando de un solo uso (fuera del repositorio) consulta un DNI y un RUC conocidos y un número inexistente, e imprime los campos y el código HTTP, **nunca el token**. Si cambia lo que supone el plan, se corrige el plan primero — Verificación: forma anotada en `verificacion.md`
 
 ## Fase 2 · API: servicio y datos
 
