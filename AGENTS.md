@@ -134,11 +134,13 @@ Primer arranque local: `php artisan migrate:fresh --seed` (crea las cuentas de p
 
 Entradas breves y fechadas de decisiones o cambios relevantes (la más reciente arriba).
 
-- **2026-10-30** — Spec 017 (varios establecimientos, A-86 a A-91) en implementación en la rama `017-varios-establecimientos` de API y frontend, repartida entre una sesión de backend y otra de frontend.
+- **2026-10-30** — Spec 017 (varios establecimientos, A-86 a A-91) implementada en la rama `017-varios-establecimientos` de API y frontend, repartida entre una sesión de backend y otra de frontend.
   - **API (T001–T025 hechas):** locales con alta, edición y desactivación (`/establishments`), vendedores asignados (`establishment_user`) y `EstablishmentAccess`. Stock por local con traslados FEFO (`stock_transfers`) y alertas por local. Tickets, comprobantes y notas del local (el XML lleva su `CodLocal`), series por local, correlativo de tickets por empresa (A-88). El inicio, las listas y las exportaciones se filtran por local; lo existente quedó en el principal. Sin dependencias nuevas.
   - **Pruebas:** 1084 de API en SQLite y 1100 en PostgreSQL, con la migración sobre datos anteriores, traslados concurrentes y aislamiento entre locales (dos mutaciones).
   - **CE-001** en SUNAT beta (2026-10-30): B002-00000001 desde el local 0001, aceptada con su código de anexo ([verificación](docs/specs/017-varios-establecimientos/verificacion.md)).
-  - **Pendiente:** el frontend (versión 0.4.0), el recorrido con dos locales y la prueba en el teléfono (T026, F022), y el merge (T029).
+  - **App:** local actual por dispositivo, venta en curso y preferencia de serie por local (la venta de la 0.3.0 pasa al principal), selector y filtros solo con varios locales activos, «Mi empresa → Locales», locales de cada vendedor y traslados en la ficha. Versión 0.4.0. 506 pruebas de frontend.
+  - **Teléfono real y navegador** (2026-10-30, probado por el usuario): dos locales, vendedor de la sucursal, traslados, venta a medias de la 0.3.0 conservada, «Atrás», modo avión, 360 px, modo oscuro y TalkBack.
+  - **Integrada en `main`** de API y frontend (2026-10-30, merge local sin push). Suites en verde sobre `main`: 1085 de API en SQLite (1101 en PostgreSQL) y 506 de frontend.
 
 - **2026-10-29** — Spec 016 (foto del producto y logo en S3, A-79 a A-85) implementada en la rama `016-imagen-producto` de API y frontend, repartida entre una sesión de backend y otra de frontend.
   - **API:** `POST`/`DELETE products/{id}/image` (administrador) y `image: {url, thumb_url} | null` en los productos. Proceso con GD a WebP de 800 y 200 px, derecho según el EXIF y sin metadatos, con claves UUID. El logo pasa a S3 como PNG con alfa (`images:move-logos` en cada despliegue) y el PDF lo guarda en caché. Si S3 falla: 503 sin cambios, GET intactos y borrados pendientes en `image_deletions` (`images:cleanup`). Un bucket con dos carpetas: imágenes públicas en `AWS_ROOT` y copias en `AWS_BACKUP_ROOT`. El generador de OpenAPI documenta las subidas como multipart. Sin dependencias nuevas.
