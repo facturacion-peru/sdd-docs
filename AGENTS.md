@@ -108,6 +108,16 @@ Primer arranque local: `php artisan migrate:fresh --seed` (crea las cuentas de p
   - El emulador tiene Bluetooth virtual pero sin equipos: sirve para el permiso, el Bluetooth apagado y `not_paired` (guardando a mano una dirección en `sunat.printer`), no para `connect_failed` ni para imprimir.
   - Para automatizar el emulador o el teléfono, usar el protocolo de DevTools del WebView *debug* (`adb forward tcp:9222 localabstract:webview_devtools_remote_<pid>`). `adb shell input tap` falla cuando el teclado mueve los campos.
   - `pnpm android:release` exige una URL HTTPS de la API. Sin servidor, `VITE_API_BASE_URL=https://api.invalid` sirve solo para comprobar que compila.
+- **Imágenes en S3 (spec 016):**
+  - El código nunca nombra el disco de imágenes: usa `config('filesystems.images_disk')`. En local va `IMAGES_DISK=public` (y `storage:link`); sin esa variable, las fotos van al bucket real del `.env`.
+  - Un `logo_path` con «/» es una ruta antigua del disco `public`; sin «/», una clave del disco de imágenes (`CompanyLogo::isLegacy`).
+  - La app no tiene permiso para listar el bucket: lo que no se pudo borrar va a `image_deletions` y lo reintenta `images:cleanup`. No borrar objetos con `ImageStore::disk()->delete()` directo.
+  - `ImageProcessor` reduce **antes** de girar: girar una foto de 4000 px duplica la memoria y no cabe en los 128 MB de PHP-FPM.
+  - Para simular S3 caído: `Tests\Support\FailingDisks::unreachable()` (S3 real contra un puerto cerrado, sin reintentos); `url()` sigue funcionando.
+  - **Cámara en el WebView:** solo se abre con `capture` **y** `accept="image/*"`, más `<queries>` de `IMAGE_CAPTURE` en el manifiesto; si falta algo, Capacitor abre la galería sin avisar. No declarar `CAMERA`: Capacitor lo pediría, y negarlo llega como una cancelación muda.
+  - Capacitor deja la foto de la cámara en `files/Pictures` del almacenamiento externo y no la borra (puede traer GPS): `device().pickImage` la borra.
+  - Las subidas con avance van con `core/api/upload` (XHR), porque `fetch` no informa el avance. Cancelar rechaza con `UploadCancelled`, que no es un `ApiError`.
+  - La venta en curso guarda solo los campos de `SellableProduct`: lo que llega del catálogo trae más (la foto) y no debe persistirse.
 - `Eloquent\Collection::map()` sobre una colección **vacía** sigue siendo de Eloquent: su `intersect()` falla con textos. Usar `->toBase()` antes.
 - El generador de OpenAPI tipa todo parámetro de ruta como número; para `{kind}` o un UUID, el frontend usa un *cast* comentado.
 - El código heredado de `legacy/` no se ejecuta: antes de reincorporar algo, leer `docs/investigacion/001-evaluacion-api-existente.md`.
@@ -115,6 +125,12 @@ Primer arranque local: `php artisan migrate:fresh --seed` (crea las cuentas de p
 ## Bitácora
 
 Entradas breves y fechadas de decisiones o cambios relevantes (la más reciente arriba).
+
+- **2026-10-29** — Spec 016 (foto del producto y logo en S3, A-79 a A-85) implementada en la rama `016-imagen-producto` de API y frontend, repartida entre una sesión de backend y otra de frontend.
+  - **API:** `POST`/`DELETE products/{id}/image` (administrador) y `image: {url, thumb_url} | null` en los productos. Proceso con GD a WebP de 800 y 200 px, derecho según el EXIF y sin metadatos, con claves UUID. El logo pasa a S3 como PNG con alfa (`images:move-logos` en cada despliegue) y el PDF lo guarda en caché. Si S3 falla: 503 sin cambios, GET intactos y borrados pendientes en `image_deletions` (`images:cleanup`). Un bucket con dos carpetas: imágenes públicas en `AWS_ROOT` y copias en `AWS_BACKUP_ROOT`. El generador de OpenAPI documenta las subidas como multipart. Sin dependencias nuevas.
+  - **App:** reduce la foto a unos 1600 px antes de subirla (originales de hasta 10 MB) y la sube con avance. Cámara y galería del WebView sin `@capacitor/camera` ni permiso `CAMERA`. Miniaturas en «Vender», «Productos» y la ficha, nunca en el carrito. Versión 0.3.0.
+  - **Pruebas:** 903 de API en SQLite y 917 en PostgreSQL (con subidas simultáneas y su mutación) y 418 de frontend.
+  - **Pendiente:** la configuración de AWS del usuario (T019), la verificación con su bucket y en el teléfono (T020, F017) y el merge (T023).
 
 - **2026-10-23** — Spec 015 (impresión Bluetooth en la app Android, A-75 a A-78) implementada en la rama `015-impresion-bluetooth` de API y frontend.
   - **API:** `GET tickets/{id}/print`, `sales-documents/{id}/print` y `printing/test-page`. Devuelven bytes ESC/POS de 58 u 80 mm con el contenido del PDF de 80 mm (QR nativo o como imagen) y no escriben nada. Sin dependencias nuevas.
