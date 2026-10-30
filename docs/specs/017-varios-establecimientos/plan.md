@@ -146,7 +146,7 @@ Pedidos a la API, además de lo descrito arriba:
 
 1. **`establishments` también en la respuesta de `login` y de aceptar la invitación**, no solo en `/auth/me`. La sesión nace de esas respuestas: sin el dato, la app no sabe si mostrar el selector hasta recargar.
 2. **`company.active_establishments_count`** en la sesión. El vendedor recibe solo sus locales, así que con uno asignado no puede saber si la empresa tiene más. Con eso decide RF-010: con un solo local activo en la empresa no se ve nada, y con varios el vendedor ve el nombre de su local aunque no pueda cambiarlo (HU-2, esc. 1).
-3. **Buscador de ubigeo para la empresa.** Hoy `GET /ubigeos/search` solo existe en `/platform`, y la empresa tiene solo la cascada región → provincia → distrito. El formulario de locales reusa el buscador de la plataforma (`UbigeoPicker`), así que hace falta la misma búsqueda para el administrador de empresa.
+3. **Buscador de ubigeo para la empresa:** ya existe (`GET /api/v1/ubigeos/search`, grupo `tenant`, el mismo `UbigeoController@searchUbigeo` que el de `/platform`), así que en la API no cambia nada. El formulario de locales reusa `UbigeoPicker` y le pasa la función que llama a esa ruta.
 4. **En `EstablishmentResource`, `code_locked`** (true si ya tiene comprobantes). Así el formulario deshabilita el código, en vez de esperar el 422.
 5. **`establishment_id` en `SeriesResource`.** «Vender» filtra las series del local actual, y «Series» las agrupa por local.
 6. **`establishment {id, code, name, address}` en el detalle** de ticket y comprobante, no solo en las filas. El ticket web (`TicketReceipt`, `window.print()`) lo imprime.
