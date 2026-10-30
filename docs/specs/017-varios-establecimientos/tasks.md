@@ -177,7 +177,7 @@
   - con un solo local no se piden.
 
   Verificación: en verde
-- [ ] **F016** (después de T014) Pruebas y cambios en las lecturas de inventario:
+- [x] **F016** (después de T014) Pruebas y cambios en las lecturas de inventario:
   - `ProductsView` con el filtro: el disponible es el del local o la suma;
   - `ProductDetailView` con «Stock por local» (`stock_by_establishment`);
   - `LotList` y `MovementList` con el filtro y el local en cada fila; los traslados se leen «Traslado a …» o «Traslado desde …» y no ofrecen «Revertir»;
@@ -185,7 +185,7 @@
   - `StockEntryView` con «Local», por defecto el actual.
 
   Verificación: en verde
-- [ ] **F017** (después de T012) Pruebas y `TransferStockDialog.vue` en la ficha:
+- [x] **F017** (después de T012) Pruebas y `TransferStockDialog.vue` en la ficha:
   - solo el administrador y con `multi`;
   - origen con su disponible; destino solo activo y distinto del origen;
   - 422 de stock insuficiente o destino inactivo en su campo (`useApiForm`);
