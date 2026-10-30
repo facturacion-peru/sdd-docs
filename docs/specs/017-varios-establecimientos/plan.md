@@ -120,10 +120,19 @@ Aceptan `establishment_id` (opcional) y, sin él, usan los locales permitidos:
 | POST | `/establishments` | administrador | Crea un local: `code` (4 dígitos, único), `name`, `address`, `ubigeo` |
 | PATCH | `/establishments/{establishment}` | administrador | Edita nombre, dirección, ubigeo y `active`. El código no cambia si el local ya tiene comprobantes; el principal no se desactiva |
 | PUT | `/users/{user}/establishments` | administrador | Locales de un vendedor (`establishment_ids`, al menos uno activo) |
-| POST | `/products/{product}/transfers` | administrador | Traslado: `from_establishment_id`, `to_establishment_id`, `quantity`, `note` |
+| POST | `/products/{product}/transfers` | administrador | Traslado: `from_establishment_id`, `to_establishment_id`, `quantity`, `note`. Responde 201 con el `ProductResource` (con `stock_by_establishment`) |
+| POST | `/invitations` | administrador | Acepta `establishment_ids`: al menos uno activo si el rol es vendedor y la empresa tiene varios locales activos; con uno solo, se asigna ese. `InvitationResource` lo devuelve |
 | — | Rutas de venta, stock y listas | — | `establishment_id` según las secciones anteriores |
 
-`EstablishmentResource`: `id`, `code`, `name`, `address`, `ubigeo` (con nombres), `is_main`, `active`. `CompanyResource` y `/auth/me` agregan `establishments` (los permitidos, para que la app decida si muestra el selector) sin otra llamada. `UserResource` agrega `establishment_ids` para el administrador. `PlatformCompanyDetailResource` agrega `establishments_count`.
+**Recursos:**
+- `EstablishmentResource`: `id`, `code`, `name`, `address`, `ubigeo` (con nombres), `is_main`, `active` y `code_locked` (ya tiene comprobantes: el código no se puede cambiar).
+- **Sesión:** la respuesta de `login`, la de aceptar la invitación y `/auth/me` traen `establishments` (los permitidos) y `company.active_establishments_count`. El vendedor solo recibe sus locales, así que la cuenta es lo que le dice a la app si la empresa tiene varios (RF-010 frente a HU-2, esc. 1). `CompanyResource` trae lo mismo.
+- `SeriesResource` agrega `establishment_id`.
+- Detalle de ticket y de comprobante: `establishment {id, code, name, address}`. En las filas de las listas, `establishment {id, code, name}`.
+- `GET /products/{id}` agrega `stock_by_establishment: [{establishment_id, stock, available_stock}]`, solo con los locales permitidos.
+- `UserResource` agrega `establishment_ids` para el administrador.
+- `PlatformCompanyDetailResource` agrega `establishments_count`.
+- **Ubigeo:** el formulario de locales usa `GET /ubigeos/search`, que ya existe para la empresa (grupo `tenant`) con el mismo método que el de la plataforma. No cambia.
 
 **Ticket impreso:** el PDF de 80 mm y `TicketPrint` agregan el nombre y la dirección del local (cambian juntos por `PrintParityTest`). El PDF del comprobante ya trae la dirección del local; se agrega su nombre si no es el principal, también en `DocumentPrint`.
 
