@@ -124,5 +124,5 @@ Como administrador de la plataforma, quiero ver cuántas consultas se hacen al d
 | Fecha | Aclaración | Decisión |
 |---|---|---|
 | 2026-10-30 | Spec creada a pedido del usuario (búsqueda por DNI o RUC con apisperu.com, primero la base propia) | — |
-| 2026-10-30 | A-92 a A-95 | Verificado no se edita a mano; tabla común de la plataforma con tope por empresa; solo «Actualizar datos» vuelve a consultar; RUC de baja o no habido avisa sin bloquear |
+| 2026-10-30 | A-92 a A-95 | Verificado no se edita a mano; tabla común de la plataforma (el tope por empresa se descartó en A-96); solo «Actualizar datos» vuelve a consultar; RUC de baja o no habido avisa sin bloquear |
 | 2026-10-30 | A-96 | Sin topes en el MVP (plan ilimitado si el uso crece); token de la plataforma; registro manual si el servicio falla; se cuenta el uso por día |
