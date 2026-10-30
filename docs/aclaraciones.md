@@ -100,12 +100,12 @@ Registro único de preguntas abiertas y decisiones. Las specs las citan por su i
 | [A-83](#a-83) | Fotos en exportar e importar (014) | 016 | Resuelta |
 | [A-84](#a-84) | Almacenamiento en desarrollo y en pruebas | 016 | Resuelta |
 | [A-85](#a-85) | Reducir la foto en el celular antes de subirla | 016 | Resuelta |
-| [A-86](#a-86) | Stock por establecimiento o de la empresa | 017 | Abierta |
-| [A-87](#a-87) | En qué establecimiento trabaja cada usuario | 017 | Abierta |
-| [A-88](#a-88) | Numeración de los tickets con varios locales | 017 | Abierta |
-| [A-89](#a-89) ⚖️ | Quién crea los establecimientos y qué se pide | 017 | Abierta |
-| [A-90](#a-90) | Qué pantallas se separan por establecimiento | 017 | Abierta |
-| [A-91](#a-91) | Empresas que ya existen | 017 | Abierta |
+| [A-86](#a-86) | Stock por establecimiento o de la empresa | 017 | Resuelta |
+| [A-87](#a-87) | En qué establecimiento trabaja cada usuario | 017 | Resuelta |
+| [A-88](#a-88) | Numeración de los tickets con varios locales | 017 | Resuelta |
+| [A-89](#a-89) ⚖️ | Quién crea los establecimientos y qué se pide | 017 | Resuelta |
+| [A-90](#a-90) | Qué pantallas se separan por establecimiento | 017 | Resuelta |
+| [A-91](#a-91) | Empresas que ya existen | 017 | Resuelta |
 
 ---
 
@@ -1101,25 +1101,29 @@ Retoma A-07, que dejó un solo establecimiento (anexo `0000`) en el MVP, modelad
 
 ### A-86
 
-**¿El stock es de cada establecimiento o de toda la empresa?** · Bloquea: 017 · **Abierta**
+**¿El stock es de cada establecimiento o de toda la empresa?** · Bloquea: 017 · **Resuelta**
 
 - **A.** **Stock por establecimiento.** Cada local tiene su stock, sus lotes y sus alertas; vender descuenta del local donde se vende. Hacen falta **traslados** entre locales (salida de uno y entrada en otro, auditados) y las entradas de mercadería se registran en un local.
 - **B.** **Stock único de la empresa** (como hoy, A-12). Los establecimientos solo cambian la dirección y las series del comprobante y permiten ver las ventas por local.
 
 **Recomendación:** A. Una bodega con dos locales necesita saber qué hay en cada uno; con B, el stock de un local dice que hay algo que está en el otro. En contra: es el cambio más grande de la spec (inventario, lotes FEFO, alertas, importación y exportación) y la visión dejaba fuera «varios almacenes»: elegir A lo incluye.
 
+> **Decisión (2026-10-29):** A. Stock por establecimiento, con lotes y alertas por local, entradas en un local y traslados entre locales. Incluye lo que la visión llamaba «varios almacenes» (solo locales que son establecimientos de SUNAT).
+
 ### A-87
 
-**¿En qué establecimiento trabaja cada usuario?** · Bloquea: 017 · **Abierta**
+**¿En qué establecimiento trabaja cada usuario?** · Bloquea: 017 · **Resuelta**
 
 - **A.** El administrador asigna a cada vendedor **uno o varios** establecimientos. Si tiene varios, elige en cuál trabaja (se recuerda en el dispositivo) y solo vende, ve stock y ve ventas de ese. El administrador de empresa trabaja en todos y elige el local al vender.
 - **B.** Todos los usuarios ven y venden en todos los locales; el local se elige al vender.
 
 **Recomendación:** A. Evita vender por error con la serie o el stock de otro local y que un vendedor vea las ventas de un local que no es el suyo. Una empresa con un solo local no nota nada: todos quedan en el principal.
 
+> **Decisión (2026-10-29):** A. El administrador asigna a cada vendedor uno o varios locales; el vendedor solo vende y ve lo de esos locales. El administrador de empresa trabaja en todos.
+
 ### A-88
 
-**¿Cómo se numeran los tickets internos?** · Bloquea: 017 · **Abierta**
+**¿Cómo se numeran los tickets internos?** · Bloquea: 017 · **Resuelta**
 
 Hoy los tickets llevan un correlativo único por empresa (spec 003); los comprobantes ya usan la serie del local.
 
@@ -1128,29 +1132,37 @@ Hoy los tickets llevan un correlativo único por empresa (spec 003); los comprob
 
 **Recomendación:** A. No cambia la numeración de las empresas que ya usan la app y el ticket no es un comprobante de SUNAT. El local se ve en el ticket y en los filtros.
 
+> **Decisión (2026-10-29):** A. Un solo correlativo de tickets por empresa, como hoy; el ticket indica el local.
+
 ### A-89 ⚖️
 
-**¿Quién crea los establecimientos y qué se pide?** · Bloquea: 017 · **Abierta**
+**¿Quién crea los establecimientos y qué se pide?** · Bloquea: 017 · **Resuelta**
 
 **Recomendación:** el administrador de empresa, desde «Mi empresa», con el **código de anexo** que figura en su ficha RUC de SUNAT (4 dígitos, único en la empresa), nombre, dirección y ubigeo. La app no consulta SUNAT: el administrador es responsable de que el código exista ⚖️ (un código equivocado hace que SUNAT observe o rechace los comprobantes). Un local con ventas, series o stock no se borra: se **desactiva**, y entonces no admite ventas ni usuarios nuevos. El principal no se desactiva. Sin límite de locales por empresa mientras no haya planes de cobro.
 
+> **Decisión (2026-10-29):** Aceptada la recomendación.
+
 ### A-90
 
-**¿Qué pantallas se separan por establecimiento?** · Bloquea: 017 · **Abierta**
+**¿Qué pantallas se separan por establecimiento?** · Bloquea: 017 · **Resuelta**
 
 **Recomendación:**
 - **Por local, con filtro** (el administrador elige uno o «Todos»): inicio (spec 011), listas de tickets y comprobantes, stock y alertas, movimientos.
-- **Por local, al trabajar:** «Vender» usa el local actual (sus series y, si A-86 es A, su stock).
+- **Por local, al trabajar:** «Vender» usa el local actual (sus series y su stock, A-86).
 - **De toda la empresa, sin cambios:** productos y precios, clientes, usuarios, configuración de SUNAT y certificado.
 - **Exportar** (spec 014) agrega la columna del local; **importar** el stock inicial va al local que se elija.
 
 El precio es el mismo en todos los locales (precios por local, fuera de alcance).
 
+> **Decisión (2026-10-29):** Aceptada la recomendación.
+
 ### A-91
 
-**¿Qué pasa con las empresas que ya existen?** · Bloquea: 017 · **Abierta**
+**¿Qué pasa con las empresas que ya existen?** · Bloquea: 017 · **Resuelta**
 
 **Recomendación:** al instalar la versión, todo lo existente (stock, lotes, tickets, comprobantes, series y usuarios) queda en el establecimiento principal. Una empresa con un solo local ve la app igual que hoy: el selector de local y los filtros aparecen solo cuando tiene más de uno activo.
+
+> **Decisión (2026-10-29):** Aceptada la recomendación.
 
 ## Pendientes menores
 
