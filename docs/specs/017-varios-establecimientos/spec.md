@@ -1,6 +1,6 @@
 # Spec 017: Varios establecimientos
 
-**Estado:** Borrador (aclaraciones resueltas, falta aprobación) · **Versión:** 0.2 · **Fecha:** 2026-10-29
+**Estado:** Aprobada (2026-10-29) · **Versión:** 1.0 · **Fecha:** 2026-10-29
 **Depende de:** 001, 002, 003, 004, 005, 007, 011, 012, 014 · **Aclaraciones:** A-86 a A-91 (resueltas)
 
 > Qué y por qué. Sin frameworks, tablas, endpoints ni componentes: eso va en `plan.md`.
@@ -127,3 +127,4 @@ Como administrador de empresa, quiero ver las ventas, el stock y las alertas de 
 |---|---|---|
 | 2026-10-29 | Spec creada a pedido del usuario (varios establecimientos, retoma A-07) | — |
 | 2026-10-29 | A-86 a A-91 | Stock por local con traslados; usuarios asignados a locales; un correlativo de tickets por empresa; recomendaciones de A-89 a A-91 aceptadas |
+| 2026-10-29 | Aprobada (v1.0) | El usuario aprueba la v0.2 sin cambios |
