@@ -1,6 +1,6 @@
 # Plan 018: Consulta de DNI y RUC
 
-**Estado:** Borrador · **Fecha:** 2026-10-30 · **Spec:** [spec.md](./spec.md) (versión aprobada: 1.0)
+**Estado:** Aprobado (2026-10-30) · **Fecha:** 2026-10-30 · **Spec:** [spec.md](./spec.md) (versión aprobada: 1.0)
 
 > Reparto: la **API** la escribe la sesión de backend (este documento). La sección **Frontend** la completa la sesión del frontend antes de la aprobación.
 
