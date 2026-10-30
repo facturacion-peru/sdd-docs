@@ -201,7 +201,7 @@
 
   Verificación: en verde
 - [x] **F021** (después de T025) `pnpm api:types` con el `openapi.json` final. `version` 0.4.0 en `package.json` — Verificación: verificación completa del frontend con código de salida 0 y cifras anotadas, y `pnpm android:dev` compila el APK *debug* (JDK 21) — **Hecho (2026-10-30):** `type-check`, `lint`, `test:unit` (506 pruebas en 76 archivos) y `build-only` con código de salida 0. El APK *debug* compila como 0.4.0 (`versionCode` 400), sin `CAMERA`; compilado con `assembleDebug`, no instalado
-- [ ] **F022** Verificación manual del frontend (plan, «Verificación manual del frontend»):
+- [x] **F022** Verificación manual del frontend (plan, «Verificación manual del frontend»):
   - con un solo local, en web y en el teléfono, igual que en `main`;
   - con dos locales, en el teléfono real:
     - elegir el local;
@@ -213,7 +213,7 @@
   - 360 px y modo oscuro en «Vender», la barra lateral, «Mi empresa → Locales», «Usuarios» y la ficha;
   - TalkBack en el selector.
 
-  Verificación: resultados en `verificacion.md`
+  Verificación: resultados en `verificacion.md` — **Hecho (2026-10-30):** el usuario probó en el teléfono (0.4.0) y en el navegador y lo dio por bueno; la base local muestra ventas y boletas en los dos locales y dos traslados ([verificación](verificacion.md))
 - [x] **F023** README del frontend: `shared/establishments`, `UbigeoPicker` en `shared/ui`, claves de `localStorage` por local, y la fila de `company` con «Locales» — Verificación: revisado
 
 ## Cierre
