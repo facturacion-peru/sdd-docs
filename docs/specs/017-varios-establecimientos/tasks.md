@@ -102,14 +102,14 @@
 > - **Regla de todas las pantallas (RF-010):** cada tarea que agrega un selector, filtro o nombre de local prueba también que, con un solo local activo, no se pinta nada y las peticiones son las de `main`.
 > - **Verificación completa:** `pnpm type-check && pnpm lint && pnpm test:unit --run && pnpm build-only`.
 
-- [ ] **F001** Rama `017-varios-establecimientos` desde `main` en el frontend — Verificación: `git branch --show-current`
+- [x] **F001** Rama `017-varios-establecimientos` desde `main` en el frontend — Verificación: `git branch --show-current`
 - [ ] **F002** (después de T007–T008) `pnpm api:types`. Luego:
   - `shared/establishments/types.ts`: `Establishment` y `EstablishmentRef`;
   - `establishments` y `company.active_establishments_count` en `core/auth/types.ts`;
   - `shared/establishments/api.ts`: `list(includeInactive)`, `create`, `update` y `assignToUser`, con sus pruebas.
 
   Verificación: `pnpm type-check` y pruebas en verde
-- [ ] **F003** [P] Pruebas de `useEstablishmentStore` (deben fallar):
+- [x] **F003** [P] Pruebas de `useEstablishmentStore` (deben fallar):
   - `multi` solo con `active_establishments_count > 1`;
   - recuerda `current` en `sunat.establishment.<empresa>.<usuario>`, aparte para cada usuario y empresa;
   - con un solo permitido, lo toma solo;
@@ -119,22 +119,22 @@
   - cerrar sesión no borra la elección.
 
   Verificación: en rojo
-- [ ] **F004** `shared/establishments/store.ts` — Verificación: F003 en verde
-- [ ] **F005** Pruebas y `EstablishmentSwitcher.vue`, y su lugar en `AppLayout` (barra lateral y contraída con `aria-label`):
+- [x] **F004** `shared/establishments/store.ts` — Verificación: F003 en verde
+- [x] **F005** Pruebas y `EstablishmentSwitcher.vue`, y su lugar en `AppLayout` (barra lateral y contraída con `aria-label`):
   - con uno permitido es texto;
   - con varios, `BaseDialog` «¿En qué local trabajas?» con radios, el actual con `data-autofocus` y «Atrás» que lo cierra (`dismissTop`);
   - con una venta abierta, avisa «Tu venta en curso (N productos) queda guardada en …»;
   - sin `multi`, no se pinta.
 
   Verificación: en verde y `theme.spec.ts` en verde
-- [ ] **F006** [P] Pruebas y `EstablishmentFilter.vue`:
+- [x] **F006** [P] Pruebas y `EstablishmentFilter.vue`:
   - «Todos los locales» no manda `establishment_id`;
   - por defecto, «Todos» para el administrador y el local actual para el vendedor;
   - el administrador ve los inactivos con «(inactivo)»;
   - sin `multi`, no se pinta.
 
   Verificación: en verde
-- [ ] **F007** [P] Pruebas de `sale-draft.ts` por local (deben fallar):
+- [x] **F007** [P] Pruebas de `sale-draft.ts` por local (deben fallar):
   - claves `….<local>` para la venta y la preferencia;
   - cambiar de local guarda una venta y carga la otra, y volver recupera la primera;
   - la preferencia de serie es por local;
@@ -143,7 +143,7 @@
   - sin local actual no se guarda nada.
 
   Verificación: en rojo
-- [ ] **F008** `sale-draft.ts` con el local en la clave, la migración y `clearAll()`, y `AppLayout.logout()` con `clearAll()`. Un 401 sigue sin borrar (principio VII; `AGENTS.md`) — Verificación: F007 y las pruebas de `sale-draft` y `AppLayout` en verde
+- [x] **F008** `sale-draft.ts` con el local en la clave, la migración y `clearAll()`, y `AppLayout.logout()` con `clearAll()`. Un 401 sigue sin borrar (principio VII; `AGENTS.md`) — Verificación: F007 y las pruebas de `sale-draft` y `AppLayout` en verde
 - [ ] **F009** (después de T016–T018) Pruebas y cambios en «Vender» (`NewSaleView`, `ProductCatalog`, `SaleCart`, `sales/api.ts`):
   - catálogo, `availability` y cobro con `establishment_id`; el cobro usa el local de la venta guardada;
   - solo las series del local (`SeriesResource.establishment_id`);
@@ -159,7 +159,7 @@
 
   Verificación: en verde y `theme.spec.ts` en verde (`TicketReceipt` sigue en blanco y negro)
 - [ ] **F011** [P] (después de T021) Pruebas y `EstablishmentFilter` en el inicio: las tarjetas, el gráfico, las recientes y los pendientes se recargan con el local — Verificación: en verde
-- [ ] **F012** [P] `UbigeoPicker` pasa de `platform/components` a `shared/ui` y recibe la función de búsqueda por prop: la plataforma le pasa `/platform/ubigeos/search` y la empresa, `/ubigeos/search`. Pruebas de la plataforma sin cambios — Verificación: suite completa en verde
+- [x] **F012** [P] `UbigeoPicker` pasa de `platform/components` a `shared/ui` y recibe la función de búsqueda por prop: la plataforma le pasa `/platform/ubigeos/search` y la empresa, `/ubigeos/search`. Pruebas de la plataforma sin cambios — Verificación: suite completa en verde
 - [ ] **F013** (después de T007) Pruebas y cambios en «Mi empresa → Locales»:
   - sección «Locales» en `CompanyView` con «Principal» e «Inactivo» (`BaseBadge`);
   - rutas `/empresa/locales/nuevo` y `/empresa/locales/:id` (solo el administrador) con `EstablishmentFormView`;
