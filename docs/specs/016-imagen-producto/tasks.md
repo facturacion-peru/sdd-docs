@@ -79,8 +79,8 @@
   - la foto llega como `File` con su orientación.
 
   Si no alcanza: proponer `@capacitor/camera` 8.x 🔒 (revisión, `minimumReleaseAge` y aprobación del usuario). Verificación: resultado y decisión en `verificacion.md`
-- [ ] **F003** Separar en `core/api` la parte común de las cabeceras (token, `Accept` y `X-App-Version`), que usarán `authMiddleware` y `upload.ts` — Verificación: suite completa en verde, sin cambios de comportamiento
-- [ ] **F004** Pruebas de `core/api/upload.ts` (deben fallar):
+- [x] **F003** Separar en `core/api` la parte común de las cabeceras (token, `Accept` y `X-App-Version`), que usarán `authMiddleware` y `upload.ts` — Verificación: suite completa en verde, sin cambios de comportamiento
+- [x] **F004** Pruebas de `core/api/upload.ts` (deben fallar):
   - cabeceras;
   - `onProgress`;
   - 422 → `ApiError` con `errors.image`;
@@ -89,7 +89,7 @@
   - abortar sin error.
 
   Luego `uploadForm` con XHR. Verificación: en verde
-- [ ] **F005** [P] Pruebas de `shared/images/prepare.ts` (deben fallar):
+- [x] **F005** [P] Pruebas de `shared/images/prepare.ts` (deben fallar):
   - *magic bytes*: HEIC con nombre `.jpg` → rechazado;
   - más de 10 MB → rechazado sin decodificar;
   - dimensiones leídas en la cabecera de JPEG (SOF), PNG (IHDR) y WebP (VP8, VP8L y VP8X), y más de 50 MP → rechazado;
@@ -97,11 +97,11 @@
   - imagen ilegible → «No se pudo leer la imagen».
 
   Verificación: en rojo
-- [ ] **F006** `prepareProductPhoto` y la validación del logo (formato y 1 MB, sin reducir) — Verificación: F005 en verde
-- [ ] **F007** `Device.pickImage(source)` en `types.ts`, `web.ts` y `native.ts`, según F002 ([verificación](verificacion.md)), con pruebas del `<input>` temporal: `camera` → `accept="image/*"` y `capture`; `gallery` → los tres formatos; `cancel` → `null`. En Android:
+- [x] **F006** `prepareProductPhoto` y la validación del logo (formato y 1 MB, sin reducir) — Verificación: F005 en verde
+- [x] **F007** `Device.pickImage(source)` en `types.ts`, `web.ts` y `native.ts`, según F002 ([verificación](verificacion.md)), con pruebas del `<input>` temporal: `camera` → `accept="image/*"` y `capture`; `gallery` → los tres formatos; `cancel` → `null`. En Android:
   - `<queries>` para `IMAGE_CAPTURE` y `external-files-path` `Pictures/` en `file_paths.xml`, **sin** `CAMERA`;
   - borrar la foto temporal de `Pictures/` después de leerla (`@capacitor/filesystem`, ya instalado) — Verificación: pruebas de `core/device` en verde
-- [ ] **F008** `ProductImage` y `Product.image` en `inventory/types.ts`, y `CatalogProduct` en `sales/api.ts`. Después, pruebas y `shared/ui/ProductThumb.vue`:
+- [x] **F008** `ProductImage` y `Product.image` en `inventory/types.ts`, y `CatalogProduct` en `sales/api.ts`. Después, pruebas y `shared/ui/ProductThumb.vue`:
   - marcador sin foto y con `@error`, con `aria-hidden`;
   - `alt` igual al nombre;
   - `loading="lazy"`;
@@ -109,31 +109,31 @@
   - `thumb_url` en `sm` y `md`, y `url` en `lg`.
 
   Verificación: en verde y `theme.spec.ts` en verde
-- [ ] **F009** Pruebas y `shared/ui/ImagePicker.vue`:
+- [x] **F009** Pruebas y `shared/ui/ImagePicker.vue`:
   - vista previa, descartar sin emitir y liberar la URL al desmontar;
   - en la web, abre directo el selector;
   - en la app, `BaseDialog` con «Tomar foto» y «Elegir de la galería», que se cierra con «Atrás» (`dismissTop`);
   - el error de `prepareProductPhoto` se muestra.
 
   Verificación: en verde
-- [ ] **F010** (después de T003) `pnpm api:types`. `inventoryApi.uploadImage` con `uploadForm` y `inventoryApi.removeImage`, con sus pruebas — Verificación: `pnpm type-check` y pruebas en verde
-- [ ] **F011** Pruebas y cambios en `ProductFormView.vue` (HU-1, esc. 6 a 8):
+- [x] **F010** (después de T003) `pnpm api:types`. `inventoryApi.uploadImage` con `uploadForm` y `inventoryApi.removeImage`, con sus pruebas — Verificación: `pnpm type-check` y pruebas en verde
+- [x] **F011** Pruebas y cambios en `ProductFormView.vue` (HU-1, esc. 6 a 8):
   - sección «Foto» solo para el administrador;
   - al crear, guarda y después sube; si falla, va a la ficha con el aviso y «Reintentar»;
   - al editar, sube con su avance, sin doble envío y con «Cancelar»;
   - sin conexión, guarda los datos y avisa.
 
   Verificación: en verde
-- [ ] **F012** Pruebas y cambios en `ProductDetailView.vue` (HU-1, esc. 3 y 5, y HU-2, esc. 3):
+- [x] **F012** Pruebas y cambios en `ProductDetailView.vue` (HU-1, esc. 3 y 5, y HU-2, esc. 3):
   - foto grande;
   - «Cambiar foto» y «Quitar foto» con confirmación, solo para el administrador;
   - 422 y 503 con el mensaje de la API.
 
   Verificación: en verde
-- [ ] **F013** [P] `ProductThumb` en `ProductsView.vue` (`sm`, `grid-cols-1`) y en `ProductCatalog.vue` (`md`, también en el esqueleto), con sus pruebas. El carrito no muestra fotos — Verificación: en verde
-- [ ] **F014** [P] Prueba (debe fallar) y cambio en `sale-draft.ts`: `add()` copia solo los campos de `SellableProduct`, y `localStorage` no guarda `image` (HU-2, esc. 4) — Verificación: en verde
-- [ ] **F015** [P] Pruebas y cambios en `CompanyView.vue`: el logo se sube con `uploadForm` (con avance), con la validación previa de formato y 1 MB, y sin reducirlo (HU-4, esc. 5) — Verificación: en verde
-- [ ] **F016** (después de T018) `pnpm api:types` con el `openapi.json` final. `version` 0.3.0 en `package.json` — Verificación: verificación completa del frontend con código de salida 0 y cifras anotadas, y `pnpm android:dev` compila e instala el APK *debug* (JDK 21)
+- [x] **F013** [P] `ProductThumb` en `ProductsView.vue` (`sm`, `grid-cols-1`) y en `ProductCatalog.vue` (`md`, también en el esqueleto), con sus pruebas. El carrito no muestra fotos — Verificación: en verde
+- [x] **F014** [P] Prueba (debe fallar) y cambio en `sale-draft.ts`: `add()` copia solo los campos de `SellableProduct`, y `localStorage` no guarda `image` (HU-2, esc. 4) — Verificación: en verde
+- [x] **F015** [P] Pruebas y cambios en `CompanyView.vue`: el logo se sube con `uploadForm` (con avance), con la validación previa de formato y 1 MB, y sin reducirlo (HU-4, esc. 5) — Verificación: en verde
+- [x] **F016** (después de T018) `pnpm api:types` con el `openapi.json` final. `version` 0.3.0 en `package.json` — Verificación: verificación completa del frontend con código de salida 0 y cifras anotadas, y `pnpm android:dev` compila e instala el APK *debug* (JDK 21) — **Hecho (2026-10-29):** `type-check`, `lint`, `test:unit` (418 pruebas en 66 archivos) y `build-only` con código de salida 0. El APK *debug* compila como 0.3.0 (`versionCode` 300) y no declara `CAMERA`. No se instaló en el teléfono: allí está la app del usuario
 - [ ] **F017** ☁️ Verificación manual del frontend (parte de T020, con la API de la rama y el bucket de pruebas):
   - 360 px y modo oscuro en «Vender», «Productos» y la ficha;
   - TalkBack en el catálogo;
