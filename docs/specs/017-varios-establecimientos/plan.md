@@ -129,7 +129,119 @@ Aceptan `establishment_id` (opcional) y, sin él, usan los locales permitidos:
 
 ## Frontend
 
-_Pendiente: la completa la sesión del frontend._
+> Lo escribe la sesión del frontend. Rama `017-varios-establecimientos` del frontend, desde `main`. **Sin dependencias nuevas.** Versión 0.4.0 (de ahí sale `versionCode`); al desplegar, `APP_ANDROID_MIN_VERSION` sube a 0.4.0.
+
+### Lo que el frontend necesita del contrato
+
+Pedidos a la API, además de lo descrito arriba:
+
+1. **`establishments` también en la respuesta de `login` y de aceptar la invitación**, no solo en `/auth/me`. La sesión nace de esas respuestas: sin el dato, la app no sabe si mostrar el selector hasta recargar.
+2. **`company.active_establishments_count`** en la sesión. El vendedor recibe solo sus locales, así que con uno asignado no puede saber si la empresa tiene más. Con eso decide RF-010: con un solo local activo en la empresa no se ve nada, y con varios el vendedor ve el nombre de su local aunque no pueda cambiarlo (HU-2, esc. 1).
+3. **Buscador de ubigeo para la empresa.** Hoy `GET /ubigeos/search` solo existe en `/platform`, y la empresa tiene solo la cascada región → provincia → distrito. El formulario de locales reusa el buscador de la plataforma (`UbigeoPicker`), así que hace falta la misma búsqueda para el administrador de empresa.
+4. **En `EstablishmentResource`, `code_locked`** (true si ya tiene comprobantes). Así el formulario deshabilita el código, en vez de esperar el 422.
+5. **`establishment_id` en `SeriesResource`.** «Vender» filtra las series del local actual, y «Series» las agrupa por local.
+6. **`establishment {id, code, name, address}` en el detalle** de ticket y comprobante, no solo en las filas. El ticket web (`TicketReceipt`, `window.print()`) lo imprime.
+7. **`stock_by_establishment: [{establishment_id, stock, available_stock}]` en `GET /products/{id}`**, solo con los locales permitidos. El traslado muestra el disponible de cada origen, y la ficha muestra el stock por local, sin una llamada por local.
+8. **`POST /products/{product}/transfers`** responde 201 con el producto (`ProductResource` con `stock_by_establishment`). La app refresca la ficha; los lotes y movimientos los vuelve a pedir.
+9. **`POST /invitations`** acepta `establishment_ids` (al menos uno activo si el rol es vendedor y la empresa tiene varios locales). `InvitationResource` lo devuelve.
+
+### Local actual (`shared/establishments/`)
+
+Lo usan varias features (venta, inventario, inicio y listas), así que no va dentro de ninguna. Tiene la misma forma que `printer-settings` (spec 015).
+
+- **`types.ts`:** `Establishment = {id, code, name, address, ubigeo, is_main, active, code_locked}` y `EstablishmentRef = {id, code, name}` (lo que traen las filas). Se tipan a mano, como el resto de las respuestas.
+- **`store.ts` (`useEstablishmentStore`):**
+  - **`allowed`:** sale de `session.establishments` y se refresca con `GET /establishments` al entrar a «Vender» (un local creado o desactivado durante la sesión).
+  - **`multi`:** `company.active_establishments_count > 1`. Es la única condición de RF-010: ningún selector, filtro ni columna de local se pinta sin ella.
+  - **`current`:** el local donde se trabaja, recordado **por dispositivo** en `sunat.establishment.<empresa>.<usuario>` (solo el id). Al iniciar:
+    - si el id guardado está entre los `allowed` activos, se usa;
+    - si hay un solo permitido, se toma solo;
+    - si no, queda `null` y la app pide elegir (HU-2, esc. 2 y 5).
+
+    No se borra al cerrar sesión, como la preferencia de serie: es del dispositivo.
+  - **`noneAllowed`:** el vendedor sin locales activos. «Vender» muestra «No tienes un local asignado. Pide al administrador que te asigne uno.» y no carga el catálogo (caso límite).
+- **`EstablishmentSwitcher.vue`:**
+  - Muestra el nombre del local actual en la barra lateral, bajo la empresa, y en la cabecera de «Vender».
+  - Con más de un permitido, es un botón que abre un `BaseDialog` con la lista (radios, `data-autofocus` en el actual). «Atrás» lo cierra (`useDismissable`).
+  - Con uno solo, es texto. Sin `multi`, no se pinta.
+- **`EstablishmentFilter.vue`:** un `BaseSelect` con «Todos los locales» y los locales.
+  - Para el administrador, también los inactivos (`?include_inactive=1`), porque su historial se sigue viendo, con «(inactivo)».
+  - **Por defecto:** «Todos» para el administrador y el local actual para el vendedor (A-87: trabaja en uno a la vez).
+  - Con «Todos» no se manda `establishment_id`: la API ya usa los permitidos.
+  - Sin `multi`, no se pinta.
+
+### Venta en curso y preferencia por local (specs 012 y A-60)
+
+- **Claves:**
+  - venta en curso: `sunat.sale-draft.<empresa>.<usuario>.<local>`;
+  - preferencia de comprobante y serie: `sunat.sale-preference.<empresa>.<usuario>.<local>` (la serie es de un local).
+
+  `storageKey` depende de `current`. Cambiar de local guarda la venta del local anterior y carga la del nuevo: nunca se mezclan, y al volver al local anterior la venta sigue ahí (HU-2, esc. 2).
+- **Al cambiar de local con una venta abierta,** el diálogo lo dice antes de confirmar: «Tu venta en curso (3 productos) queda guardada en Principal.»
+- **Migración de las claves de 0.3.0 (sin local):** al cargar, si no existe la clave del local y sí la antigua, y el local actual es el **principal**, se mueve la antigua a la nueva y se borra. Todo lo de antes estaba en el principal (A-91), así que no se pierde una venta a medias al actualizar.
+- **Cerrar sesión** (`AppLayout.logout()` → `draft.clearAll()`) borra las ventas en curso de **todos** los locales del usuario: recorre las claves `sunat.sale-draft.<empresa>.<usuario>.*`. Así no quedan ventas de un local desactivado en el teléfono. Un 401 sigue sin borrarlas (principio VII).
+- **La idempotencia no cambia:** la clave viaja con cada venta guardada, y una venta solo se cobra en el local donde se armó, porque `establishment_id` sale del local de la clave, no del actual.
+- **Local desactivado mientras se vende:** el cobro recibe 422 «No puedes trabajar en ese local». La app refresca `allowed`, deja `current` en `null`, pide elegir otro y conserva la venta en su clave. No se pasa sola al local nuevo (caso límite).
+
+### Pantallas
+
+| Dónde | Cambio |
+|---|---|
+| `AppLayout.vue` | `EstablishmentSwitcher` en la barra lateral, bajo el nombre de la empresa; contraído (spec 010 v1.4) solo queda el ícono con `aria-label` |
+| `NewSaleView.vue` / `ProductCatalog.vue` / `SaleCart.vue` | El catálogo, `availability` (series) y el cobro van con `establishment_id` del local actual. Las series se filtran por `establishment_id` del local. Sin local elegido (`multi` y `current === null`), se muestra el selector en lugar del catálogo |
+| `TicketView.vue`, `SalesDocumentView.vue`, `TicketReceipt.vue` | Nombre del local (y dirección en el recibo) si `multi` |
+| `TicketsView.vue`, `SalesDocumentsView.vue` | `EstablishmentFilter` y el código del local en cada fila (texto pequeño, sin columna nueva a 360 px) |
+| Inicio (`dashboard`) | `EstablishmentFilter` arriba; las tarjetas y el gráfico se recargan al cambiarlo |
+| `ProductsView.vue` | `EstablishmentFilter`: el disponible es el del local elegido o la suma. El precio no cambia (A-90) |
+| `ProductDetailView.vue` | «Stock por local» (lista corta con `stock_by_establishment`) si `multi`. `LotList` y `MovementList` con el filtro y el local en cada fila; los movimientos de traslado se leen «Traslado a Sucursal» o «Traslado desde Principal» y no ofrecen «Revertir» |
+| `TransferStockDialog.vue` (nuevo, inventario) | Solo para el administrador y con `multi`. Campos: origen (con su disponible), destino (solo activos y distinto del origen), cantidad y nota. Usa `useApiForm` para los 422 (stock insuficiente, destino inactivo). Al terminar, «Traslado registrado.» y recarga la ficha |
+| `StockEntryView.vue` | «Local» (`BaseSelect`, por defecto el actual) si `multi` |
+| `AlertsView.vue` | `EstablishmentFilter` y el local en cada alerta (un producto puede salir dos veces) |
+| «Mi empresa → Locales» (`company`) | Una sección «Locales» en `CompanyView` con la lista: código, nombre, «Principal» e «Inactivo» con `BaseBadge`. «Nuevo local» y «Editar» van a `/empresa/locales/nuevo` y `/empresa/locales/:id` (`EstablishmentFormView`, solo para el administrador) |
+| `EstablishmentFormView.vue` (nuevo) | Código (4 dígitos, `inputmode="numeric"`, deshabilitado si `code_locked`), nombre, dirección y ubigeo con `UbigeoPicker`, que pasa a `shared/ui` y recibe la función de búsqueda por prop. Aviso fijo ⚖️ (A-89): «Usa el código de anexo de tu ficha RUC. Si no existe en SUNAT, tus comprobantes serán observados o rechazados.» «Desactivar» o «Activar» pide confirmación con `BaseDialog`; el principal no lo ofrece |
+| `SeriesView.vue` | Las series se agrupan por local si `multi`, y «Nueva serie» pide el local (por defecto el principal) |
+| `UsersView.vue` | Los vendedores muestran sus locales y una acción «Locales» con un diálogo de casillas (al menos uno, solo activos) → `PUT /users/{user}/establishments`. El administrador muestra «Todos los locales», sin acción |
+| `InviteUserDialog.vue` | Con rol vendedor y `multi`: casillas de locales, por defecto el actual. Con un solo local no se piden: la API asigna ese |
+| Exportar e importar (`data-transfer`) | `EstablishmentFilter` en la exportación de productos y de ventas; «Local del stock inicial» (por defecto el principal) en la vista previa de productos |
+| Plataforma (`CompanyDetailView`) | «Locales: N» con `establishments_count` |
+
+**Lo que no cambia:**
+- clientes, precios, configuración de SUNAT y certificado (A-90);
+- la nota de crédito: el local sale del original, y el diálogo solo muestra la serie que propone la API;
+- la impresión Bluetooth: los bytes ya traen el local.
+
+### 360 px y accesibilidad
+
+- El nombre del local se trunca con `truncate` dentro de `min-w-0`, y el selector abre un diálogo, no un menú desplegable.
+- Los filtros comparten la fila del grid existente (`grid-cols-1` en el celular).
+- Colores solo del tema (`theme.spec.ts`). Las casillas y los radios llevan `label`, y el diálogo del selector tiene título («¿En qué local trabajas?»).
+
+### Pruebas del frontend (Vitest)
+
+| Requisito / escenario | Prueba |
+|---|---|
+| RF-010, A-91 | `EstablishmentSwitcher`, `EstablishmentFilter` y `NewSaleView` con un solo local activo: no hay selector, filtro ni nombre de local, y las peticiones no cambian respecto a `main` |
+| HU-2 esc. 1–2 | `establishment-store.spec.ts`: recuerda el local por empresa y usuario; con un solo permitido lo toma solo; con un id guardado que ya no está permitido, queda en `null` |
+| HU-2 esc. 2, spec 012 | `sale-draft.spec.ts`: cambiar de local guarda y carga ventas distintas; volver recupera la primera; la preferencia de serie es por local; migración de la clave 0.3.0 solo al principal; `clearAll()` borra todos los locales del usuario y nada de otro usuario |
+| HU-2 esc. 5 | `NewSaleView.spec.ts`: 422 «No puedes trabajar en ese local» al cobrar → pide elegir y la venta sigue en su clave; el vendedor sin locales ve el mensaje y no se carga el catálogo |
+| HU-2 esc. 3 | El cobro (ticket y comprobante) manda el `establishment_id` del local de la venta; las series del catálogo son solo las del local |
+| HU-3 | `TransferStockDialog.spec.ts`: el destino excluye el origen y los inactivos; el 422 de stock insuficiente se ve en el campo; al terminar, recarga. `MovementList`: un traslado no ofrece «Revertir» |
+| HU-1 | `EstablishmentFormView.spec.ts`: 4 dígitos, código deshabilitado con `code_locked`, el principal sin «Desactivar», 422 de código repetido en el campo y aviso A-89 visible |
+| HU-4 | `EstablishmentFilter`: «Todos» no manda el parámetro; por defecto «Todos» para el administrador y el local actual para el vendedor. Inicio, listas y alertas recargan al cambiarlo |
+| A-87 | `UsersView` / `InviteUserDialog`: asignación con al menos un local; el administrador sin acción |
+| Tema y router | `theme.spec.ts` y `router.spec.ts` siguen en verde con las vistas nuevas |
+
+**Verificación manual del frontend** (además de los pasos 1 a 4 de la API):
+- **Con un solo local** (RF-010), en web y en el teléfono: «Vender», inicio, listas y ficha iguales a `main`;
+- **con dos locales, en el teléfono real:**
+  - elegir el local al entrar;
+  - armar una venta, cambiar de local y volver;
+  - vender desde el segundo y trasladar;
+  - «Atrás» en los diálogos nuevos;
+  - modo avión con la venta abierta;
+  - actualizar desde la 0.3.0 con una venta a medias (migración de la clave);
+- 360 px y modo oscuro en «Vender», la barra lateral, «Mi empresa → Locales», «Usuarios» y la ficha;
+- TalkBack en el selector de local.
 
 ## Estrategia de pruebas
 
