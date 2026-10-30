@@ -156,4 +156,4 @@
   - estado en `docs/specs/README.md`.
 
   El README del frontend lo actualiza su sesión. Verificación: revisada — **Hecho (2026-10-29):** README de la API, trampas de API y frontend (incluida la del APK *debug* con `http://localhost`), bitácora y estado. La prueba en el teléfono con disco local está en `verificacion.md`
-- [ ] **T023** 🔒 Merge local de `016-imagen-producto` a `main` en ambos repositorios y commit de la raíz — Verificación: suites en verde sobre `main`
+- [x] **T023** 🔒 Merge local de `016-imagen-producto` a `main` en ambos repositorios y commit de la raíz — Verificación: suites en verde sobre `main` — **Hecho (2026-10-29)**, con la confirmación del usuario: API `1910127` y frontend `c1d268d`, sin push. Sobre `main`: 903 pruebas de API en SQLite (14 omitidas), 917 en PostgreSQL, Pint y 420 de frontend, con código de salida 0
