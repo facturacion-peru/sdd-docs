@@ -142,7 +142,7 @@
   - **CE-002** con `chrome://inspect`.
 
   Verificación: resultados en `verificacion.md`
-- [ ] **F018** README del frontend: reducción de fotos, `pickImage` y `ProductThumb`. Las trampas nuevas del frontend se pasan a T022 — Verificación: revisada
+- [x] **F018** README del frontend: reducción de fotos, `pickImage` y `ProductThumb`. Las trampas nuevas del frontend se pasan a T022 — Verificación: revisada
 
 ## Cierre
 
