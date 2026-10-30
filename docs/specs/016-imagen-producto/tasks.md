@@ -8,8 +8,8 @@
 
 ## Fase 1 · Preparación (API)
 
-- [ ] **T001** Rama `016-imagen-producto` desde `main` en la API — Verificación: `git branch --show-current`
-- [ ] **T002** Configuración, sin cambiar comportamiento:
+- [x] **T001** Rama `016-imagen-producto` desde `main` en la API — Verificación: `git branch --show-current`
+- [x] **T002** Configuración, sin cambiar comportamiento:
   - disco `images` (S3, raíz `AWS_ROOT`, `throw => true`);
   - `filesystems.images_disk` (`IMAGES_DISK`, por defecto `images`);
   - en el disco `s3` de las copias, la raíz `AWS_BACKUP_ROOT` y las claves `AWS_BACKUP_*` (por defecto las `AWS_*`);
@@ -17,7 +17,7 @@
   - `exif` en `PHP_EXTENSIONS` de la CI.
 
   **Al terminar, avisar al usuario que renombre `AWS_BACKUP_BUCKET` → `AWS_BACKUP_ROOT` y agregue `IMAGES_DISK=public` en su `.env`.** Verificación: suites en verde, `php artisan config:show filesystems.disks.s3.root` con su `.env` y `actionlint`
-- [ ] **T003** Generador de OpenAPI (pruebas primero): con reglas `file` o `image`, el cuerpo pasa a `multipart/form-data` y sin `maxLength`. `company/logo` queda bien documentado — Verificación: prueba del generador en verde y `public/openapi.json` regenerado
+- [x] **T003** Generador de OpenAPI (pruebas primero): con reglas `file` o `image`, el cuerpo pasa a `multipart/form-data` y sin `maxLength`. `company/logo` queda bien documentado — Verificación: prueba del generador en verde y `public/openapi.json` regenerado
 
 ## Fase 2 · API: proceso de imágenes
 
@@ -71,8 +71,8 @@
 > - **En paralelo con la API:** de F001 a F009 no dependen de ella, y F002 puede empezar enseguida.
 > - **Verificación completa:** `pnpm type-check && pnpm lint && pnpm test:unit --run && pnpm build-only`.
 
-- [ ] **F001** Rama `016-imagen-producto` desde `main` en el frontend — Verificación: `git branch --show-current`
-- [ ] **F002** Prueba en el emulador (T-F1), sin tocar el código de la rama, con una página de prueba en la variante *debug*. Comprobar:
+- [x] **F001** Rama `016-imagen-producto` desde `main` en el frontend — Verificación: `git branch --show-current`
+- [x] **F002** Prueba en el emulador (T-F1), sin tocar el código de la rama, con una página de prueba en la variante *debug*. Comprobar:
   - `<input type="file" capture="environment">` abre la cámara y sin `capture` abre el selector de fotos de Android 13+;
   - funciona sin declarar `CAMERA` y sin permiso de almacenamiento;
   - «Atrás» dentro de la cámara y del selector;
@@ -98,7 +98,9 @@
 
   Verificación: en rojo
 - [ ] **F006** `prepareProductPhoto` y la validación del logo (formato y 1 MB, sin reducir) — Verificación: F005 en verde
-- [ ] **F007** `Device.pickImage(source)` en `types.ts`, `web.ts` y `native.ts`, según el resultado de F002, con pruebas del `<input>` temporal (`accept`, `capture` y cancelar → `null`). Si F002 lo exige, `CAMERA` en el manifiesto — Verificación: pruebas de `core/device` en verde
+- [ ] **F007** `Device.pickImage(source)` en `types.ts`, `web.ts` y `native.ts`, según F002 ([verificación](verificacion.md)), con pruebas del `<input>` temporal: `camera` → `accept="image/*"` y `capture`; `gallery` → los tres formatos; `cancel` → `null`. En Android:
+  - `<queries>` para `IMAGE_CAPTURE` y `external-files-path` `Pictures/` en `file_paths.xml`, **sin** `CAMERA`;
+  - borrar la foto temporal de `Pictures/` después de leerla (`@capacitor/filesystem`, ya instalado) — Verificación: pruebas de `core/device` en verde
 - [ ] **F008** `ProductImage` y `Product.image` en `inventory/types.ts`, y `CatalogProduct` en `sales/api.ts`. Después, pruebas y `shared/ui/ProductThumb.vue`:
   - marcador sin foto y con `@error`, con `aria-hidden`;
   - `alt` igual al nombre;
