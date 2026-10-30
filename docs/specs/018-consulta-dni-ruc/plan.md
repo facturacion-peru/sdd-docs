@@ -95,7 +95,100 @@ Las dos rutas de empresa van en `TenantRoutes.php`. La de plataforma la cubren `
 
 ## Frontend
 
-_Pendiente: la completa la sesión del frontend._
+> Lo escribe la sesión del frontend. Rama `018-consulta-dni-ruc` del frontend, desde `main`. **Sin dependencias nuevas.** Versión 0.5.0 (de ahí sale `versionCode`).
+
+### Lo que el frontend necesita del contrato
+
+1. **Valores de `ruc_status` y `ruc_condition` normalizados**, por ejemplo siempre en mayúsculas y sin espacios de más (`ACTIVO`, `BAJA DE OFICIO`, `HABIDO`, `NO HABIDO`…). La app avisa cuando `ruc_status !== 'ACTIVO'` o `ruc_condition !== 'HABIDO'` (A-95) y muestra el texto tal cual.
+2. **`verified_at`** en ISO 8601, como el resto de fechas.
+3. **Un cliente manual que el servicio no pudo verificar** (paso 2 de la búsqueda) llega con `data` igual al cliente manual y `reason` igual al motivo. La app lo elige igual y muestra el motivo debajo.
+
+### Tipos y API (`features/sales`)
+
+- **`Customer`:** agrega `verified: boolean`, `verified_at: string | null`, `ruc_status: string | null` y `ruc_condition: string | null`. Se tipan a mano, como el resto de las respuestas.
+- **`LookupResult`:** `{ customer: Customer | null; source: 'company' | 'platform' | 'service' | null; reason: 'not_found' | 'unavailable' | 'quota' | 'disabled' | null }`.
+- **`customersApi.lookup(type, number, signal)`:** `POST /customers/lookup` con el `AbortSignal` de `openapi-fetch`; cancelar no muestra error.
+- **`customersApi.refresh(id)`:** `POST /customers/{id}/refresh`. Un 503 llega como `ApiError` con su `message`.
+- **`shared/utils/documents.ts`:** `isDni`, `isRuc` (11 dígitos y dígito verificador, el mismo cálculo que `App\Rules\Ruc`) y `documentKind(text)`. Sirven para avisar del formato **antes** de pedir nada (RF-005, HU-1 esc. 6). La API valida igual.
+
+### `useDocumentLookup` (`features/sales/composables`)
+
+Recibe el texto que se escribe y devuelve un estado:
+- `idle` (no parece documento);
+- `invalid` (con el mensaje: «El DNI tiene 8 dígitos.», «El RUC no es válido: revisa los números.»);
+- `searching`;
+- `found` (`customer`, `source`);
+- `missing` (`reason`);
+- `offline`.
+
+**Reglas:**
+- **Cuándo consulta:** al completar 8 dígitos (DNI) u 11 (RUC) y con 300 ms de espera sin teclear.
+- **Una búsqueda a la vez:** cada búsqueda nueva aborta la anterior (`AbortController`). Una respuesta tardía nunca pisa a una más nueva: se compara el número.
+- **Sin conexión** (`device().onConnectionChange`): no consulta. Busca solo entre los clientes ya cargados y queda en `offline` (caso límite).
+- **Factura (`requireRuc`):** un DNI queda en `invalid` con «Para factura se necesita un RUC.», sin consultar.
+
+### «Vender»: `CustomerPicker`
+
+- **El campo de búsqueda es el mismo de hoy.** Si lo escrito es un DNI o un RUC, se usa `useDocumentLookup`; si es texto, la búsqueda por nombre de siempre.
+- **Encontrado (HU-1 esc. 1 a 3):** el cliente **queda elegido solo**, sin un toque más (CE-001). En la tarjeta del cliente elegido se ve:
+  - nombre o razón social y dirección;
+  - la insignia «Verificado» (con la fecha en `title` y en texto para el lector) o «Manual»;
+  - el estado del RUC.
+  
+  «Cambiar» vuelve a la búsqueda, como hoy.
+- **RUC de baja o no habido (A-95 ⚖️):** `BaseAlert` de aviso dentro de la tarjeta, «Este RUC figura como BAJA DE OFICIO / NO HABIDO en SUNAT. Puedes emitir, pero confírmalo con el cliente.». No bloquea «Emitir».
+- **No encontrado o servicio caído (HU-1 esc. 5, RF-010):** debajo del campo se muestra el motivo y el botón «Registrar a mano», que abre el diálogo de hoy con el tipo y el número ya puestos. La venta en curso no se toca. Los motivos:
+  - `not_found`: «No encontramos ese DNI en RENIEC» o «ese RUC en SUNAT»;
+  - `unavailable`: «El servicio de consulta no responde.»;
+  - `quota`: «Se acabaron las consultas automáticas de hoy.»;
+  - `disabled`: «La consulta automática no está disponible.».
+- **Mientras busca:** «Buscando en RENIEC…» o «…en SUNAT…» con `aria-live="polite"`, así el lector de pantalla anuncia el resultado sin mover el foco.
+- **«Actualizar datos» (HU-3):** botón chico en la tarjeta de un cliente con DNI o RUC, para el vendedor y el administrador. Si funciona, reemplaza el cliente de la venta en curso y avisa «Datos actualizados.»; si da 503, muestra el `message` y el cliente queda como estaba.
+- **Carné de extranjería y otros (HU-1 esc. 7):** nada cambia; se registran a mano.
+- **El ticket** (nombre y documento opcionales, en texto libre) no usa la búsqueda: no es un cliente guardado (spec 003).
+
+### «Clientes» (`CustomersView`)
+
+- Cada fila muestra la insignia y, si es RUC, el aviso de estado cuando corresponde.
+- **El diálogo de edición de un cliente verificado** (HU-2 esc. 1) deshabilita «Nombre» y «Dirección», con la ayuda «Viene de RENIEC o SUNAT. Usa «Actualizar datos».». Si la API responde 422 igual (por ejemplo, otro usuario lo verificó mientras tanto), el mensaje se muestra en el campo.
+- **«Actualizar datos»** en cada fila con DNI o RUC; al terminar, recarga la fila.
+
+### Componentes compartidos de la feature
+
+| Componente | Papel |
+|---|---|
+| `CustomerVerifiedBadge.vue` | «Verificado» (`success`, con «Consultado el 30 oct. 2026») o «Manual» (`neutral`) |
+| `RucStatusAlert.vue` | El aviso de A-95; no se pinta si el RUC está activo y habido o si no es RUC |
+
+Colores solo del tema (`theme.spec.ts`).
+
+### Plataforma: «Consultas DNI/RUC» (HU-4)
+
+- **Ruta y menú:** `/plataforma/consultas` (`platform-lookups`), en el menú del panel junto a «Soporte».
+- **Tabla de los 14 días:** fecha, total, encontrados, no encontrados y fallidos, dentro de un `div` con desplazamiento horizontal a 360 px. Arriba, el total de hoy.
+- Sin números de documento: la API no los manda.
+- Sin gráfico en el MVP: la tabla responde la pregunta de cuándo pagar el plan.
+
+### Pruebas del frontend (Vitest)
+
+| Requisito / escenario | Prueba |
+|---|---|
+| RF-005, HU-1 esc. 6 | `documents.spec.ts`: DNI de 8 dígitos; RUC con dígito verificador válido e inválido (casos de la API); texto con letras, que no es documento |
+| HU-1 esc. 1 a 3, CE-001 | `useDocumentLookup.spec.ts`: consulta al completar 8 u 11 dígitos tras la espera; aborta la anterior al seguir escribiendo; una respuesta vieja no pisa a la nueva; sin conexión, no consulta |
+| HU-1 esc. 3 y 5, RF-010 | `CustomerPicker.spec.ts`: encontrado → queda elegido con «Verificado»; cada `reason` muestra su motivo y «Registrar a mano» abre el diálogo con el número; la venta no se toca |
+| A-95 | `RucStatusAlert`: avisa con BAJA o NO HABIDO, no con ACTIVO y HABIDO; «Emitir» sigue habilitado |
+| HU-2 esc. 1 y 4 | `CustomersView.spec.ts`: verificado → nombre y dirección deshabilitados y la insignia; manual → se editan; 422 en el campo |
+| HU-3 | «Actualizar datos»: éxito reemplaza el cliente de la venta y avisa; 503 deja el cliente como estaba y muestra el `message` |
+| Factura | Con `requireRuc`, un DNI da el error de formato sin pedir nada |
+| HU-4 | `LookupUsageView.spec.ts`: tabla de 14 días y total de hoy; ruta solo de plataforma (`router.spec.ts`) |
+| Tema | `theme.spec.ts` en verde |
+
+**Verificación manual del frontend** (además de la de la API):
+- **CE-001 en el teléfono real con datos móviles:** desde el último dígito de un RUC nuevo hasta ver la razón social, menos de 3 s, medido con las herramientas del WebView;
+- servicio sin token o caído: emitir una boleta con un cliente registrado a mano (CE-003);
+- 360 px y modo oscuro en el selector de cliente, la tarjeta con el aviso, «Clientes» y la tabla de la plataforma;
+- TalkBack anuncia «Buscando…» y el resultado;
+- modo avión con «Vender» abierto.
 
 ## Estrategia de pruebas
 
