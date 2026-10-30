@@ -33,4 +33,4 @@ Lo que quedó en la base local de esas pruebas (consulta de solo lectura, últim
 | Traslados entre locales | 2 |
 | Locales creados en la auditoría | 1 (`establishment.created`, el de T026) |
 
-**Sin confirmar uno por uno:** el usuario no detalló la migración de la venta a medias de la 0.3.0, «Atrás» en los diálogos nuevos, el modo avión, 360 px y modo oscuro, ni TalkBack en el selector.
+**Confirmado después por el usuario:** también comprobó la venta a medias de la 0.3.0, que se conservó al actualizar; «Atrás» en los diálogos nuevos; el modo avión; 360 px y modo oscuro; y TalkBack en el selector. Quedó conforme.
