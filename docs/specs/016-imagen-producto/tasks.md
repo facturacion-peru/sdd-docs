@@ -149,11 +149,11 @@
 - [ ] **T019** ☁️ Configuración de AWS del usuario (plan, «Operación en AWS»): política del bucket, claves IAM, versionado y `.env`. **Pendiente para el despliegue** (spec 009): el usuario aún no crea el bucket de producción (2026-10-29) — Verificación: el usuario confirma
 - [ ] **T020** ☁️ Verificación manual contra el bucket de pruebas (plan, pasos 1 a 6): CE-001, CE-002, CE-004, RF-016 (listar sin credenciales, la clave de la app fuera de `AWS_BACKUP_ROOT`, `backup:run` y el versionado) y el logo con `images:move-logos`. **Pendiente para el despliegue** (spec 009): el usuario aún no crea el bucket de producción (2026-10-29) — Verificación: resultados anotados en `verificacion.md`
 - [ ] **T021** Comprobaciones del principio VI en verde (API SQLite y PostgreSQL, Pint; frontend completo) — Verificación: códigos de salida 0 y cifras anotadas
-- [ ] **T022** Documentación:
+- [x] **T022** Documentación:
   - README de la API (disco de imágenes, variables y comandos);
   - trampas nuevas en `AGENTS.md`;
   - bitácora;
   - estado en `docs/specs/README.md`.
 
-  El README del frontend lo actualiza su sesión. Verificación: revisada
+  El README del frontend lo actualiza su sesión. Verificación: revisada — **Hecho (2026-10-29):** README de la API, trampas de API y frontend (incluida la del APK *debug* con `http://localhost`), bitácora y estado. La prueba en el teléfono con disco local está en `verificacion.md`
 - [ ] **T023** 🔒 Merge local de `016-imagen-producto` a `main` en ambos repositorios y commit de la raíz — Verificación: suites en verde sobre `main`

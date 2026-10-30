@@ -118,6 +118,7 @@ Primer arranque local: `php artisan migrate:fresh --seed` (crea las cuentas de p
   - Capacitor deja la foto de la cámara en `files/Pictures` del almacenamiento externo y no la borra (puede traer GPS): `device().pickImage` la borra.
   - Las subidas con avance van con `core/api/upload` (XHR), porque `fetch` no informa el avance. Cancelar rechaza con `UploadCancelled`, que no es un `ApiError`.
   - La venta en curso guarda solo los campos de `SellableProduct`: lo que llega del catálogo trae más (la foto) y no debe persistirse.
+  - El APK *debug* carga como `http://localhost` (`androidScheme: 'http'`, solo con `CAP_ANDROID_DEV=1`): desde `https://localhost`, Chromium bloquea las imágenes HTTP de la API aunque `allowMixedContent` deje pasar `fetch` y XHR (la subida funciona y la foto no se ve). La API de desarrollo necesita `http://localhost` en `CORS_ALLOWED_ORIGINS`.
 - `Eloquent\Collection::map()` sobre una colección **vacía** sigue siendo de Eloquent: su `intersect()` falla con textos. Usar `->toBase()` antes.
 - El generador de OpenAPI tipa todo parámetro de ruta como número; para `{kind}` o un UUID, el frontend usa un *cast* comentado.
 - El código heredado de `legacy/` no se ejecuta: antes de reincorporar algo, leer `docs/investigacion/001-evaluacion-api-existente.md`.
@@ -130,7 +131,8 @@ Entradas breves y fechadas de decisiones o cambios relevantes (la más reciente 
   - **API:** `POST`/`DELETE products/{id}/image` (administrador) y `image: {url, thumb_url} | null` en los productos. Proceso con GD a WebP de 800 y 200 px, derecho según el EXIF y sin metadatos, con claves UUID. El logo pasa a S3 como PNG con alfa (`images:move-logos` en cada despliegue) y el PDF lo guarda en caché. Si S3 falla: 503 sin cambios, GET intactos y borrados pendientes en `image_deletions` (`images:cleanup`). Un bucket con dos carpetas: imágenes públicas en `AWS_ROOT` y copias en `AWS_BACKUP_ROOT`. El generador de OpenAPI documenta las subidas como multipart. Sin dependencias nuevas.
   - **App:** reduce la foto a unos 1600 px antes de subirla (originales de hasta 10 MB) y la sube con avance. Cámara y galería del WebView sin `@capacitor/camera` ni permiso `CAMERA`. Miniaturas en «Vender», «Productos» y la ficha, nunca en el carrito. Versión 0.3.0.
   - **Pruebas:** 903 de API en SQLite y 917 en PostgreSQL (con subidas simultáneas y su mutación) y 418 de frontend.
-  - **Pendiente:** la configuración de AWS (T019) y la verificación con el bucket (T020), **para el despliegue**: aún no existe el bucket de producción. También la verificación en el teléfono (F017) y el merge (T023).
+  - **Pendiente:** la configuración de AWS (T019) y la verificación con el bucket (T020), **para el despliegue**: aún no existe el bucket de producción. También el resto de la verificación en el teléfono (F017, con el bucket) y el merge (T023).
+  - **Teléfono real** (2026-10-29, Poco X3, disco local por wifi): el usuario subió fotos con cámara y galería y se ven. Corrigió que el APK *debug* no mostrara las fotos (contenido mixto).
 
 - **2026-10-23** — Spec 015 (impresión Bluetooth en la app Android, A-75 a A-78) implementada en la rama `015-impresion-bluetooth` de API y frontend.
   - **API:** `GET tickets/{id}/print`, `sales-documents/{id}/print` y `printing/test-page`. Devuelven bytes ESC/POS de 58 u 80 mm con el contenido del PDF de 80 mm (QR nativo o como imagen) y no escriben nada. Sin dependencias nuevas.
