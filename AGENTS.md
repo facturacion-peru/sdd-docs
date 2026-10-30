@@ -119,6 +119,13 @@ Primer arranque local: `php artisan migrate:fresh --seed` (crea las cuentas de p
   - Las subidas con avance van con `core/api/upload` (XHR), porque `fetch` no informa el avance. Cancelar rechaza con `UploadCancelled`, que no es un `ApiError`.
   - La venta en curso guarda solo los campos de `SellableProduct`: lo que llega del catálogo trae más (la foto) y no debe persistirse.
   - El APK *debug* carga como `http://localhost` (`androidScheme: 'http'`, solo con `CAP_ANDROID_DEV=1`): desde `https://localhost`, Chromium bloquea las imágenes HTTP de la API aunque `allowMixedContent` deje pasar `fetch` y XHR (la subida funciona y la foto no se ve). La API de desarrollo necesita `http://localhost` en `CORS_ALLOWED_ORIGINS`.
+- **Varios establecimientos (spec 017):**
+  - Ninguna consulta de stock, ventas o series acepta un id de local sin pasar por `EstablishmentAccess` (`resolve` para escribir, `filter` para leer). Si una lista nueva no filtra por local, `CrossEstablishmentAccessTest` la detecta solo si se agregan marcadores del otro local.
+  - `UserFactory::forCompany` asigna al vendedor el local **si la empresa tiene uno solo activo** (como al aceptar una invitación). Si la prueba crea otro local después, el vendedor sigue solo en el primero.
+  - Las pruebas anteriores a la 017 llaman al inventario con `mainOf($modelo)` (`tests/Pest.php`): `consume()` y `registerEntry()` piden el local.
+  - El inventario de `TenantRoutes.php` es también el de `CrossEstablishmentAccessTest`: una ruta nueva con `{ticket}` o `{salesDocument}` debe dar 404 a un vendedor de otro local (los bindings de `AppServiceProvider` aplican `visibleTo`).
+  - Revertir la migración tras un traslado no restaura el único `(product_id, lot_number)`: el lote quedó repartido entre locales.
+  - Lo impreso solo nombra el local si no es el principal (`Establishment::branchOf`): con un solo local, ticket y comprobante no cambian.
 - `Eloquent\Collection::map()` sobre una colección **vacía** sigue siendo de Eloquent: su `intersect()` falla con textos. Usar `->toBase()` antes.
 - El generador de OpenAPI tipa todo parámetro de ruta como número; para `{kind}` o un UUID, el frontend usa un *cast* comentado.
 - El código heredado de `legacy/` no se ejecuta: antes de reincorporar algo, leer `docs/investigacion/001-evaluacion-api-existente.md`.
@@ -126,6 +133,12 @@ Primer arranque local: `php artisan migrate:fresh --seed` (crea las cuentas de p
 ## Bitácora
 
 Entradas breves y fechadas de decisiones o cambios relevantes (la más reciente arriba).
+
+- **2026-10-30** — Spec 017 (varios establecimientos, A-86 a A-91) en implementación en la rama `017-varios-establecimientos` de API y frontend, repartida entre una sesión de backend y otra de frontend.
+  - **API (T001–T025 hechas):** locales con alta, edición y desactivación (`/establishments`), vendedores asignados (`establishment_user`) y `EstablishmentAccess`. Stock por local con traslados FEFO (`stock_transfers`) y alertas por local. Tickets, comprobantes y notas del local (el XML lleva su `CodLocal`), series por local, correlativo de tickets por empresa (A-88). El inicio, las listas y las exportaciones se filtran por local; lo existente quedó en el principal. Sin dependencias nuevas.
+  - **Pruebas:** 1084 de API en SQLite y 1100 en PostgreSQL, con la migración sobre datos anteriores, traslados concurrentes y aislamiento entre locales (dos mutaciones).
+  - **CE-001** en SUNAT beta (2026-10-30): B002-00000001 desde el local 0001, aceptada con su código de anexo ([verificación](docs/specs/017-varios-establecimientos/verificacion.md)).
+  - **Pendiente:** el frontend (versión 0.4.0), el recorrido con dos locales y la prueba en el teléfono (T026, F022), y el merge (T029).
 
 - **2026-10-29** — Spec 016 (foto del producto y logo en S3, A-79 a A-85) implementada en la rama `016-imagen-producto` de API y frontend, repartida entre una sesión de backend y otra de frontend.
   - **API:** `POST`/`DELETE products/{id}/image` (administrador) y `image: {url, thumb_url} | null` en los productos. Proceso con GD a WebP de 800 y 200 px, derecho según el EXIF y sin metadatos, con claves UUID. El logo pasa a S3 como PNG con alfa (`images:move-logos` en cada despliegue) y el PDF lo guarda en caché. Si S3 falla: 503 sin cambios, GET intactos y borrados pendientes en `image_deletions` (`images:cleanup`). Un bucket con dos carpetas: imágenes públicas en `AWS_ROOT` y copias en `AWS_BACKUP_ROOT`. El generador de OpenAPI documenta las subidas como multipart. Sin dependencias nuevas.
