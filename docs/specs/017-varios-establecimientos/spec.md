@@ -1,6 +1,6 @@
 # Spec 017: Varios establecimientos
 
-**Estado:** Aprobada (2026-10-29) · **Versión:** 1.0 · **Fecha:** 2026-10-29
+**Estado:** Aprobada (2026-10-29) · **Versión:** 1.1 · **Fecha:** 2026-10-29
 **Depende de:** 001, 002, 003, 004, 005, 007, 011, 012, 014 · **Aclaraciones:** A-86 a A-91 (resueltas)
 
 > Qué y por qué. Sin frameworks, tablas, endpoints ni componentes: eso va en `plan.md`.
@@ -74,7 +74,7 @@ Como administrador de empresa, quiero ver las ventas, el stock y las alertas de 
 
 - **Empresas existentes:** todo lo anterior a esta spec queda en el principal (A-91), sin que la empresa haga nada.
 - **Código de anexo inexistente en SUNAT:** la app no lo puede comprobar; SUNAT observará o rechazará el comprobante y se verá como hoy (spec 005). El aviso al crear el local lo advierte (A-89 ⚖️).
-- **Ventas concurrentes en dos locales** del mismo producto: cada una descuenta de su local sin bloquear a la otra; en el mismo local, ninguna deja el stock en negativo (A-15), como hoy.
+- **Ventas concurrentes en dos locales** del mismo producto: cada una descuenta de su local, y ninguna de las dos falla ni espera de forma notoria; en el mismo local, ninguna deja el stock en negativo (A-15), como hoy.
 - **Traslado concurrente** con una venta en el local de origen: nunca queda más stock del que había ni se pierde ninguna de las dos operaciones.
 - **Usuario sin local activo asignado:** no puede vender y ve un mensaje para pedir que lo asignen.
 - **Nota de crédito** de un comprobante de otro local: usa la serie de nota del local del comprobante original y repone stock allí.
@@ -128,3 +128,4 @@ Como administrador de empresa, quiero ver las ventas, el stock y las alertas de 
 | 2026-10-29 | Spec creada a pedido del usuario (varios establecimientos, retoma A-07) | — |
 | 2026-10-29 | A-86 a A-91 | Stock por local con traslados; usuarios asignados a locales; un correlativo de tickets por empresa; recomendaciones de A-89 a A-91 aceptadas |
 | 2026-10-29 | Aprobada (v1.0) | El usuario aprueba la v0.2 sin cambios |
+| 2026-10-29 | v1.1 | Aprobada por el usuario al revisar el plan: las ventas simultáneas del mismo producto en dos locales no fallan ni esperan de forma notoria (antes: «sin bloquear a la otra»; se serializan unos milisegundos por la fila del producto) |

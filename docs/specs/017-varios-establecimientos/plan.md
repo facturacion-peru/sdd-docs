@@ -1,6 +1,6 @@
 # Plan 017: Varios establecimientos
 
-**Estado:** Borrador · **Fecha:** 2026-10-29 · **Spec:** [spec.md](./spec.md) (versión aprobada: 1.0)
+**Estado:** Borrador · **Fecha:** 2026-10-29 · **Spec:** [spec.md](./spec.md) (versión aprobada: 1.1)
 
 > Reparto: la **API** y la migración de datos las escribe la sesión de backend (este documento). La sección **Frontend** la completa la sesión del frontend antes de la aprobación.
 
