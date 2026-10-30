@@ -69,7 +69,7 @@
   - aviso con BAJA o NO HABIDO, sin aviso con ACTIVO y HABIDO ni si no es RUC.
 
   Verificación: en verde y `theme.spec.ts` en verde
-- [ ] **F004** (después de T007) `pnpm api:types`. `customersApi.lookup(type, number, signal)` y sus pruebas (cuerpo, `AbortSignal`, `data` nulo con `reason`, 422 de formato) — Verificación: `pnpm type-check` y pruebas en verde
+- [x] **F004** (después de T007) `pnpm api:types`. `customersApi.lookup(type, number, signal)` y sus pruebas (cuerpo, `AbortSignal`, `data` nulo con `reason`, 422 de formato) — Verificación: `pnpm type-check` y pruebas en verde
 - [x] **F005** [P] Pruebas y `useDocumentLookup` (con `lookup` simulado):
   - consulta al completar 8 u 11 dígitos tras 300 ms;
   - aborta la anterior al seguir escribiendo; una respuesta vieja no pisa a la nueva;
@@ -77,7 +77,7 @@
   - sin conexión → `offline`, sin pedir nada.
 
   Verificación: en verde
-- [ ] **F006** (después de T007) Pruebas y cambios en `CustomerPicker` (HU-1):
+- [x] **F006** (después de T007) Pruebas y cambios en `CustomerPicker` (HU-1):
   - un documento encontrado queda elegido solo, con la insignia y el estado del RUC;
   - cada `reason` muestra su motivo y «Registrar a mano» abre el diálogo con el tipo y el número;
   - un manual que no se pudo verificar queda elegido, con el motivo debajo;
