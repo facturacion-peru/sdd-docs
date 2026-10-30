@@ -67,9 +67,9 @@
 
 ## Fase 4 · API: venta por local (HU-2)
 
-- [ ] **T015** Pruebas de tickets (deben fallar): queda en el local resuelto y consume allí; sin `establishment_id` y un solo permitido, como hoy; con varios, 422; no permitido o inactivo, 422; el correlativo sigue por empresa (A-88); `establishment` en la lista y `{id, code, name, address}` en el detalle — Verificación: en rojo
-- [ ] **T016** `StoreTicketRequest` y `TicketService` con el local — Verificación: T015 en verde
-- [ ] **T017** Pruebas de comprobantes y notas (deben fallar):
+- [x] **T015** Pruebas de tickets (deben fallar): queda en el local resuelto y consume allí; sin `establishment_id` y un solo permitido, como hoy; con varios, 422; no permitido o inactivo, 422; el correlativo sigue por empresa (A-88); `establishment` en la lista y `{id, code, name, address}` en el detalle — Verificación: en rojo
+- [x] **T016** `StoreTicketRequest` y `TicketService` con el local — Verificación: T015 en verde
+- [x] **T017** Pruebas de comprobantes y notas (deben fallar):
   - el local es el de la serie; `establishment_id` distinto, 422; serie de un local inactivo o no permitido, 422;
   - la serie automática se elige entre las del local;
   - el XML lleva el `CodLocal` y la dirección del local (`UblBuilder`);
@@ -77,7 +77,7 @@
   - descartar un rechazado repone en su local.
 
   Verificación: en rojo
-- [ ] **T018** `SalesDocumentService`, `CreditNoteService` (`noteSeries` por local) y `SeriesController`/`SeriesService` (`establishment_id` al crear, fijo con comprobantes, `establishment_id` en `SeriesResource`) — Verificación: T017 en verde
+- [x] **T018** `SalesDocumentService`, `CreditNoteService` (`noteSeries` por local) y `SeriesController`/`SeriesService` (`establishment_id` al crear, fijo con comprobantes, `establishment_id` en `SeriesResource`) — Verificación: T017 en verde
 - [ ] **T019** Ticket y comprobante impresos: nombre y dirección del local en `pdf/ticket.blade.php` y `TicketPrint`, y nombre del local (si no es el principal) en `pdf/sales-document.blade.php` y `DocumentPrint` — Verificación: `PrintParityTest` y las pruebas de PDF en verde
 - [ ] **T020** Importación de productos con el local cerrado: el stock inicial va al `establishment_id` de la vista previa (por defecto el principal) — Verificación: pruebas de importación en verde
 
