@@ -1,6 +1,6 @@
 # Spec 018: Consulta de DNI y RUC
 
-**Estado:** Borrador (aclaraciones resueltas, falta aprobación) · **Versión:** 0.2 · **Fecha:** 2026-10-30
+**Estado:** Aprobada (2026-10-30) · **Versión:** 1.0 · **Fecha:** 2026-10-30
 **Depende de:** 001, 005, 012, 014, 017 · **Aclaraciones:** A-92 a A-96 (resueltas)
 
 > Qué y por qué. Sin frameworks, tablas, endpoints ni componentes: eso va en `plan.md`.
@@ -126,3 +126,4 @@ Como administrador de la plataforma, quiero ver cuántas consultas se hacen al d
 | 2026-10-30 | Spec creada a pedido del usuario (búsqueda por DNI o RUC con apisperu.com, primero la base propia) | — |
 | 2026-10-30 | A-92 a A-95 | Verificado no se edita a mano; tabla común de la plataforma (el tope por empresa se descartó en A-96); solo «Actualizar datos» vuelve a consultar; RUC de baja o no habido avisa sin bloquear |
 | 2026-10-30 | A-96 | Sin topes en el MVP (plan ilimitado si el uso crece); token de la plataforma; registro manual si el servicio falla; se cuenta el uso por día |
+| 2026-10-30 | Aprobada (v1.0) | El usuario aprueba la v0.2 sin cambios |
