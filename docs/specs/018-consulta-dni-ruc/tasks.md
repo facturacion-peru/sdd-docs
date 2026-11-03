@@ -104,5 +104,5 @@
 
 - [ ] **T013** 🔑 Verificación manual (plan, pasos 1 a 4): CE-001 cronometrado en el teléfono con datos móviles, una factura con un RUC traído del servicio aceptada en SUNAT beta y el aviso con un token inválido — Verificación: resultados en `verificacion.md`
 - [ ] **T014** Comprobaciones del principio VI en verde (API SQLite y PostgreSQL, Pint; frontend completo) — Verificación: códigos de salida 0 y cifras anotadas
-- [ ] **T015** Documentación: README de la API (consulta de documentos, variables y uso), trampas en `AGENTS.md`, bitácora y estado en `docs/specs/README.md`. El README del frontend lo actualiza su sesión — Verificación: revisada
+- [x] **T015** Documentación: README de la API (consulta de documentos, variables y uso), trampas en `AGENTS.md`, bitácora y estado en `docs/specs/README.md`. El README del frontend lo actualiza su sesión — Verificación: revisada — **Hecho (2026-10-30):** README de la API (sección «Consulta de DNI y RUC», variables y endpoints), trampas y bitácora en `AGENTS.md`; el README del frontend lo actualizó su sesión (F010)
 - [ ] **T016** 🔒 Merge local de `018-consulta-dni-ruc` a `main` en ambos repositorios y commit de la raíz — Verificación: suites en verde sobre `main`
