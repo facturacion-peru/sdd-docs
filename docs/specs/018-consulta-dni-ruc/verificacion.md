@@ -30,3 +30,21 @@ Base local, empresa demo, rama `018-consulta-dni-ruc` de la API y el servicio re
 | Búsqueda con un token inválido | ✅ Sin cliente y `reason: unavailable`: la app ofrece el registro manual |
 
 **Queda para la app** (F012, con el usuario): CE-001 cronometrado en el teléfono con datos móviles (menos de 3 s desde terminar de escribir), CE-003 con el servicio caído, 360 px, TalkBack y modo avión.
+
+## F012 · App y navegador (en curso)
+
+### CE-003 · Servicio caído (2026-11-02, probado por el usuario)
+
+APIs de la rama `018-consulta-dni-ruc` con la base local y apisperu inalcanzable (`APISPERU_BASE_URL=https://127.0.0.1:9`): `:8001` para la app 0.5.0 del teléfono (Poco X3) y el navegador en `:5173`, y `:8002` para el navegador en `:5174`. Un RUC nuevo respondía `reason: unavailable` en 0,13 s.
+
+| Prueba | Resultado |
+|---|---|
+| DNI nuevo con el servicio caído | ✅ La app dice que el servicio no está disponible y ofrece «Registrar a mano» |
+| Registro manual | ✅ Dos clientes con DNI registrados a mano (en el «Domicilio fiscal» y en la «Sucursal Centro»), elegidos en la venta y marcados «Manual» |
+| Boleta con el cliente manual | ✅ B001-00000024 y B002-00000005, aceptadas por SUNAT beta |
+| Venta en curso | ✅ No se perdió al fallar la búsqueda |
+| Lo ya guardado | ✅ Un documento ya registrado sigue saliendo de la base |
+
+**Hallazgo (de la 017, fuera de esta spec):** con vendedor.centro@demo.test, «Factura» aparecía desactivada sin explicación. La «Sucursal Centro» no tenía serie de factura, y el aviso de «Vender» solo sale cuando están bloqueadas boleta y factura a la vez. Se creó una serie de factura para ese local; el aviso queda pendiente de la decisión del usuario.
+
+**Falta:** CE-001 cronometrado, 360 px y modo oscuro, TalkBack y modo avión.
