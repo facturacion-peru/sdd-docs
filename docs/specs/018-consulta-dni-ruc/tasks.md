@@ -91,18 +91,18 @@
 - [x] **F009** [P] (después de T011) Pruebas y `LookupUsageView` en `/plataforma/consultas`, con su entrada en el menú del panel: tabla de 14 días con desplazamiento a 360 px y el total de hoy; ruta solo de plataforma (`router.spec.ts`) — Verificación: en verde
 - [x] **F010** README del frontend: `useDocumentLookup`, `shared/utils/documents`, insignia y aviso del RUC, y la vista de uso de la plataforma — Verificación: revisado
 - [x] **F011** (después de T012) `pnpm api:types` con el `openapi.json` final. `version` 0.5.0 en `package.json` — Verificación: verificación completa del frontend con código de salida 0 y cifras anotadas, y el APK *debug* compila (JDK 21) — **Hecho (2026-10-30):** `type-check`, `lint`, `test:unit` (547 pruebas en 81 archivos) y `build-only` con código de salida 0. El APK *debug* compila como 0.5.0 (`versionCode` 500), sin `CAMERA`, y no está instalado
-- [ ] **F012** Verificación manual del frontend (plan):
+- [x] **F012** Verificación manual del frontend (plan):
   - **CE-001 en el teléfono real con datos móviles:** menos de 3 s desde el último dígito de un RUC nuevo, medido con las herramientas del WebView;
   - CE-003: el servicio caído o sin token, y una boleta con un cliente registrado a mano;
   - 360 px y modo oscuro en el selector, la tarjeta con el aviso, «Clientes» y la tabla de la plataforma;
   - TalkBack anuncia «Buscando…» y el resultado;
   - modo avión con «Vender» abierto.
 
-  Verificación: resultados en `verificacion.md`
+  Verificación: resultados en `verificacion.md` — **Hecho (2026-11-06):** CE-003 probado por el usuario (B001-00000024 y B002-00000005 aceptadas). El resto lo probó el usuario en el teléfono y lo aceptó, sin medir CE-001 desde la PC
 
 ## Cierre
 
-- [ ] **T013** 🔑 Verificación manual (plan, pasos 1 a 4): CE-001 cronometrado en el teléfono con datos móviles, una factura con un RUC traído del servicio aceptada en SUNAT beta y el aviso con un token inválido — Verificación: resultados en `verificacion.md`
+- [x] **T013** 🔑 Verificación manual (plan, pasos 1 a 4): CE-001 cronometrado en el teléfono con datos móviles, una factura con un RUC traído del servicio aceptada en SUNAT beta y el aviso con un token inválido — Verificación: resultados en `verificacion.md` — **Hecho (2026-11-06):** RUC del servicio en 1,16 s en el servidor, F001-00000005 aceptada en beta y `reason: unavailable` con un token inválido; en el teléfono, aceptado por el usuario (F012)
 - [ ] **T014** Comprobaciones del principio VI en verde (API SQLite y PostgreSQL, Pint; frontend completo) — Verificación: códigos de salida 0 y cifras anotadas
 - [x] **T015** Documentación: README de la API (consulta de documentos, variables y uso), trampas en `AGENTS.md`, bitácora y estado en `docs/specs/README.md`. El README del frontend lo actualiza su sesión — Verificación: revisada — **Hecho (2026-10-30):** README de la API (sección «Consulta de DNI y RUC», variables y endpoints), trampas y bitácora en `AGENTS.md`; el README del frontend lo actualizó su sesión (F010)
 - [ ] **T016** 🔒 Merge local de `018-consulta-dni-ruc` a `main` en ambos repositorios y commit de la raíz — Verificación: suites en verde sobre `main`

@@ -31,7 +31,7 @@ Base local, empresa demo, rama `018-consulta-dni-ruc` de la API y el servicio re
 
 **Queda para la app** (F012, con el usuario): CE-001 cronometrado en el teléfono con datos móviles (menos de 3 s desde terminar de escribir), CE-003 con el servicio caído, 360 px, TalkBack y modo avión.
 
-## F012 · App y navegador (en curso)
+## F012 · App y navegador (2026-11-06, aceptada por el usuario)
 
 ### CE-003 · Servicio caído (2026-11-02, probado por el usuario)
 
@@ -47,4 +47,8 @@ APIs de la rama `018-consulta-dni-ruc` con la base local y apisperu inalcanzable
 
 **Hallazgo (de la 017, fuera de esta spec):** con vendedor.centro@demo.test, «Factura» aparecía desactivada sin explicación. La «Sucursal Centro» no tenía serie de factura, y el aviso de «Vender» solo sale cuando están bloqueadas boleta y factura a la vez. Se creó una serie de factura para ese local; el aviso queda pendiente de la decisión del usuario.
 
-**Falta:** CE-001 cronometrado, 360 px y modo oscuro, TalkBack y modo avión.
+### Resto de F012 (2026-11-06, probado por el usuario)
+
+El usuario hizo en el teléfono (app 0.5.0, Poco X3) las comprobaciones que faltaban: CE-001 con datos móviles, 360 px y modo oscuro, TalkBack y modo avión. Las dio por buenas («ya hice las comprobaciones, esta aceptable»). El tiempo de CE-001 no se midió desde la PC con las herramientas del WebView: queda la apreciación del usuario. Del lado del servidor, la consulta real tardó 1,16 s (T013).
+
+**Pendiente, a decisión del usuario:** el aviso de «Factura» desactivada cuando el local no tiene serie de factura (hallazgo de la 017, arriba).
