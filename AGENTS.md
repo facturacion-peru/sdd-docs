@@ -140,6 +140,8 @@ Primer arranque local: `php artisan migrate:fresh --seed` (crea las cuentas de p
 
 Entradas breves y fechadas de decisiones o cambios relevantes (la más reciente arriba).
 
+- **2026-11-06** — Nombre e identificador definitivos (A-61): «Comprobante Digital», dominio `comprobantedigital.app` e identificador Android `app.comprobantedigital`. Están en la rama `nombre-comprobante-digital` de API y frontend: plantillas de `.env` y de despliegue, guías de `deploy/`, Capacitor, Gradle y el paquete Java. La 0.5.0 instalada con el identificador anterior hay que desinstalarla. El origen del APK sigue siendo `http(s)://localhost`.
+
 - **2026-10-30** — Spec 018 (consulta de DNI y RUC con apisperu.com, A-92 a A-96) implementada en la rama `018-consulta-dni-ruc` de API y frontend.
   - **API (T001–T012 hechas):** `POST customers/lookup` busca en la empresa, en la tabla común de la plataforma y en apisperu. Lo traído queda verificado y no se edita a mano ni por importación (A-92). «Actualizar datos» vuelve a consultar a pedido (A-94). Un RUC de baja o no habido avisa sin bloquear (A-95 ⚖️). Sin topes de consultas (A-96); la plataforma ve el uso por día. Sin dependencias nuevas.
   - **Pruebas:** 1134 de API en SQLite y 1151 en PostgreSQL, con búsquedas simultáneas y su mutación.

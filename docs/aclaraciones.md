@@ -743,6 +743,8 @@ También hay que fijar el **nombre** visible de la app y su **identificador** (p
 
 > **Decisión (2026-10-06):** C. APK firmado de instalación directa para el piloto; Google Play al pasar a producción, junto con A-24 ⚖️. El nombre visible y el identificador (basado en el dominio del SaaS) se fijan antes de la primera entrega a una empresa.
 
+> **Nombre e identificador (2026-11-06):** nombre visible «Comprobante Digital», dominio de producción `comprobantedigital.app` (API en `api.`, web en `app.`) e identificador Android `app.comprobantedigital`, el dominio al revés. Al cambiar el identificador, la 0.5.0 instalada con `io.github.facturacion_peru.app` se desinstala: Android la trata como otra app. En Google Play el identificador ya no se podrá cambiar.
+
 ### A-62
 
 **¿A qué servidor se conecta la app?** · Bloquea: 013 · **Resuelta**
