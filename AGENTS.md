@@ -140,11 +140,13 @@ Primer arranque local: `php artisan migrate:fresh --seed` (crea las cuentas de p
 
 Entradas breves y fechadas de decisiones o cambios relevantes (la más reciente arriba).
 
-- **2026-10-30** — Spec 018 (consulta de DNI y RUC con apisperu.com, A-92 a A-96) en implementación en la rama `018-consulta-dni-ruc` de API y frontend.
+- **2026-10-30** — Spec 018 (consulta de DNI y RUC con apisperu.com, A-92 a A-96) implementada en la rama `018-consulta-dni-ruc` de API y frontend.
   - **API (T001–T012 hechas):** `POST customers/lookup` busca en la empresa, en la tabla común de la plataforma y en apisperu. Lo traído queda verificado y no se edita a mano ni por importación (A-92). «Actualizar datos» vuelve a consultar a pedido (A-94). Un RUC de baja o no habido avisa sin bloquear (A-95 ⚖️). Sin topes de consultas (A-96); la plataforma ve el uso por día. Sin dependencias nuevas.
   - **Pruebas:** 1134 de API en SQLite y 1151 en PostgreSQL, con búsquedas simultáneas y su mutación.
   - **Con el token real** (2026-10-30): RUC de SUNAT en 1,16 s y factura F001-00000005 aceptada en beta con ese cliente ([verificación](docs/specs/018-consulta-dni-ruc/verificacion.md)).
-  - **Pendiente:** el frontend (versión 0.5.0), la prueba en el teléfono (CE-001, F012) y el merge (T016).
+  - **App (versión 0.5.0):** búsqueda al completar 8 u 11 dígitos en «Vender», insignia «Verificado» o «Manual», aviso de RUC de baja o no habido, «Actualizar datos» y el uso por día en `/plataforma/consultas`. 549 pruebas de frontend.
+  - **Teléfono real** (2026-11-06, probado y aceptado por el usuario): CE-003 con el servicio caído (B001-00000024 y B002-00000005 aceptadas), datos móviles, 360 px, modo oscuro, TalkBack y modo avión. CE-001 no se midió desde la PC.
+  - **Integrada en `main`** de API y frontend y subida a GitHub (2026-11-06), con el ticket impreso fuera del diálogo, la búsqueda de distritos sin distinguir mayúsculas (`whereLike`) y el aviso de «Factura» sin serie en el local. Suites en verde sobre `main`: 1135 de API en SQLite (1152 en PostgreSQL) y 549 de frontend.
 
 - **2026-10-30** — Spec 017 (varios establecimientos, A-86 a A-91) implementada en la rama `017-varios-establecimientos` de API y frontend, repartida entre una sesión de backend y otra de frontend.
   - **API (T001–T025 hechas):** locales con alta, edición y desactivación (`/establishments`), vendedores asignados (`establishment_user`) y `EstablishmentAccess`. Stock por local con traslados FEFO (`stock_transfers`) y alertas por local. Tickets, comprobantes y notas del local (el XML lleva su `CodLocal`), series por local, correlativo de tickets por empresa (A-88). El inicio, las listas y las exportaciones se filtran por local; lo existente quedó en el principal. Sin dependencias nuevas.
@@ -152,7 +154,7 @@ Entradas breves y fechadas de decisiones o cambios relevantes (la más reciente 
   - **CE-001** en SUNAT beta (2026-10-30): B002-00000001 desde el local 0001, aceptada con su código de anexo ([verificación](docs/specs/017-varios-establecimientos/verificacion.md)).
   - **App:** local actual por dispositivo, venta en curso y preferencia de serie por local (la venta de la 0.3.0 pasa al principal), selector y filtros solo con varios locales activos, «Mi empresa → Locales», locales de cada vendedor y traslados en la ficha. Versión 0.4.0. 506 pruebas de frontend.
   - **Teléfono real y navegador** (2026-10-30, probado por el usuario): dos locales, vendedor de la sucursal, traslados, venta a medias de la 0.3.0 conservada, «Atrás», modo avión, 360 px, modo oscuro y TalkBack.
-  - **Integrada en `main`** de API y frontend (2026-10-30, merge local sin push). Suites en verde sobre `main`: 1085 de API en SQLite (1101 en PostgreSQL) y 506 de frontend.
+  - **Integrada en `main`** de API y frontend (2026-10-30) y subida a GitHub (2026-11-06). Suites en verde sobre `main`: 1085 de API en SQLite (1101 en PostgreSQL) y 506 de frontend.
 
 - **2026-10-29** — Spec 016 (foto del producto y logo en S3, A-79 a A-85) implementada en la rama `016-imagen-producto` de API y frontend, repartida entre una sesión de backend y otra de frontend.
   - **API:** `POST`/`DELETE products/{id}/image` (administrador) y `image: {url, thumb_url} | null` en los productos. Proceso con GD a WebP de 800 y 200 px, derecho según el EXIF y sin metadatos, con claves UUID. El logo pasa a S3 como PNG con alfa (`images:move-logos` en cada despliegue) y el PDF lo guarda en caché. Si S3 falla: 503 sin cambios, GET intactos y borrados pendientes en `image_deletions` (`images:cleanup`). Un bucket con dos carpetas: imágenes públicas en `AWS_ROOT` y copias en `AWS_BACKUP_ROOT`. El generador de OpenAPI documenta las subidas como multipart. Sin dependencias nuevas.

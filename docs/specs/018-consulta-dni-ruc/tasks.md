@@ -1,6 +1,6 @@
 # Tareas 018: Consulta de DNI y RUC
 
-**Estado:** Aprobadas (2026-10-30) · **Fecha:** 2026-10-30 · **Plan:** [plan.md](./plan.md)
+**Estado:** Completadas (2026-11-06) · **Fecha:** 2026-10-30 · **Plan:** [plan.md](./plan.md)
 
 > Cada tarea es pequeña, deja el proyecto funcionando y tiene su verificación.
 > `[P]` = puede hacerse en paralelo con la anterior. 🔒 = requiere confirmación explícita del usuario. 🔑 = necesita `APISPERU_TOKEN` en el `.env` del usuario.
@@ -105,4 +105,4 @@
 - [x] **T013** 🔑 Verificación manual (plan, pasos 1 a 4): CE-001 cronometrado en el teléfono con datos móviles, una factura con un RUC traído del servicio aceptada en SUNAT beta y el aviso con un token inválido — Verificación: resultados en `verificacion.md` — **Hecho (2026-11-06):** RUC del servicio en 1,16 s en el servidor, F001-00000005 aceptada en beta y `reason: unavailable` con un token inválido; en el teléfono, aceptado por el usuario (F012)
 - [x] **T014** Comprobaciones del principio VI en verde (API SQLite y PostgreSQL, Pint; frontend completo) — Verificación: códigos de salida 0 y cifras anotadas — **Hecho (2026-11-06):** 1135 pruebas de API en SQLite (17 omitidas), 1152 en PostgreSQL y Pint; frontend con `type-check`, `lint`, `test:unit` (548 pruebas en 82 archivos) y `build-only`. Todo con código de salida 0. Incluye el cambio del usuario en la búsqueda de ubigeos (`whereLike`, fuera de la 018)
 - [x] **T015** Documentación: README de la API (consulta de documentos, variables y uso), trampas en `AGENTS.md`, bitácora y estado en `docs/specs/README.md`. El README del frontend lo actualiza su sesión — Verificación: revisada — **Hecho (2026-10-30):** README de la API (sección «Consulta de DNI y RUC», variables y endpoints), trampas y bitácora en `AGENTS.md`; el README del frontend lo actualizó su sesión (F010)
-- [ ] **T016** 🔒 Merge local de `018-consulta-dni-ruc` a `main` en ambos repositorios y commit de la raíz — Verificación: suites en verde sobre `main`
+- [x] **T016** 🔒 Merge local de `018-consulta-dni-ruc` a `main` en ambos repositorios y commit de la raíz — Verificación: suites en verde sobre `main` — **Hecho (2026-11-06):** merge confirmado por el usuario (API `558b7b6`, frontend `73a1073`, más `aviso-factura-sin-serie` en `e0a67f0`). Sobre `main`: 1135 pruebas de API en SQLite, 1152 en PostgreSQL y Pint, y 549 de frontend, con código de salida 0
